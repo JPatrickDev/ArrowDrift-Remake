@@ -18,13 +18,14 @@ import java.util.Random;
  */
 public class Tile implements Disposable {
 
-    private int x, y;
+    public int x;
+    public int y;
     private boolean solid;
-    private String texture;
+    public String texture;
     public static int TILE_SIZE = 64;
-    private Texture textureObj;
+    public Texture textureObj;
 
-    public static HashMap<AllowedMovementType,Texture> movementTextures = new HashMap<AllowedMovementType, Texture>();
+    public static HashMap<AllowedMovementType, Texture> movementTextures = new HashMap<AllowedMovementType, Texture>();
 
     static {
         movementTextures.put(AllowedMovementType.DOWN_LEFT, new Texture("downLeft.png"));
@@ -32,9 +33,10 @@ public class Tile implements Disposable {
         movementTextures.put(AllowedMovementType.DOWN_RIGHT, new Texture("downRight.png"));
         movementTextures.put(AllowedMovementType.UP_RIGHT, new Texture("upRight.png"));
     }
+
     private AllowedMovementType movement = null;
 
-    public Tile(String texture, int x, int y, boolean solid,AllowedMovementType type) {
+    public Tile(String texture, int x, int y, boolean solid, AllowedMovementType type) {
         this.x = x;
         this.y = y;
         this.texture = texture;
@@ -45,15 +47,15 @@ public class Tile implements Disposable {
 
     public void draw(SpriteBatch batch, int xo, int yo) {
         batch.draw(textureObj, x + xo, y + yo);
-        if(movement != AllowedMovementType.NONE){
+        if (movement != AllowedMovementType.NONE) {
             Texture t = movementTextures.get(movement);
-            batch.draw(t,x + xo,y + yo);
+            batch.draw(t, x + xo, y + yo);
         }
     }
 
     public void steppedOn(Entity e, Level level) {
         System.out.println("Stepped on");
-      //  e.fling(Direction.values()[new Random().nextInt(4)], level);
+        //  e.fling(Direction.values()[new Random().nextInt(4)], level);
     }
 
     public void walkedInTo(Entity e, Direction from) {
@@ -74,12 +76,15 @@ public class Tile implements Disposable {
     }
 
     //1 = WALL
+    //2 = Belt
     //0 = FLOOR
     public static Tile fromID(int ID, int x, int y, AllowedMovementType allowedMovementType) {
-        if(ID == 1){
-            return new Wall(x,y,allowedMovementType);
-        }else if(ID == 0){
-            return new Floor(x,y,allowedMovementType);
+        if (ID == 1) {
+            return new Wall(x, y, allowedMovementType);
+        } else if (ID == 0) {
+            return new Floor(x, y, allowedMovementType);
+        } else if (ID == 2) {
+            return new BeltTile(x, y,Direction.UP);
         }
         return null;
     }

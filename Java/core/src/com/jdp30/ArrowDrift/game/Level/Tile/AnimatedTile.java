@@ -16,21 +16,13 @@ public class AnimatedTile extends Tile {
 
     public AnimatedTile(String texture, int x, int y, boolean solid, AllowedMovementType type) {
         super(texture, x, y, solid, type);
-        // Use the split utility method to create a 2D array of TextureRegions. This is
-        // possible because this sprite sheet contains frames of equal size and they are
-        // all aligned.
-        TextureRegion[][] tmp = TextureRegion.split(this.textureObj, 64,
+        TextureRegion[][] tmp = TextureRegion.split(this.getTextureObj(), 64,
                 64);
-
-        // Place the regions into a 1D array in the correct order, starting from the top
-        // left, going across first. The Animation constructor requires a 1D array.
-        TextureRegion[] walkFrames = new TextureRegion[19];
+        TextureRegion[] animFrames = new TextureRegion[19];
         for (int i = 0; i < 19; i++) {
-                walkFrames[i] = tmp[0][i];
+            animFrames[i] = tmp[0][i];
         }
-
-        // Initialize the Animation with the frame interval and array of frames
-        animation = new Animation<TextureRegion>(0.05f, walkFrames);
+        animation = new Animation<TextureRegion>(0.05f, animFrames);
     }
 
     protected float stateTime;

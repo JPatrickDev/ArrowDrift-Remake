@@ -21,9 +21,9 @@ public class Tile implements Disposable {
     public int x;
     public int y;
     private boolean solid;
-    public String texture;
+    private String texture;
     public static int TILE_SIZE = 64;
-    public Texture textureObj;
+    private Texture textureObj;
 
     public static HashMap<AllowedMovementType, Texture> movementTextures = new HashMap<AllowedMovementType, Texture>();
 
@@ -97,5 +97,9 @@ public class Tile implements Disposable {
             return new BeltTile(x, y,d);
         }
         return null;
+    }
+
+    public Texture getTextureObj() {
+        return textureObj;
     }
 }

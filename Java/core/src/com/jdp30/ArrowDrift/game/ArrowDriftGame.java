@@ -44,11 +44,13 @@ public class ArrowDriftGame extends ApplicationAdapter {
 
             @Override
             public void callback() {
-                AllowedMovementType t = level.getCurrentMovementType();
-                if (t.getUPDOWN() == 0) {
-                    level.p.movedBy(0, 1, level);
-                } else if (t.getUPDOWN() == 1) {
-                    level.p.movedBy(0, -1, level);
+                if (!level.p.isMoving()) {
+                    AllowedMovementType t = level.getCurrentMovementType();
+                    if (t.getUPDOWN() == 0) {
+                        level.p.movedBy(0, 1, level);
+                    } else if (t.getUPDOWN() == 1) {
+                        level.p.movedBy(0, -1, level);
+                    }
                 }
             }
         });
@@ -57,11 +59,13 @@ public class ArrowDriftGame extends ApplicationAdapter {
 
             @Override
             public void callback() {
-                AllowedMovementType t = level.getCurrentMovementType();
-                if (t.getLEFTRIGHT() == 0) {
-                    level.p.movedBy(-1, 0, level);
-                } else if (t.getLEFTRIGHT() == 1) {
-                    level.p.movedBy(1, 0, level);
+                if (!level.p.isMoving()) {
+                    AllowedMovementType t = level.getCurrentMovementType();
+                    if (t.getLEFTRIGHT() == 0) {
+                        level.p.movedBy(-1, 0, level);
+                    } else if (t.getLEFTRIGHT() == 1) {
+                        level.p.movedBy(1, 0, level);
+                    }
                 }
             }
         });
@@ -71,6 +75,8 @@ public class ArrowDriftGame extends ApplicationAdapter {
 
     @Override
     public void render() {
+
+        System.out.println(level.p.isMoving());
 
         update();
 

@@ -35,6 +35,8 @@ public class Player extends Entity {
                 if (level.getCurrentMovementType().getLEFTRIGHT() == 1)
                     moveTo(getX() + 1, getY(), level);
             }
+        }else{
+            System.out.println("Moving.....");
         }
     }
 

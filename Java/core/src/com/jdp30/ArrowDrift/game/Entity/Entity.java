@@ -29,7 +29,6 @@ public class Entity implements Disposable {
 
     private boolean isFlung = false;
     private Direction flingDir = null;
-    private boolean moving;
     private boolean flung;
 
     public Entity(Texture texture, int x, int y) {
@@ -180,7 +179,7 @@ public class Entity implements Disposable {
     }
 
     public boolean isMoving() {
-        return moving;
+        return isMoving;
     }
 
     public boolean isFlung() {

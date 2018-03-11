@@ -12,7 +12,7 @@ import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
  * Last Edit: 11/03/2018
  */
 public class AnimatedTile extends Tile {
-    private Animation<TextureRegion> animation = null;
+    protected Animation<TextureRegion> animation = null;
 
     public AnimatedTile(String texture, int x, int y, boolean solid, AllowedMovementType type) {
         super(texture, x, y, solid, type);
@@ -33,15 +33,12 @@ public class AnimatedTile extends Tile {
         animation = new Animation<TextureRegion>(0.05f, walkFrames);
     }
 
-    float stateTime;
+    protected float stateTime;
 
     @Override
     public void draw(SpriteBatch batch, int xo, int yo) {
-        //super.draw(batch, xo, yo);
         stateTime += Gdx.graphics.getDeltaTime();
-        if (stateTime >= animation.getAnimationDuration())
-            stateTime = 0;
         if (animation.getKeyFrame(stateTime) != null)
-            batch.draw(animation.getKeyFrame(stateTime), x + xo, y + yo);
+            batch.draw(animation.getKeyFrame(stateTime,true), x + xo, y + yo);
     }
 }

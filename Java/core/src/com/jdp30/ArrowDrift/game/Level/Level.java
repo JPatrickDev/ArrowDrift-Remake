@@ -130,7 +130,7 @@ public class Level implements Disposable {
             String[] tiles = row.split(":");
             for (String t : tiles) {
                 String[] tileData = t.split(",");
-                Tile tile = Tile.fromID(Integer.parseInt(tileData[0]), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(Integer.parseInt(tileData[1])));
+                Tile tile = Tile.fromID(Integer.parseInt(tileData[0]), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(Integer.parseInt(tileData[1])),tileData);
                 if (tile != null) {
                     level.setTileAt(x, y, tile);
                 } else {

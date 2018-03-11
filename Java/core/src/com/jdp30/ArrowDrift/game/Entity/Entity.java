@@ -15,7 +15,7 @@ import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
  * <p>
  * Last Edit: 05/03/2018
  */
-public class Entity implements Disposable{
+public class Entity implements Disposable {
 
     //Tile coords
     private int x, y;
@@ -77,7 +77,7 @@ public class Entity implements Disposable{
                 yOff = 0;
                 xOff = 0;
                 isMoving = false;
-                level.getTile(x, y).steppedOn(this,level);
+                level.getTile(x, y).steppedOn(this, level);
                 if (isFlung) {
                     tX = getX();
                     tY = getY();
@@ -95,8 +95,8 @@ public class Entity implements Disposable{
                             tX = getX() + 1;
                             break;
                     }
-                    moveTo(tX,tY,level);
-                    if(!isMoving){
+                    moveTo(tX, tY, level);
+                    if (!isMoving) {
                         isFlung = false;
                         flingDir = null;
                         tX = -1;
@@ -115,7 +115,7 @@ public class Entity implements Disposable{
         if (!(tX == x || tY == y))
             return;
 
-        if (!level.canMoveTo(tX,tY)) {
+        if (!level.canMoveTo(tX, tY)) {
             Direction from = null;
             if (tX > x) {
                 from = Direction.RIGHT;
@@ -128,7 +128,7 @@ public class Entity implements Disposable{
             }
             if (tY < y)
                 from = Direction.DOWN;
-            level.walkedInTo(tX,tY,from,this);
+            level.walkedInTo(tX, tY, from, this);
             return;
         }
         this.tX = tX;
@@ -136,7 +136,7 @@ public class Entity implements Disposable{
         isMoving = true;
     }
 
-    public void fling(Direction direction,Level level){
+    public void fling(Direction direction, Level level) {
         isFlung = true;
         flingDir = direction;
         isMoving = false;
@@ -157,8 +157,8 @@ public class Entity implements Disposable{
                 tX = getX() + 1;
                 break;
         }
-        moveTo(tX,tY,level);
-        if(!isMoving){
+        moveTo(tX, tY, level);
+        if (!isMoving) {
             isFlung = false;
             flingDir = null;
             tX = -1;
@@ -189,5 +189,9 @@ public class Entity implements Disposable{
 
     public void walkedInTo(Direction from, Level level) {
 
+    }
+
+    public void movedBy(int dX, int dY, Level level) {
+        moveTo(getX() + dX, getY() + dY, level);
     }
 }

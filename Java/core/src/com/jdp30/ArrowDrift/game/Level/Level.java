@@ -21,7 +21,7 @@ public class Level implements Disposable {
     private int w, h;
     private Tile[][] tiles;
 
-    private Player p;
+    public Player p;
     private ArrayList<Entity> entities = new ArrayList<Entity>();
 
     public Level(int w, int h) {

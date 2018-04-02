@@ -12,7 +12,7 @@ import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
  * <p>
  * Last Edit: 11/03/2018
  */
-public class AnimatedTile extends Tile {
+public abstract class AnimatedTile extends Tile {
     protected Animation<TextureRegion> animation = null;
 
     public AnimatedTile(String texture, int x, int y, boolean solid, AllowedMovementType type) {

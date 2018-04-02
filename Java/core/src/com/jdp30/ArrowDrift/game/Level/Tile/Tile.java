@@ -16,7 +16,7 @@ import java.util.Random;
  * <p>
  * Last Edit: 05/03/2018
  */
-public class Tile implements Disposable {
+public abstract class Tile implements Disposable {
 
     public int x;
     public int y;
@@ -102,4 +102,8 @@ public class Tile implements Disposable {
     public Texture getTextureObj() {
         return textureObj;
     }
+
+
+    public abstract Tile copy();
+
 }

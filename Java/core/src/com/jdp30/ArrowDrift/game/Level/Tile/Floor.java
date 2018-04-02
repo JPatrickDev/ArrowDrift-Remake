@@ -13,4 +13,8 @@ public class Floor extends Tile {
         super("floor.png", x, y, false, type);
     }
 
+    @Override
+    public Tile copy() {
+        return new Floor(x, y, getMovementType());
+    }
 }

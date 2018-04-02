@@ -2,7 +2,9 @@ package com.jdp30.ArrowDrift.game.LevelEditor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.jdp30.ArrowDrift.game.Level.Direction;
 import com.jdp30.ArrowDrift.game.Level.Tile.AnimatedTile;
+import com.jdp30.ArrowDrift.game.Level.Tile.BeltTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.sun.xml.internal.ws.Closeable;
 
@@ -18,15 +20,19 @@ public class EditorTile extends Actor implements Cloneable {
     public EditorTile(Tile t, int x, int y) {
         setPosition(x, y);
         setSize(64, 64);
-        this.parent = t;
+        this.parent = t.copy();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        if(parent instanceof AnimatedTile){
-            batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(), getY());
-        }else {
+        if (parent instanceof AnimatedTile) {
+            if (parent instanceof BeltTile) {
+                batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(),getY(), 32, 32, 64, 64, 1, 1, ((BeltTile) parent).getAngle());
+            } else {
+                batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(), getY());
+            }
+        } else {
             batch.draw(parent.getTextureObj(), getX(), getY());
         }
     }
@@ -42,6 +48,14 @@ public class EditorTile extends Actor implements Cloneable {
     }
 
     public void setTile(Tile tile) {
-        this.parent = tile;
+        this.parent = tile.copy();
+    }
+
+    public void rightClicked() {
+        System.out.println("Right clicked");
+        if (this.parent instanceof BeltTile) {
+            System.out.println("Changing DIR");
+            ((BeltTile) this.parent).setDir(Direction.next(((BeltTile) parent).getDir()));
+        }
     }
 }

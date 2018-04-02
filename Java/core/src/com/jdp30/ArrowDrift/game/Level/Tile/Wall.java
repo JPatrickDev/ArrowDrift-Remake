@@ -11,4 +11,9 @@ public class Wall extends Tile {
     public Wall(int x, int y, AllowedMovementType type) {
         super("wall.png", x, y, true, type);
     }
+
+    @Override
+    public Tile copy() {
+        return new Wall(x, y, getMovementType());
+    }
 }

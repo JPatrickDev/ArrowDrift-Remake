@@ -14,4 +14,18 @@ public enum Direction {
     Direction(int numValue) {
         this.numValue = numValue;
     }
+
+
+    public static Direction fromValue(int i){
+        for(Direction d : values())
+            if(d.numValue == i)
+                return d;
+        return null;
+    }
+    public static Direction next(Direction inout){
+        int i = inout.numValue + 1;
+        if(i >= 4)
+            i = 0;
+        return fromValue(i);
+    }
 }

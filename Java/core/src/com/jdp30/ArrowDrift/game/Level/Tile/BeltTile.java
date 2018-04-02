@@ -27,9 +27,23 @@ public class BeltTile extends AnimatedTile {
         e.fling(dir, level);
     }
 
+    @Override
+    public Tile copy() {
+        return new BeltTile(x, y, dir);
+    }
+
 
     @Override
     public void draw(SpriteBatch batch, int xo, int yo) {
+        int angle = getAngle();
+        stateTime += Gdx.graphics.getDeltaTime();
+        TextureRegion t = animation.getKeyFrame(stateTime, true);
+        if (t != null)
+            //batch.draw(animation.getKeyFrame(stateTime,true), x + xo, y + yo);
+            batch.draw(t, x + xo, y + yo, 32, 32, 64, 64, 1, 1, angle);
+    }
+
+    public int getAngle() {
         int angle = 0;
         switch (dir) {
             case LEFT:
@@ -42,10 +56,14 @@ public class BeltTile extends AnimatedTile {
                 angle = 270;
                 break;
         }
-        stateTime += Gdx.graphics.getDeltaTime();
-        TextureRegion t = animation.getKeyFrame(stateTime, true);
-        if (t != null)
-            //batch.draw(animation.getKeyFrame(stateTime,true), x + xo, y + yo);
-            batch.draw(t, x + xo, y + yo, 32, 32, 64, 64, 1, 1, angle);
+        return angle;
+    }
+
+    public void setDir(Direction dir) {
+        this.dir = dir;
+    }
+
+    public Direction getDir() {
+        return dir;
     }
 }

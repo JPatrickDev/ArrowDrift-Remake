@@ -106,6 +106,8 @@ public abstract class Tile implements Disposable {
 
     public abstract Tile copy();
 
+    public abstract String toStringFormat();
+
     public void setType(AllowedMovementType type) {
         this.movement = type;
     }

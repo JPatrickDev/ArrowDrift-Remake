@@ -17,4 +17,9 @@ public class Floor extends Tile {
     public Tile copy() {
         return new Floor(x, y, getMovementType());
     }
+
+    @Override
+    public String toStringFormat() {
+        return "0" + "," + getMovementType().getID();
+    }
 }

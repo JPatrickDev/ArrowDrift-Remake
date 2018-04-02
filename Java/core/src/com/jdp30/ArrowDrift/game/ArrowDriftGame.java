@@ -33,8 +33,8 @@ public class ArrowDriftGame extends Game {
 
     @Override
     public void create() {
-        //setScreen(new InGameScreen());
-        setScreen(new EditorHomeScreen());
+         setScreen(new InGameScreen());
+        //setScreen(new EditorHomeScreen());
     }
 
     public static void setCurrentScreen(Screen s){

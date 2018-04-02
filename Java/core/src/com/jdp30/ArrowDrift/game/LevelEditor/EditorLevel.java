@@ -9,6 +9,7 @@ import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -60,10 +61,15 @@ public class EditorLevel extends ClickListener {
     @Override
     public void clicked(InputEvent event, float x, float y) {
         super.clicked(event, x, y);
+        if (event.getListenerActor() instanceof EntityContainer) {
+            removeEntityAt((int) event.getListenerActor().getX(), (int) event.getListenerActor().getY());
+            return;
+        }
         EditorTile t = (EditorTile) event.getListenerActor();
         if (parent.getCurrentInHand() != null) {
             System.out.println(event.getButton());
             if (event.getButton() == 0) {
+                removeEntityAt((int) t.getX(), (int) t.getY());
                 if (parent.getCurrentInHand() instanceof EditorTile) {
                     t.setTile(((EditorTile) parent.getCurrentInHand()).getParentTile());
                 }
@@ -78,8 +84,48 @@ public class EditorLevel extends ClickListener {
 
     public void addEntity(Entity e) {
         EntityContainer c = new EntityContainer(e);
+        c.addListener(listener);
         stage.addActor(c);
         entities.add(c);
+    }
+
+    public void removeEntityAt(int x, int y) {
+        EntityContainer remove = null;
+        for (EntityContainer c : entities) {
+            if (c.getX() == x && c.getY() == y) {
+                remove = c;
+                break;
+            }
+        }
+        if (remove != null) {
+            entities.remove(remove);
+            remove.remove();
+        }
+    }
+
+    public Level toLevel() {
+        Level level = new Level(width, height);
+        for (int x = 0; x != width; x++) {
+            for (int y = 0; y != height; y++) {
+                EditorTile tile = tiles[x][y];
+                level.setTileAt(x, y, tile.getParentTile().copy());
+            }
+        }
+        for (EntityContainer c : entities) {
+            Entity e = c.getEntity().copy();
+            e.setPos(((int) c.getX() / Tile.TILE_SIZE), ((int) c.getY() / Tile.TILE_SIZE));
+            level.addEntity(e);
+        }
+        return level;
+    }
+
+
+    public void save(String fileName) {
+        try {
+            toLevel().toFile(fileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
@@ -94,6 +140,10 @@ class RightListener extends ClickListener {
     @Override
     public void clicked(InputEvent event, float x, float y) {
         super.clicked(event, x, y);
+        if (event.getListenerActor() instanceof EntityContainer) {
+            parent.getLevel().removeEntityAt((int) event.getListenerActor().getX(), (int) event.getListenerActor().getY());
+            return;
+        }
         EditorTile t = (EditorTile) event.getListenerActor();
         System.out.println(event.getButton());
         t.rightClicked();

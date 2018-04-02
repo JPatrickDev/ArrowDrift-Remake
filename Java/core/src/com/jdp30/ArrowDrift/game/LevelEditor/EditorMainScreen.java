@@ -99,4 +99,8 @@ public class EditorMainScreen implements Screen {
     public void addEntityToLevel(Entity e) {
         level.addEntity(e);
     }
+
+    public EditorLevel getLevel() {
+        return level;
+    }
 }

@@ -1,5 +1,6 @@
 package com.jdp30.ArrowDrift.game.LevelEditor;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -11,6 +12,8 @@ import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Wall;
 
+import javax.swing.*;
+
 /**
  * Created by Jack Patrick on 02/04/2018.
  * <p>
@@ -21,7 +24,7 @@ public class Toolbar extends Container<Actor> {
     private EditorMainScreen parent;
     ToolbarClickListener l;
 
-    public Toolbar(EditorMainScreen parent, Skin skin, int x, int y, int w, int h) {
+    public Toolbar(final EditorMainScreen parent, Skin skin, int x, int y, int w, int h) {
         this.parent = parent;
         this.l = new ToolbarClickListener(this);
         setX(x);
@@ -73,6 +76,17 @@ public class Toolbar extends Container<Actor> {
         boxContainer.addListener(l);
         entitiesTable.add(boxContainer);
         table.add(entitiesTable);
+
+        table.row();
+        TextButton b = new TextButton("Save Level",skin);
+        b.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String fileName = JOptionPane.showInputDialog(null,"File name");
+                parent.getLevel().save(fileName);
+            }
+        });
+        table.add(b);
 
         this.setActor(table);
     }

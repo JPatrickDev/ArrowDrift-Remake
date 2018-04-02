@@ -16,4 +16,9 @@ public class Wall extends Tile {
     public Tile copy() {
         return new Wall(x, y, getMovementType());
     }
+
+    @Override
+    public String toStringFormat() {
+        return "1" + "," + getMovementType().getID();
+    }
 }

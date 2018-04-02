@@ -9,12 +9,14 @@ import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
  * Created by Jack Patrick on 05/03/2018.
- *
+ * <p>
  * Last Edit: 05/03/2018
  */
 public class Level implements Disposable {
@@ -98,8 +100,8 @@ public class Level implements Disposable {
         String text = handle.readString();
         String wordsArray[] = text.split("\\r?\\n");
         ArrayList<String> validLines = new ArrayList<String>();
-        for(String s : wordsArray){
-            if(!s.startsWith("#"))
+        for (String s : wordsArray) {
+            if (!s.startsWith("#"))
                 validLines.add(s);
         }
         wordsArray = validLines.toArray(new String[]{});
@@ -119,7 +121,7 @@ public class Level implements Disposable {
             String[] tiles = row.split(":");
             for (String t : tiles) {
                 String[] tileData = t.split(",");
-                Tile tile = Tile.fromID(Integer.parseInt(tileData[0]), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(Integer.parseInt(tileData[1])),tileData);
+                Tile tile = Tile.fromID(Integer.parseInt(tileData[0]), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(Integer.parseInt(tileData[1])), tileData);
                 if (tile != null) {
                     level.setTileAt(x, y, tile);
                 } else {
@@ -131,16 +133,16 @@ public class Level implements Disposable {
             x = 0;
             y++;
         }
-        if(wordsArray.length > (3 + height)){
+        if (wordsArray.length > (3 + height)) {
             System.out.println("More data found");
-            for(int i = 3 + height; i != (wordsArray.length);i++){
+            for (int i = 3 + height; i != (wordsArray.length); i++) {
                 String row = wordsArray[i];
                 String[] rowData = row.split(":");
                 String[] coords = rowData[1].split(",");
                 System.out.println(row);
                 try {
                     Class<? extends Entity> e = Class.forName("com.jdp30.ArrowDrift.game.Entity." + rowData[0]).asSubclass(Entity.class);
-                    Entity en = e.getConstructor(int.class,int.class).newInstance(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+                    Entity en = e.getConstructor(int.class, int.class).newInstance(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
                     level.addEntity(en);
                 } catch (ClassNotFoundException e1) {
                     e1.printStackTrace();
@@ -158,7 +160,30 @@ public class Level implements Disposable {
         return level;
     }
 
-    public static Level blank(int width,int height){
+    public void toFile(String path) throws IOException {
+        FileHandle handle = Gdx.files.local(path);
+        handle.delete();
+        BufferedWriter writer = new BufferedWriter(handle.writer(true,"UTF8"));
+        writer.write(this.getWidth() + "");
+        writer.newLine();
+        writer.write(getHeight() + "");
+        writer.newLine();
+        writer.write(p.getX() + " " + p.getY());
+        writer.newLine();
+        for (int y = getHeight() - 1; y >= 0; y--) {
+            String line = "";
+            for (int x = 0; x != getWidth(); x++) {
+                line += ":" + tiles[x][y].toStringFormat();
+            }
+            line = line.replaceFirst(":","");
+            writer.write(line);
+            writer.newLine();
+        }
+        writer.flush();
+        writer.close();
+    }
+
+    public static Level blank(int width, int height) {
         Level level = new Level(width, height);
         for (int y = 0; y != height; y++) {
             for (int x = 0; x != width; x++) {
@@ -173,11 +198,11 @@ public class Level implements Disposable {
         return level;
     }
 
-    private void setTileAt(int x, int y, Tile tile) {
+    public void setTileAt(int x, int y, Tile tile) {
         tiles[x][y] = tile;
     }
 
-    private void addEntity(Entity entity) {
+    public void addEntity(Entity entity) {
         if (entity instanceof Player)
             p = (Player) entity;
         else

@@ -28,4 +28,8 @@ public enum Direction {
             i = 0;
         return fromValue(i);
     }
+
+    public int getID() {
+        return numValue;
+    }
 }

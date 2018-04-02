@@ -66,4 +66,9 @@ public class BeltTile extends AnimatedTile {
     public Direction getDir() {
         return dir;
     }
+
+    @Override
+    public String toStringFormat() {
+        return "2" + "," + getMovementType().getID() + "," + dir.getID();
+    }
 }

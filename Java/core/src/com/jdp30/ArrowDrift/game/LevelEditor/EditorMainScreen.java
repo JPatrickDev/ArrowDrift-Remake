@@ -24,6 +24,7 @@ public class EditorMainScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         bar = new Toolbar(skin,(int)(Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/3),0,Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight());
         stage.addActor(bar);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override

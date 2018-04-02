@@ -24,4 +24,6 @@ public class EditorTile extends Actor {
         super.draw(batch, parentAlpha);
         batch.draw(parent.getTextureObj(), getX(), getY());
     }
+
+
 }

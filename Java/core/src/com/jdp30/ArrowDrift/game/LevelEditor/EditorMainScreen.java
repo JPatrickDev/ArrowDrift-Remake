@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jdp30.ArrowDrift.game.Level.Level;
 
 /**
@@ -15,10 +16,14 @@ public class EditorMainScreen implements Screen {
 
     private Stage stage;
     private EditorLevel level;
+    private Toolbar bar;
 
     public EditorMainScreen(Level level) {
         stage = new Stage();
         this.level = EditorLevel.fromLevel(stage, level);
+        Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
+        bar = new Toolbar(skin,(int)(Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/3),0,Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight());
+        stage.addActor(bar);
     }
 
     @Override

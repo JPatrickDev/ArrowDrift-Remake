@@ -14,7 +14,12 @@ import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
  */
 public class Toolbar extends Container<Actor> {
 
-    public Toolbar(Skin skin, int x, int y, int w, int h) {
+    private EditorMainScreen parent;
+    ToolbarClickListener l;
+
+    public Toolbar(EditorMainScreen parent, Skin skin, int x, int y, int w, int h) {
+        this.parent = parent;
+        this.l = new ToolbarClickListener(this);
         setX(x);
         setY(y);
         setWidth(w);
@@ -34,28 +39,37 @@ public class Toolbar extends Container<Actor> {
 
         Table tiles = new Table();
         table.row();
-        for (int i = 1; i <= 30; i++) {
-            tiles.add(new EditorTile(Tile.fromID(1, 0, 0, AllowedMovementType.fromID(4), new String[0]), 0, 0));
+        for (int i = 0; i <= 500; i++) {
+            Tile t = Tile.fromID(i, 0, 0, AllowedMovementType.fromID(4), new String[]{"0", "0", "0"});
+            if (t == null)
+                break;
+            EditorTile tile = new EditorTile(t, 0, 0);
+            tile.addListener(this.l);
+            tiles.add(tile);
             if (i % 3 == 0 && i != 0)
                 tiles.row();
         }
-        for(Actor a : tiles.getChildren()){
-            a.addListener(new ClickListener(){
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    System.out.println("Clicked" + event.getListenerActor());
-                    return true; //the inputmultiplexer will stop trying to handle this touch
-                }
-            });
-        }
         final ScrollPane scroll = new ScrollPane(tiles, skin);
-        scroll.layout();
         table.add(scroll).expand().fill();
-        scroll.layout();;
         this.setActor(table);
     }
 
-    public Toolbar(Actor actor) {
-        super(actor);
+    public void tileClicked(EditorTile tile) {
+        parent.setCurrentTile(tile);
+    }
+}
+
+class ToolbarClickListener extends ClickListener {
+    private Toolbar parent;
+
+    public ToolbarClickListener(Toolbar parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void clicked(InputEvent event, float x, float y) {
+        System.out.println("Clicked" + event.getListenerActor());
+        parent.tileClicked((EditorTile) event.getListenerActor());
+        super.clicked(event, x, y);
     }
 }

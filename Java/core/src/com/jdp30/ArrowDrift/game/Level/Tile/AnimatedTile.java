@@ -1,6 +1,7 @@
 package com.jdp30.ArrowDrift.game.Level.Tile;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -31,6 +32,11 @@ public class AnimatedTile extends Tile {
     public void draw(SpriteBatch batch, int xo, int yo) {
         stateTime += Gdx.graphics.getDeltaTime();
         if (animation.getKeyFrame(stateTime) != null)
-            batch.draw(animation.getKeyFrame(stateTime,true), x + xo, y + yo);
+            batch.draw(animation.getKeyFrame(stateTime, true), x + xo, y + yo);
+    }
+
+    public TextureRegion getCurrentFrame() {
+   //     stateTime += Gdx.graphics.getDeltaTime();
+        return animation.getKeyFrame(stateTime, true);
     }
 }

@@ -179,6 +179,10 @@ public class Level implements Disposable {
             writer.write(line);
             writer.newLine();
         }
+        for(Entity e : entities){
+            writer.write(e.getClass().getSimpleName() + ":" + e.getX() + "," + e.getY());
+            writer.newLine();
+        }
         writer.flush();
         writer.close();
     }

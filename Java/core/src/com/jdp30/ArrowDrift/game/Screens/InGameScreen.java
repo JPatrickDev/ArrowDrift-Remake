@@ -39,8 +39,6 @@ public class InGameScreen implements Screen {
         //level = new Level(7,7);
         level = Level.load("level.txt");
 
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture("upDown.png")));
-        ImageButton playButton = new ImageButton(drawable);
         float wh = Gdx.graphics.getWidth() / 2;
 
         upDown = new ImgButton("button/up.png", (int) (wh / 2 - 128 / 2), (int) ((Gdx.graphics.getHeight() - (level.getHeight() * Tile.TILE_SIZE)) / 2 - 128 / 2));

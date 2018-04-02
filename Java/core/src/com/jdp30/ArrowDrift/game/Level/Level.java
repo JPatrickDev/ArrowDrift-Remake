@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Jack Patrick on 05/03/2018.
- * <p>
+ *
  * Last Edit: 05/03/2018
  */
 public class Level implements Disposable {
@@ -28,23 +28,6 @@ public class Level implements Disposable {
         this.w = w;
         this.h = h;
         this.tiles = new Tile[w][h];
-     /*   for (int x = 0; x != w; x++) {
-            for (int y = 0; y != h; y++) {
-                tiles[x][y] = new Floor(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
-            }
-        }
-
-        for (int x = 0; x != w; x++) {
-            tiles[x][0] = new Wall(x * Tile.TILE_SIZE, 0);
-            tiles[x][h - 1] = new Wall(x * Tile.TILE_SIZE, (h - 1) * Tile.TILE_SIZE);
-        }
-
-        for (int y = 0; y != h; y++) {
-            tiles[0][y] = new Wall(0, y * Tile.TILE_SIZE);
-            tiles[w - 1][y] = new Wall((w - 1) * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
-        }
-*/
-        //p = new Player(1, 1);
     }
 
 
@@ -114,6 +97,12 @@ public class Level implements Disposable {
         FileHandle handle = Gdx.files.internal(file);
         String text = handle.readString();
         String wordsArray[] = text.split("\\r?\\n");
+        ArrayList<String> validLines = new ArrayList<String>();
+        for(String s : wordsArray){
+            if(!s.startsWith("#"))
+                validLines.add(s);
+        }
+        wordsArray = validLines.toArray(new String[]{});
         int width = Integer.parseInt(wordsArray[0]);
         int height = Integer.parseInt(wordsArray[1]);
         Level level = new Level(width, height);
@@ -169,6 +158,21 @@ public class Level implements Disposable {
         return level;
     }
 
+    public static Level blank(int width,int height){
+        Level level = new Level(width, height);
+        for (int y = 0; y != height; y++) {
+            for (int x = 0; x != width; x++) {
+                Tile tile = Tile.fromID(1, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(4), new String[0]);
+                if (tile != null) {
+                    level.setTileAt(x, y, tile);
+                } else {
+                    System.out.println("Invalid tile ID");
+                }
+            }
+        }
+        return level;
+    }
+
     private void setTileAt(int x, int y, Tile tile) {
         tiles[x][y] = tile;
     }
@@ -178,5 +182,9 @@ public class Level implements Disposable {
             p = (Player) entity;
         else
             entities.add(entity);
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
     }
 }

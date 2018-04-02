@@ -5,8 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+
+import java.util.ArrayList;
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -20,6 +23,7 @@ public class EditorLevel extends ClickListener {
     Stage stage;
     private EditorMainScreen parent;
     private RightListener listener;
+    public ArrayList<EntityContainer> entities = new ArrayList<EntityContainer>();
 
     public EditorLevel(EditorMainScreen parent, Stage stage, int width, int height) {
         this.width = width;
@@ -57,13 +61,25 @@ public class EditorLevel extends ClickListener {
     public void clicked(InputEvent event, float x, float y) {
         super.clicked(event, x, y);
         EditorTile t = (EditorTile) event.getListenerActor();
-        if (parent.getCurrentTile() != null) {
+        if (parent.getCurrentInHand() != null) {
             System.out.println(event.getButton());
-            if (event.getButton() == 0)
-                t.setTile(parent.getCurrentTile().getParentTile());
-            else
-                parent.getCurrentTile().rightClicked();
+            if (event.getButton() == 0) {
+                if (parent.getCurrentInHand() instanceof EditorTile) {
+                    t.setTile(((EditorTile) parent.getCurrentInHand()).getParentTile());
+                }
+                if (parent.getCurrentInHand() instanceof EntityContainer) {
+                    Entity e = ((EntityContainer) parent.getCurrentInHand()).getEntity();
+                    e.setPos((int) (t.getX() / Tile.TILE_SIZE), (int) (t.getY() / Tile.TILE_SIZE));
+                    addEntity(e);
+                }
+            }
         }
+    }
+
+    public void addEntity(Entity e) {
+        EntityContainer c = new EntityContainer(e);
+        stage.addActor(c);
+        entities.add(c);
     }
 }
 
@@ -79,12 +95,8 @@ class RightListener extends ClickListener {
     public void clicked(InputEvent event, float x, float y) {
         super.clicked(event, x, y);
         EditorTile t = (EditorTile) event.getListenerActor();
-        if (parent.getCurrentTile() != null) {
-            System.out.println(event.getButton());
-            if (event.getButton() == 0)
-                t.setTile(parent.getCurrentTile().getParentTile());
-            else
-                t.rightClicked();
-        }
+        System.out.println(event.getButton());
+        t.rightClicked();
+
     }
 }

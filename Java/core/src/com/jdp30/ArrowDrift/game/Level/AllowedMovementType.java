@@ -2,11 +2,11 @@ package com.jdp30.ArrowDrift.game.Level;
 
 /**
  * Created by Jack Patrick on 06/03/2018.
- *
+ * <p>
  * Last Edit: 06/03/2018
  */
 public enum AllowedMovementType {
-    UP_LEFT(0, 0, 0), UP_RIGHT(0, 1, 1), DOWN_LEFT(1, 0, 2), DOWN_RIGHT(1, 1, 3),NONE(0,0,4);
+    UP_LEFT(0, 0, 0), UP_RIGHT(0, 1, 1), DOWN_LEFT(1, 0, 2), DOWN_RIGHT(1, 1, 3), NONE(0, 0, 4);
 
     private int UPDOWN, LEFTRIGHT, id;
 
@@ -29,10 +29,17 @@ public enum AllowedMovementType {
     }
 
     public static AllowedMovementType fromID(int i) {
-        for(AllowedMovementType t : values()){
-            if(t.getID() == i)
+        for (AllowedMovementType t : values()) {
+            if (t.getID() == i)
                 return t;
         }
         return null;
+    }
+
+    public static AllowedMovementType next(AllowedMovementType inout) {
+        int i = inout.id + 1;
+        if (i >= 5)
+            i = 0;
+        return fromID(i);
     }
 }

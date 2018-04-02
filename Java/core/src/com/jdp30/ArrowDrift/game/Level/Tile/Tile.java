@@ -78,7 +78,7 @@ public abstract class Tile implements Disposable {
     //1 = WALL
     //2 = Belt
     //0 = FLOOR
-    public static Tile fromID(int ID, int x, int y, AllowedMovementType allowedMovementType,String[] tileData) {
+    public static Tile fromID(int ID, int x, int y, AllowedMovementType allowedMovementType, String[] tileData) {
         if (ID == 1) {
             return new Wall(x, y, allowedMovementType);
         } else if (ID == 0) {
@@ -86,15 +86,15 @@ public abstract class Tile implements Disposable {
         } else if (ID == 2) {
             int dir = Integer.parseInt(tileData[2]);
             Direction d = null;
-            if(dir == 0)
+            if (dir == 0)
                 d = Direction.UP;
-            if(dir == 1)
+            if (dir == 1)
                 d = Direction.RIGHT;
-            if(dir == 2)
+            if (dir == 2)
                 d = Direction.DOWN;
-            if(dir == 3)
+            if (dir == 3)
                 d = Direction.LEFT;
-            return new BeltTile(x, y,d);
+            return new BeltTile(x, y, d);
         }
         return null;
     }
@@ -106,4 +106,7 @@ public abstract class Tile implements Disposable {
 
     public abstract Tile copy();
 
+    public void setType(AllowedMovementType type) {
+        this.movement = type;
+    }
 }

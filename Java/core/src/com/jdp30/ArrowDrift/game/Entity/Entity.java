@@ -15,7 +15,7 @@ import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
  * <p>
  * Last Edit: 05/03/2018
  */
-public class Entity implements Disposable {
+public abstract class Entity implements Disposable {
 
     //Tile coords
     private int x, y;
@@ -192,5 +192,16 @@ public class Entity implements Disposable {
 
     public void movedBy(int dX, int dY, Level level) {
         moveTo(getX() + dX, getY() + dY, level);
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public abstract Entity copy();
+
+    public void setPos(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 }

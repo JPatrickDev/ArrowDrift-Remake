@@ -1,7 +1,9 @@
 package com.jdp30.ArrowDrift.game.LevelEditor;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Direction;
 import com.jdp30.ArrowDrift.game.Level.Tile.AnimatedTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.BeltTile;
@@ -34,6 +36,10 @@ public class EditorTile extends Actor implements Cloneable {
             }
         } else {
             batch.draw(parent.getTextureObj(), getX(), getY());
+            if (parent.getMovementType()!= AllowedMovementType.NONE) {
+                Texture t = parent.movementTextures.get(parent.getMovementType());
+                batch.draw(t, getX(),getY());
+            }
         }
     }
 
@@ -56,6 +62,8 @@ public class EditorTile extends Actor implements Cloneable {
         if (this.parent instanceof BeltTile) {
             System.out.println("Changing DIR");
             ((BeltTile) this.parent).setDir(Direction.next(((BeltTile) parent).getDir()));
+        }else{
+            this.parent.setType(AllowedMovementType.next(parent.getMovementType()));
         }
     }
 }

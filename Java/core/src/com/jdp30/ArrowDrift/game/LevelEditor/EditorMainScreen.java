@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Level.Level;
 
 /**
@@ -18,13 +20,13 @@ public class EditorMainScreen implements Screen {
     private Stage stage;
     private EditorLevel level;
     private Toolbar bar;
-    private EditorTile currentTile;
+    private Actor currentInHand;
 
     public EditorMainScreen(Level level) {
         stage = new Stage();
-        this.level = EditorLevel.fromLevel(this,stage, level);
+        this.level = EditorLevel.fromLevel(this, stage, level);
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
-        bar = new Toolbar(this,skin,(int)(Gdx.graphics.getWidth() - Gdx.graphics.getWidth()/3),0,Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight());
+        bar = new Toolbar(this, skin, (int) (Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 3), 0, Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight());
         stage.addActor(bar);
         Gdx.input.setInputProcessor(stage);
     }
@@ -41,14 +43,14 @@ public class EditorMainScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        if(currentTile != null) {
+        if (currentInHand != null) {
             SpriteBatch batch = new SpriteBatch();
             batch.begin();
             int x = Gdx.input.getX();
             int y = Gdx.graphics.getHeight() - Gdx.input.getY();
-            currentTile.setX(x);
-            currentTile.setY(y);
-            currentTile.draw(batch,1f);
+            currentInHand.setX(x);
+            currentInHand.setY(y);
+            currentInHand.draw(batch, 1f);
             batch.end();
         }
     }
@@ -80,13 +82,21 @@ public class EditorMainScreen implements Screen {
 
     public void setCurrentTile(EditorTile currentTile) {
         try {
-            this.currentTile = currentTile.clone();
+            this.currentInHand = currentTile.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
     }
 
-    public EditorTile getCurrentTile() {
-        return currentTile;
+    public void setCurrentEntity(EntityContainer container){
+        this.currentInHand = container;
+    }
+
+    public Actor getCurrentInHand() {
+        return currentInHand;
+    }
+
+    public void addEntityToLevel(Entity e) {
+        level.addEntity(e);
     }
 }

@@ -4,8 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.jdp30.ArrowDrift.game.Entity.Box;
+import com.jdp30.ArrowDrift.game.Entity.Entity;
+import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import com.jdp30.ArrowDrift.game.Level.Tile.Wall;
 
 /**
  * Created by Jack Patrick on 02/04/2018.
@@ -40,7 +44,10 @@ public class Toolbar extends Container<Actor> {
         Table tiles = new Table();
         table.row();
         for (int i = 0; i <= 500; i++) {
-            Tile t = Tile.fromID(i, 0, 0, AllowedMovementType.fromID(4), new String[]{"0", "0", "0"});
+            Tile t = Tile.fromID(i, 0, 0, AllowedMovementType.fromID(0), new String[]{"0", "0", "0"});
+            if(t instanceof Wall){
+                t = Tile.fromID(i, 0, 0, AllowedMovementType.fromID(4), new String[]{"0", "0", "0"});
+            }
             if (t == null)
                 break;
             EditorTile tile = new EditorTile(t, 0, 0);
@@ -51,11 +58,35 @@ public class Toolbar extends Container<Actor> {
         }
         final ScrollPane scroll = new ScrollPane(tiles, skin);
         table.add(scroll).expand().fill();
+        table.row();
+        Label entities = new Label("Entities",skin);
+        table.add(entities);
+        table.row();
+
+        Table entitiesTable = new Table();
+        Player player = new Player(0,0);
+        EntityContainer playerContainer = new EntityContainer(player);
+        playerContainer.addListener(l);
+        entitiesTable.add(playerContainer);
+        Box box = new Box(0,0);
+        EntityContainer boxContainer = new EntityContainer(box);
+        boxContainer.addListener(l);
+        entitiesTable.add(boxContainer);
+        table.add(entitiesTable);
+
         this.setActor(table);
     }
 
     public void tileClicked(EditorTile tile) {
         parent.setCurrentTile(tile);
+    }
+
+    public void addEntity(Entity e) {
+        parent.addEntityToLevel(e);
+    }
+
+    public void entityToolbarClicked(EntityContainer container) {
+        this.parent.setCurrentEntity(container.copy());
     }
 }
 
@@ -69,7 +100,14 @@ class ToolbarClickListener extends ClickListener {
     @Override
     public void clicked(InputEvent event, float x, float y) {
         System.out.println("Clicked" + event.getListenerActor());
-        parent.tileClicked((EditorTile) event.getListenerActor());
+        if (event.getListenerActor() instanceof EditorTile)
+            parent.tileClicked((EditorTile) event.getListenerActor());
+        if(event.getListenerActor() instanceof EntityContainer){
+            EntityContainer container = (EntityContainer) event.getListenerActor();
+            parent.entityToolbarClicked(container);
+
+        }
+
         super.clicked(event, x, y);
     }
 }

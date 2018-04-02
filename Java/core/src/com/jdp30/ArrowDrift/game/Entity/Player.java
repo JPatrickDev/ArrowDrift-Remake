@@ -40,5 +40,10 @@ public class Player extends Entity {
         }
     }
 
+    @Override
+    public Entity copy() {
+        return new Player(getX(),getY());
+    }
+
 
 }

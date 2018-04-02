@@ -21,4 +21,9 @@ public class Box extends Entity {
         super.walkedInTo(from, level);
         fling(from, level);
     }
+
+    @Override
+    public Entity copy() {
+        return new Box(getX(),getY());
+    }
 }

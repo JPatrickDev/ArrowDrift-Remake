@@ -21,11 +21,14 @@ import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.LevelEditor.EditorHomeScreen;
 import com.jdp30.ArrowDrift.game.Screens.InGameScreen;
+import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
 import org.omg.PortableInterceptor.INACTIVE;
 
 public class ArrowDriftGame extends Game {
 
     private static ArrowDriftGame INSTANCE;
+
+    private static final String VERSION_NUMBER = "0.1";
 
     public ArrowDriftGame() {
         this.INSTANCE = this;
@@ -34,7 +37,8 @@ public class ArrowDriftGame extends Game {
     @Override
     public void create() {
        //  setScreen(new InGameScreen());
-        setScreen(new EditorHomeScreen());
+     //   setScreen(new EditorHomeScreen());
+        setScreen(new MainMenuScreen());
     }
 
     public static void setCurrentScreen(Screen s){

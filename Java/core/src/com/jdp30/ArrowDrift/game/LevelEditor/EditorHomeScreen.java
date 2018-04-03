@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.Level.Level;
-
+import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
 import javax.swing.*;
 
 /**
@@ -62,23 +62,20 @@ public class EditorHomeScreen implements Screen {
 
         table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);
         table.row();
+
         final TextButton loadLevel = new TextButton("Load Level", skin);
-        table.add(loadLevel).width(newLevel.getWidth() * 3);
+        table.add(loadLevel).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
-        // Add a listener to the button. ChangeListener is fired when the button's checked state changes, eg when clicked,
-        // Button#setChecked() is called, via a key press, etc. If the event.cancel() is called, the checked state will be reverted.
-        // ClickListener could have been used, but would only fire when clicked. Also, canceling a ClickListener event won't
-        // revert the checked state.
-       /* button.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                System.out.println("Clicked! Is checked: " + button.isChecked());
-                button.setText("Good job!");
+        final TextButton back = new TextButton("Back To Main Menu", skin);
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
             }
         });
-        */
-        // Add an image actor. Have to set the size, else it would be the size of the drawable (which is the 1x1 texture).
-        //table.add(new Image(skin.newDrawable("white", Color.RED))).size(64);
+        table.add(back).width(newLevel.getWidth() * 3).pad(20);
+        table.row();
     }
 
     public void newLevel() {

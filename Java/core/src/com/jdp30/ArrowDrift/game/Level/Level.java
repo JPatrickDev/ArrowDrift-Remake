@@ -69,6 +69,7 @@ public class Level implements Disposable {
             if (e.getX() == x && e.getY() == y)
                 return false;
         }
+        //TODO Check for player, unless the player has called the function
         return true;
     }
 
@@ -163,7 +164,7 @@ public class Level implements Disposable {
     public void toFile(String path) throws IOException {
         FileHandle handle = Gdx.files.local(path);
         handle.delete();
-        BufferedWriter writer = new BufferedWriter(handle.writer(true,"UTF8"));
+        BufferedWriter writer = new BufferedWriter(handle.writer(true, "UTF8"));
         writer.write(this.getWidth() + "");
         writer.newLine();
         writer.write(getHeight() + "");
@@ -175,11 +176,11 @@ public class Level implements Disposable {
             for (int x = 0; x != getWidth(); x++) {
                 line += ":" + tiles[x][y].toStringFormat();
             }
-            line = line.replaceFirst(":","");
+            line = line.replaceFirst(":", "");
             writer.write(line);
             writer.newLine();
         }
-        for(Entity e : entities){
+        for (Entity e : entities) {
             writer.write(e.getClass().getSimpleName() + ":" + e.getX() + "," + e.getY());
             writer.newLine();
         }

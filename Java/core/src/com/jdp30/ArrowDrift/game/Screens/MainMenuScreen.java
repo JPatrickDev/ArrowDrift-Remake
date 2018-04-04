@@ -4,13 +4,11 @@ package com.jdp30.ArrowDrift.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.LevelEditor.EditorHomeScreen;
@@ -39,7 +37,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                ArrowDriftGame.setCurrentScreen(new InGameScreen());
+                ArrowDriftGame.setCurrentScreen(new CategorySelectScreen());
             }
         });
         table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);

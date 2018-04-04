@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,12 +31,17 @@ public class ArrowDriftGame extends Game {
 
     private static final String VERSION_NUMBER = "0.1";
 
+    private BitmapFont font;
+    private SpriteBatch batch;
     public ArrowDriftGame() {
         this.INSTANCE = this;
+
     }
 
     @Override
     public void create() {
+        font = new BitmapFont(Gdx.files.internal("fonts/cg12.fnt"),Gdx.files.internal("fonts/cg12.png"),false);
+        batch = new SpriteBatch();
        //  setScreen(new InGameScreen());
      //   setScreen(new EditorHomeScreen());
         setScreen(new MainMenuScreen());
@@ -49,6 +55,9 @@ public class ArrowDriftGame extends Game {
     @Override
     public void render() {
         super.render();
+        batch.begin();
+        font.draw(batch,VERSION_NUMBER,0,12);
+        batch.end();
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.jdp30.ArrowDrift.game.GUI.ImgButton;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import sun.plugin.dom.exception.InvalidStateException;
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -33,11 +34,15 @@ public class InGameScreen implements Screen {
 
     private ImgButton upDown = null, leftRight = null;
 
+    public static String lvl = null;
     @Override
     public void show() {
+        if(lvl == null){
+            throw new InvalidStateException("Level can't be null");
+        }
         batch = new SpriteBatch();
         //level = new Level(7,7);
-        level = Level.load("level.txt");
+        level = Level.load(lvl);
 
         float wh = Gdx.graphics.getWidth() / 2;
 

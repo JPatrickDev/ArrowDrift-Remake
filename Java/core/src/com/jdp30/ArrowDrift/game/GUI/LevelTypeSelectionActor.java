@@ -61,6 +61,6 @@ public class LevelTypeSelectionActor extends Actor {
         }
         super.draw(batch, parentAlpha);
         batch.draw(previewTexture, getX() + padding, getY() + padding, prevWidth, prevHeight);
-        font.draw(batch, name, getX() + (getWidth() / 2 - this.nameWidth/2), getY() + padding);
+        font.draw(batch, name, getX() + (getWidth() / 2 - this.nameWidth/2), getY() + padding - 10);
     }
 }

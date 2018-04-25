@@ -1,22 +1,30 @@
 <html>
 <head>
     <style>
-        body {
+        body{
             background-color: #DCDCDC;
+            height:100%;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
         }
 
         #content {
-            position: relative;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-
-            width: 40%;
+            width: 50%;
             margin: 0 auto;
             text-align: center;
             background-color: #F4F4F4;
             border: 5px solid black;
+        }
+
+        #container{
+            margin-top: 50px;
+        }
+
+        #navbar{
+            border-bottom: 4px solid black;
+            border-top: 4px solid black;
+            background-color: #568777;
         }
 
         ul {
@@ -27,33 +35,108 @@
             padding-left: 5%;
             padding-right: 5%;
             display: inline;
-            width:100px;
+            width: 100px;
+            height:100%;
         }
 
-        #container {
-            height: 100%;
-            width: 100%;
-            background-color: lightgray;
+
+        .column {
+            float: left;
+            width: 50%;
         }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .left {
+            width: 70%;
+        }
+
+        .right {
+            width: 30%;
+        }
+        #updates {
+            display: flex;
+            justify-content: center;
+        }
+
+        #updatesGrid {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .update {
+            border: 4px solid #101010;
+            width: 750px;
+            height: 100px;
+            margin: 10px;
+            background-color: #568777;
+            position: relative;
+        }
+
+        .updateHeader {
+            font-weight: bold;
+            padding: 5px;
+            border-bottom: 4px solid black;
+            height: 20px;
+            line-height:20px;
+        }
+
+        .updateContent{
+            padding: 10px;
+        }
+
+        .updateFooter{
+            border-top: 4px solid black;
+            position: absolute;
+            bottom: 0;
+            width:100%;
+        }
+
+        @media (max-width: 992px) {
+            #content {
+                width: 80%;
+            }
+            .update{
+                height:130px
+            }
+        }
+
     </style>
 </head>
 <body>
 <div id="container">
     <div id="content">
         <div id="logoHeader">
-            <h1>ArrowDrift</h1>
+            <h1>Arrow Drift</h1>
         </div>
-        <hr>
         <div id="navbar">
             <ul>
-                <li>Home</li>
+                <li><a href="#">Home</a></li>
                 <li>About</li>
                 <li>Download</li>
             </ul>
         </div>
-        <hr>
         <div id="mainContent">
-            <h1>Coming Soon!</h1>
+            <div class="row">
+                <div class="column left"><h3>Recent Updates:</h3>
+                    <div id = "updates">
+                        <div id = "updatesGrid">
+                            <div class="update">
+                                <div class = "updateHeader">25.04.2018</div>
+                                <div class = "updateContent">Welcome to the Arrow Drift Website! More information coming soon.</div>
+                                <div class = "updateFooter">Tags: Announcement, Update</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column right"><h3>Commit History:</h3>Coming soon... <br><a href = "https://github.com/JPatrickDev/ArrowDrift-Remake">JPatrickDev/ArrowDrift-Remake</a></div>
+            </div>
         </div>
     </div>
 </div>

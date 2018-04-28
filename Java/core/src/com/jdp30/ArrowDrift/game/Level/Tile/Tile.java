@@ -13,7 +13,7 @@ import java.util.Random;
 
 /**
  * Created by Jack Patrick on 05/03/2018.
- * <p>
+ * <p/>
  * Last Edit: 05/03/2018
  */
 public abstract class Tile implements Disposable {
@@ -75,6 +75,7 @@ public abstract class Tile implements Disposable {
         return movement;
     }
 
+    //3 = Goal
     //1 = WALL
     //2 = Belt
     //0 = FLOOR
@@ -95,6 +96,8 @@ public abstract class Tile implements Disposable {
             if (dir == 3)
                 d = Direction.LEFT;
             return new BeltTile(x, y, d);
+        } else if (ID == 3) {
+            return new GoalTile(x, y, allowedMovementType);
         }
         return null;
     }

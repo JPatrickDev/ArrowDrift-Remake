@@ -36,7 +36,7 @@ public abstract class AnimatedTile extends Tile {
     }
 
     public TextureRegion getCurrentFrame() {
-   //     stateTime += Gdx.graphics.getDeltaTime();
+        stateTime += Gdx.graphics.getDeltaTime();
         return animation.getKeyFrame(stateTime, true);
     }
 }

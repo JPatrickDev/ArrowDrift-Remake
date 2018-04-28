@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.IndexArray;
 import com.badlogic.gdx.utils.Disposable;
 import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Entity.Player;
+import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 
 import java.io.BufferedWriter;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Jack Patrick on 05/03/2018.
- * <p>
+ * <p/>
  * Last Edit: 05/03/2018
  */
 public class Level implements Disposable {
@@ -25,6 +26,8 @@ public class Level implements Disposable {
 
     public Player p;
     private ArrayList<Entity> entities = new ArrayList<Entity>();
+
+    private int endX, endY;
 
     public Level(int w, int h) {
         this.w = w;
@@ -204,6 +207,10 @@ public class Level implements Disposable {
     }
 
     public void setTileAt(int x, int y, Tile tile) {
+        if (tile instanceof GoalTile) {
+            this.endX = x;
+            this.endY = y;
+        }
         tiles[x][y] = tile;
     }
 

@@ -7,13 +7,13 @@ import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
  */
 public class GoalTile extends Tile {
 
-    public GoalTile(int x, int y, AllowedMovementType type) {
-        super("goal.png", x, y, false, type);
+    public GoalTile(int x, int y) {
+        super("goal.png", x, y, false, AllowedMovementType.NONE);
     }
 
     @Override
     public Tile copy() {
-        return new GoalTile(x, y, getMovementType());
+        return new GoalTile(x, y);
     }
 
     @Override

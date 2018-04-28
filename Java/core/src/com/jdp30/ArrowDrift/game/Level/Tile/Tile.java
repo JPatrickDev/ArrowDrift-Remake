@@ -97,7 +97,7 @@ public abstract class Tile implements Disposable {
                 d = Direction.LEFT;
             return new BeltTile(x, y, d);
         } else if (ID == 3) {
-            return new GoalTile(x, y, allowedMovementType);
+            return new GoalTile(x, y);
         }
         return null;
     }

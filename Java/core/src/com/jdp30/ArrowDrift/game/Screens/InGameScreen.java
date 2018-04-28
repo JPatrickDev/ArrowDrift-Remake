@@ -19,7 +19,7 @@ import sun.plugin.dom.exception.InvalidStateException;
 
 /**
  * Created by Jack Patrick on 11/03/2018.
- * <p>
+ * <p/>
  * Last Edit: 11/03/2018
  */
 public class InGameScreen implements Screen {
@@ -28,6 +28,8 @@ public class InGameScreen implements Screen {
     Texture img;
     Level level = null;
 
+    int levelPos = 0;
+
     int topPadding = 10;
 
     Stage ui = null;
@@ -35,9 +37,10 @@ public class InGameScreen implements Screen {
     private ImgButton upDown = null, leftRight = null;
 
     public static String lvl = null;
+
     @Override
     public void show() {
-        if(lvl == null){
+        if (lvl == null) {
             throw new InvalidStateException("Level can't be null");
         }
         batch = new SpriteBatch();
@@ -76,20 +79,29 @@ public class InGameScreen implements Screen {
                 }
             }
         });
+    }
 
-
+    public String getNextLevel() {
+        String[] levelSplit = InGameScreen.lvl.split("/");
+        String end = levelSplit[levelSplit.length - 1];
+        end = end.replace(".txt","");
+        end = (Integer.parseInt(end) + 1) + ".txt";
+        String newS = "";
+        for(int i = 0; i != levelSplit.length - 1; i++){
+            newS += levelSplit[i] + "/";
+        }
+        return  newS  + end;
     }
 
     @Override
     public void render(float delta) {
-        System.out.println(level.p.isMoving());
-
         update();
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding);
+        if (level != null)
+            level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding);
         upDown.draw(batch);
         leftRight.draw(batch);
         batch.end();
@@ -97,6 +109,7 @@ public class InGameScreen implements Screen {
     }
 
     public void update() {
+        if (level == null) return;
         AllowedMovementType t = level.getCurrentMovementType();
         if (t.getUPDOWN() == 0) {
             upDown.setTexture(new Texture("button/up.png"));
@@ -108,6 +121,13 @@ public class InGameScreen implements Screen {
             leftRight.setTexture(new Texture("button/left.png"));
         } else if (t.getLEFTRIGHT() == 1) {
             leftRight.setTexture(new Texture("button/right.png"));
+        }
+
+        if (level != null) {
+            if (level.isOver()) {
+                lvl = getNextLevel();
+                level = Level.load(lvl);
+            }
         }
     }
 

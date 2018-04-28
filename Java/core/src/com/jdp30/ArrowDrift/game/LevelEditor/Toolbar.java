@@ -56,7 +56,7 @@ public class Toolbar extends Container<Actor> {
             EditorTile tile = new EditorTile(t, 0, 0);
             tile.addListener(this.l);
             tiles.add(tile);
-            if (i % 3 == 0 && i != 0)
+            if (i % 2 == 0 && i != 0)
                 tiles.row();
         }
         final ScrollPane scroll = new ScrollPane(tiles, skin);

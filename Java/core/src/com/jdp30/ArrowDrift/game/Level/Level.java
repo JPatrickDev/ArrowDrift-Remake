@@ -10,6 +10,7 @@ import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 
+import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -29,10 +30,12 @@ public class Level implements Disposable {
 
     private int endX, endY;
 
+    private boolean won = false;
     public Level(int w, int h) {
         this.w = w;
         this.h = h;
         this.tiles = new Tile[w][h];
+        won = false;
     }
 
 
@@ -51,6 +54,10 @@ public class Level implements Disposable {
             e.draw(batch, xo, yo);
         }
         p.draw(batch, xo, yo);
+
+        if(p.getX() == endX && p.getY() == endY){
+            won = true;
+        }
     }
 
     public int getWidth() {
@@ -223,5 +230,9 @@ public class Level implements Disposable {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public boolean isOver() {
+        return won;
     }
 }

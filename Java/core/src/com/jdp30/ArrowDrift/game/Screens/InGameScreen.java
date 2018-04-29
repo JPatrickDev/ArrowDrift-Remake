@@ -132,11 +132,12 @@ public class InGameScreen implements Screen {
 
         if (level != null) {
             if (level.isOver()) {
-                lvl = getNextLevel();
-                if(lvl == null){
+                if(getNextLevel() == null){
+                    CategoryFinishedScreen.category = lvl;
                     ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());
                     return;
                 }
+                lvl = getNextLevel();
                 level = Level.load(lvl);
             }
         }

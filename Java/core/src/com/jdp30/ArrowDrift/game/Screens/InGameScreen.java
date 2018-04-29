@@ -2,6 +2,7 @@ package com.jdp30.ArrowDrift.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.GUI.Callback;
 import com.jdp30.ArrowDrift.game.GUI.ImgButton;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
@@ -44,7 +46,7 @@ public class InGameScreen implements Screen {
             throw new InvalidStateException("Level can't be null");
         }
         batch = new SpriteBatch();
-        //level = new Level(7,7);
+
         level = Level.load(lvl);
 
         float wh = Gdx.graphics.getWidth() / 2;
@@ -84,13 +86,18 @@ public class InGameScreen implements Screen {
     public String getNextLevel() {
         String[] levelSplit = InGameScreen.lvl.split("/");
         String end = levelSplit[levelSplit.length - 1];
-        end = end.replace(".txt","");
+        end = end.replace(".txt", "");
         end = (Integer.parseInt(end) + 1) + ".txt";
         String newS = "";
-        for(int i = 0; i != levelSplit.length - 1; i++){
+        for (int i = 0; i != levelSplit.length - 1; i++) {
             newS += levelSplit[i] + "/";
         }
-        return  newS  + end;
+        FileHandle handle = Gdx.files.internal(newS + end);
+        if (handle.exists()) {
+            return newS + end;
+        }else{
+            return null;
+        }
     }
 
     @Override
@@ -126,6 +133,10 @@ public class InGameScreen implements Screen {
         if (level != null) {
             if (level.isOver()) {
                 lvl = getNextLevel();
+                if(lvl == null){
+                    ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());
+                    return;
+                }
                 level = Level.load(lvl);
             }
         }

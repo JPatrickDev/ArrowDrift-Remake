@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +19,7 @@ import com.jdp30.ArrowDrift.game.GUI.ImgButton;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import javafx.scene.paint.Color;
 import sun.plugin.dom.exception.InvalidStateException;
 
 /**
@@ -37,7 +40,7 @@ public class InGameScreen implements Screen {
     Stage ui = null;
 
     private ImgButton upDown = null, leftRight = null;
-
+    private BitmapFont font;
     public static String lvl = null;
 
     @Override
@@ -45,6 +48,9 @@ public class InGameScreen implements Screen {
         if (lvl == null) {
             throw new InvalidStateException("Level can't be null");
         }
+
+        font = new BitmapFont(Gdx.files.internal("fonts/cg40.fnt"), Gdx.files.internal("fonts/cg40.png"), false);
+
         batch = new SpriteBatch();
 
         level = Level.load(lvl);
@@ -75,8 +81,14 @@ public class InGameScreen implements Screen {
                     AllowedMovementType t = level.getCurrentMovementType();
                     if (t.getLEFTRIGHT() == 0) {
                         level.p.movedBy(-1, 0, level);
+                        if (level.p.isMoving()) {
+                            level.moves++;
+                        }
                     } else if (t.getLEFTRIGHT() == 1) {
                         level.p.movedBy(1, 0, level);
+                        if (level.p.isMoving()) {
+                            level.moves++;
+                        }
                     }
                 }
             }
@@ -95,10 +107,12 @@ public class InGameScreen implements Screen {
         FileHandle handle = Gdx.files.internal(newS + end);
         if (handle.exists()) {
             return newS + end;
-        }else{
+        } else {
             return null;
         }
     }
+
+    GlyphLayout layout = new GlyphLayout();
 
     @Override
     public void render(float delta) {
@@ -109,6 +123,11 @@ public class InGameScreen implements Screen {
         batch.begin();
         if (level != null)
             level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding);
+        font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
+        //dont do this every frame! Store it as member
+        layout.setText(font, "Moves: " + level.moves);
+        font.draw(batch, "Moves: " + level.moves, Gdx.graphics.getWidth() / 2 - (layout.width) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding - topPadding);
+        font.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         upDown.draw(batch);
         leftRight.draw(batch);
         batch.end();
@@ -132,7 +151,7 @@ public class InGameScreen implements Screen {
 
         if (level != null) {
             if (level.isOver()) {
-                if(getNextLevel() == null){
+                if (getNextLevel() == null) {
                     CategoryFinishedScreen.category = lvl;
                     ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());
                     return;

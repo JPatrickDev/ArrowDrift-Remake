@@ -31,6 +31,8 @@ public class Level implements Disposable {
     private int endX, endY;
 
     private boolean won = false;
+    public int moves = 0;
+
     public Level(int w, int h) {
         this.w = w;
         this.h = h;

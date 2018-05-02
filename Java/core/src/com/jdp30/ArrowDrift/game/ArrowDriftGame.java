@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
+import storage.Node;
+import storage.StorageSystem;
+
+import java.io.IOException;
 
 
 public class ArrowDriftGame extends Game {
@@ -17,6 +21,8 @@ public class ArrowDriftGame extends Game {
 
     private BitmapFont font;
     private SpriteBatch batch;
+
+    public static StorageSystem userdata;
     public ArrowDriftGame() {
         this.INSTANCE = this;
 
@@ -24,6 +30,14 @@ public class ArrowDriftGame extends Game {
 
     @Override
     public void create() {
+        createUserData();
+        try {
+            userdata = StorageSystem.fromFile("Arrow Drift Data/config");
+        } catch (IOException e) {
+            e.printStackTrace();
+            //TODO - Handle better
+            System.exit(0);
+        }
         font = new BitmapFont(Gdx.files.internal("fonts/cg12.fnt"),Gdx.files.internal("fonts/cg12.png"),false);
         batch = new SpriteBatch();
         setScreen(new MainMenuScreen());
@@ -44,7 +58,28 @@ public class ArrowDriftGame extends Game {
 
     @Override
     public void dispose() {
-
+        notifyStorageChanged();
     }
 
+    public void createUserData(){
+        if(Gdx.files.external("Arrow Drift Data/config").exists())
+            return;
+        StorageSystem system = new StorageSystem("userdata");
+        Node settings = new Node("settings");
+        system.getRoot().addChild(settings);
+        try {
+            system.save("Arrow Drift Data/config");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void notifyStorageChanged() {
+        System.out.println("Saving...");
+        try {
+            userdata.save("Arrow Drift Data/config");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

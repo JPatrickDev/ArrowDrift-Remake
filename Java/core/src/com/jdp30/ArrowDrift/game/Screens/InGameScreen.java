@@ -19,6 +19,7 @@ import com.jdp30.ArrowDrift.game.GUI.ImgButton;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import com.jdp30.ArrowDrift.game.util.LevelUtil;
 import javafx.scene.paint.Color;
 import sun.plugin.dom.exception.InvalidStateException;
 
@@ -66,8 +67,14 @@ public class InGameScreen implements Screen {
                     AllowedMovementType t = level.getCurrentMovementType();
                     if (t.getUPDOWN() == 0) {
                         level.p.movedBy(0, 1, level);
+                        if (level.p.isMoving()) {
+                            level.moves++;
+                        }
                     } else if (t.getUPDOWN() == 1) {
                         level.p.movedBy(0, -1, level);
+                        if (level.p.isMoving()) {
+                            level.moves++;
+                        }
                     }
                 }
             }
@@ -124,14 +131,12 @@ public class InGameScreen implements Screen {
         if (level != null)
             level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding);
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
-        //dont do this every frame! Store it as member
         layout.setText(font, "Moves: " + level.moves);
         font.draw(batch, "Moves: " + level.moves, Gdx.graphics.getWidth() / 2 - (layout.width) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding - topPadding);
         font.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         upDown.draw(batch);
         leftRight.draw(batch);
         batch.end();
-
     }
 
     public void update() {
@@ -151,6 +156,8 @@ public class InGameScreen implements Screen {
 
         if (level != null) {
             if (level.isOver()) {
+                String[] s = lvl.split("/");
+                LevelUtil.updateMoves(s[s.length - 1], s[1], level.moves);
                 if (getNextLevel() == null) {
                     CategoryFinishedScreen.category = lvl;
                     ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());

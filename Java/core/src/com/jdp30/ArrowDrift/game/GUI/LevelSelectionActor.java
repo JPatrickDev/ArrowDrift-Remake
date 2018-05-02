@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.jdp30.ArrowDrift.game.util.LevelUtil;
 
 import java.util.Random;
 
@@ -39,11 +40,32 @@ public class LevelSelectionActor extends Actor {
         r = rnd.nextFloat();
         g = rnd.nextFloat();
         b = rnd.nextFloat();
-        this.stars = rnd.nextInt(4);
+       // this.stars = rnd.nextInt(4);
     }
 
     public void init() {
         padding = getWidth() / 4.0f;
+        String[] s = path.split("/");
+        int i = LevelUtil.getMovesTaken(s[s.length - 1], s[1]);
+        if(i != -1){
+            int diff = i - LevelUtil.getMinMoves(s[s.length - 1], s[1]);
+            System.out.println(diff);
+            if(diff == 0){
+                stars = 3;
+            }else{
+                if(diff < 0){
+                    //Looks like our minMoves is wrong?
+                    stars = 3;
+                }else{
+                    if(diff <= 5)
+                        stars = 2;
+                    else
+                        stars = 1;
+                }
+            }
+        }else{
+            this.stars = 0;
+        }
     }
 
     float s = 0.5f;

@@ -25,6 +25,7 @@ public class Level implements Disposable {
     private int w, h;
     private Tile[][] tiles;
 
+    private int minMoves = 0;
     public Player p;
     private ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -60,6 +61,14 @@ public class Level implements Disposable {
         if(p.getX() == endX && p.getY() == endY){
             won = true;
         }
+    }
+
+    public int getMinMoves() {
+        return minMoves;
+    }
+
+    public void setMinMoves(int minMoves) {
+        this.minMoves = minMoves;
     }
 
     public int getWidth() {
@@ -120,6 +129,7 @@ public class Level implements Disposable {
         wordsArray = validLines.toArray(new String[]{});
         int width = Integer.parseInt(wordsArray[0]);
         int height = Integer.parseInt(wordsArray[1]);
+
         Level level = new Level(width, height);
         String[] spawnInfo = wordsArray[2].split(" ");
 
@@ -127,9 +137,12 @@ public class Level implements Disposable {
         int spawnY = Integer.parseInt(spawnInfo[1]);
         level.addEntity(new Player(spawnX, spawnY));
 
+        int minMoves = Integer.parseInt(wordsArray[3].trim());
+        level.setMinMoves(minMoves);
+
         int x = 0;
         int y = 0;
-        for (int i = 2 + height; i != 2; i--) {
+        for (int i = 3 + height; i != 3; i--) {
             String row = wordsArray[i];
             String[] tiles = row.split(":");
             for (String t : tiles) {
@@ -146,9 +159,9 @@ public class Level implements Disposable {
             x = 0;
             y++;
         }
-        if (wordsArray.length > (3 + height)) {
+        if (wordsArray.length > (4 + height)) {
             System.out.println("More data found");
-            for (int i = 3 + height; i != (wordsArray.length); i++) {
+            for (int i = 4 + height; i != (wordsArray.length); i++) {
                 String row = wordsArray[i];
                 String[] rowData = row.split(":");
                 String[] coords = rowData[1].split(",");
@@ -182,6 +195,8 @@ public class Level implements Disposable {
         writer.write(getHeight() + "");
         writer.newLine();
         writer.write(p.getX() + " " + p.getY());
+        writer.newLine();
+        writer.write(getMinMoves());
         writer.newLine();
         for (int y = getHeight() - 1; y >= 0; y--) {
             String line = "";

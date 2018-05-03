@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
+import com.jdp30.ArrowDrift.game.GUI.LevelSelectionActor;
 import com.jdp30.ArrowDrift.game.GUI.LevelTypeSelectionActor;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class CategorySelectScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
+
                     ArrowDriftGame.setCurrentScreen(new LevelSelectScreen(f.path() + "/levels/"));
                 }
             });

@@ -40,7 +40,7 @@ public class LevelSelectScreen implements Screen {
         int x = 0;
         int y = 0;
         int xP = 0;
-        float w = (800.0f) / 4;
+        float w = (Gdx.graphics.getWidth()) / 3.0f;
         float h = w;
         y = (int) h;
         for (final FileHandle f : children) {
@@ -55,6 +55,7 @@ public class LevelSelectScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
+                   // ((LevelSelectionActor)event.getListenerActor()).recaulcuateFont();
                     InGameScreen.lvl = f.path();
                     ArrowDriftGame.setCurrentScreen(new InGameScreen());
                 }

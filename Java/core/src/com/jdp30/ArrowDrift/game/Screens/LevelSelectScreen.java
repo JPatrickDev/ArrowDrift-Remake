@@ -41,7 +41,11 @@ public class LevelSelectScreen implements Screen {
         int y = 0;
         int xP = 0;
         float w = (Gdx.graphics.getWidth()) / 3.0f;
-        float h = w;
+        float h = Gdx.graphics.getHeight()/3.0f;
+        if(w > h)
+            w = h;
+        else
+            h = w;
         y = (int) h;
         for (final FileHandle f : children) {
             LevelSelectionActor a = new LevelSelectionActor(0, f.path(), f.path().split("/")[f.path().split("/").length - 1].replace(".txt",""));

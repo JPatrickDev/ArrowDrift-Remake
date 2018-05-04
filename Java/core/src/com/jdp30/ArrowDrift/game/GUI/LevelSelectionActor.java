@@ -127,7 +127,10 @@ public class LevelSelectionActor extends Actor {
         String[] s = path.split("/");
         batch.setColor(1, 1, 1, 1);
         font.draw(batch, name, getX() + padding / 2 + ((getWidth() - padding) / 2 - nameWidth / 2), getY() + padding);
+        if(moves != -1)
         smallerFont.draw(batch, moves + "", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 1.5)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+        else
+            smallerFont.draw(batch,"-", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 0.75)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
 
         smallerFont.draw(batch, min + "", (float) ((float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2)) + disabledStar.getWidth() * 3 ), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
         for (int i = 0; i != 3; i++) {

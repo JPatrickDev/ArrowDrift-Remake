@@ -150,8 +150,8 @@
                     </div>
                 </div>
                 <div class="column right">
-                    <h3>Recent Commits:</h3>
-                    <a href="https://github.com/JPatrickDev/ArrowDrift-Remake">JPatrickDev/ArrowDrift-Remake</a>
+                    <a href="https://github.com/JPatrickDev/ArrowDrift-Remake"><h3>Recent Commits:</h3>
+                    </a>
                     <div id="commitArea">
                         <?php
                         $context = stream_context_create([

@@ -9,6 +9,8 @@ import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import storage.Node;
+import storage.StorageSystem;
 
 import javax.swing.*;
 import java.io.BufferedWriter;
@@ -58,7 +60,7 @@ public class Level implements Disposable {
         }
         p.draw(batch, xo, yo);
 
-        if(p.getX() == endX && p.getY() == endY){
+        if (p.getX() == endX && p.getY() == endY) {
             won = true;
         }
     }
@@ -213,6 +215,37 @@ public class Level implements Disposable {
         }
         writer.flush();
         writer.close();
+    }
+
+    public void toFile(String path, String name) throws IOException{
+        StorageSystem level = new StorageSystem(name);
+        Node rootNode = level.getRoot();
+        rootNode.addValue("width", this.w + "");
+        rootNode.addValue("height", this.h + "");
+        rootNode.addValue("name", name);
+        rootNode.addValue("spawn", p.getX() + " " + p.getY());
+        rootNode.addValue("minMoves", getMinMoves() + "");
+        String tileData = "";
+        for (int y = getHeight() - 1; y >= 0; y--) {
+            String line = "";
+            for (int x = 0; x != getWidth(); x++) {
+                line += ":" + tiles[x][y].toStringFormat();
+            }
+            line = line.replaceFirst(":", "");
+            tileData += "#" + line;
+        }
+        tileData = tileData.replaceFirst("#","");
+        rootNode.addValue("tiles",tileData);
+
+        String entityData = "";
+        for (Entity e : entities) {
+            entityData += "#" +   e.getClass().getSimpleName() + ":" + e.getX() + "," + e.getY();
+        }
+        entityData = entityData.replaceFirst("#","");
+        rootNode.addValue("entities",entityData);
+
+       level.save("Arrow Drift Data/Levels/" + path);
+
     }
 
     public static Level blank(int width, int height) {

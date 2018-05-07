@@ -122,7 +122,7 @@ public class EditorLevel extends ClickListener {
 
     public void save(String fileName) {
         try {
-            toLevel().toFile(fileName);
+            toLevel().toFile(fileName,"Level Testing");
         } catch (IOException e) {
             e.printStackTrace();
         }

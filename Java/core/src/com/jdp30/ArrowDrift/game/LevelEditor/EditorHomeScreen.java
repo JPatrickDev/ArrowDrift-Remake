@@ -21,9 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.GUI.FileDialog;
+import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
+import storage.Node;
+import storage.StorageSystem;
+
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -87,17 +92,52 @@ public class EditorHomeScreen implements Screen {
     }
 
     private void loadPack() {
-        FileDialog files = new FileDialog("Choose Level File", skin) {
+        FileDialog files = new FileDialog("Choose Map Pack", skin) {
             @Override
             protected void result(Object object) {
                 if (object.equals("OK")) {
                     FileHandle file = getFile();
-                    
+                    try {
+                        StorageSystem system = StorageSystem.fromFile(file.toString());
+                        showCatSelectDialog(system,file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
         files.setDirectory(Gdx.files.external("Arrow Drift Data/Levels/"));
         files.show(stage);
+    }
+
+    private void showCatSelectDialog(final StorageSystem system,final FileHandle file){
+        LevelSelectDialog files = new LevelSelectDialog("Select Category", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    Node n = selected;
+                    if(n == null){
+                        String name = JOptionPane.showInputDialog(null,"Category Name:");
+                        Node newCat = new Node(name);
+                        system.getRoot().addChild(newCat);
+                        try {
+                            system.save(file.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        showCatSelectDialog(system,file);
+                    }else{
+                        showLevelSelectDialog(n,file);
+                    }
+                }
+            }
+        };
+        files.setStorageSystem(system);
+        files.show(stage);
+    }
+
+    private void showLevelSelectDialog(Node category,FileHandle file){
+
     }
 
     public void newLevel() {

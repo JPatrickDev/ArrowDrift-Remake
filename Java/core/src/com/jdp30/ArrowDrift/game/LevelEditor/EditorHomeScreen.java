@@ -3,6 +3,7 @@ package com.jdp30.ArrowDrift.game.LevelEditor;
 import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
+import com.jdp30.ArrowDrift.game.GUI.FileDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
 import javax.swing.*;
@@ -51,7 +53,7 @@ public class EditorHomeScreen implements Screen {
         stage.addActor(table);
 
 
-        final TextButton newLevel = new TextButton("New Level", skin);
+        final TextButton newLevel = new TextButton("New Map Pack", skin);
 
         newLevel.addListener(new ChangeListener() {
             @Override
@@ -63,7 +65,13 @@ public class EditorHomeScreen implements Screen {
         table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
-        final TextButton loadLevel = new TextButton("Load Level", skin);
+        final TextButton loadLevel = new TextButton("Load Map Pack", skin);
+        loadLevel.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                loadPack();
+            }
+        });
         table.add(loadLevel).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
@@ -76,6 +84,20 @@ public class EditorHomeScreen implements Screen {
         });
         table.add(back).width(newLevel.getWidth() * 3).pad(20);
         table.row();
+    }
+
+    private void loadPack() {
+        FileDialog files = new FileDialog("Choose Level File", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    FileHandle file = getFile();
+                    
+                }
+            }
+        };
+        files.setDirectory(Gdx.files.external("Arrow Drift Data/Levels/"));
+        files.show(stage);
     }
 
     public void newLevel() {

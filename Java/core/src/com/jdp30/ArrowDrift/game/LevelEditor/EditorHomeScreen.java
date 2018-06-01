@@ -91,6 +91,7 @@ public class EditorHomeScreen implements Screen {
         table.row();
     }
 
+    StorageSystem currentSystem = null;
     private void loadPack() {
         FileDialog files = new FileDialog("Choose Map Pack", skin) {
             @Override
@@ -99,6 +100,7 @@ public class EditorHomeScreen implements Screen {
                     FileHandle file = getFile();
                     try {
                         StorageSystem system = StorageSystem.fromFile(file.toString());
+                        currentSystem = system;
                         showCatSelectDialog(system,file);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -132,12 +134,37 @@ public class EditorHomeScreen implements Screen {
                 }
             }
         };
-        files.setStorageSystem(system);
+        files.setNode(system.getRoot());
         files.show(stage);
     }
 
-    private void showLevelSelectDialog(Node category,FileHandle file){
-
+    private void showLevelSelectDialog(final Node category, final FileHandle file){
+        LevelSelectDialog files = new LevelSelectDialog("Select Level", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    Node n = selected;
+                    if(n == null){
+                        String name = JOptionPane.showInputDialog(null,"Level  Name:");
+                        int w = Integer.parseInt(JOptionPane.showInputDialog(null,"Width:"));
+                        int h = Integer.parseInt(JOptionPane.showInputDialog(null,"Height:"));
+                        Level level = Level.blank(w,h);
+                        category.addChild(level.toNode(name));
+                        try {
+                            currentSystem.save(file.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        showLevelSelectDialog(category,file);
+                    }else{
+                      //  showLevelSelectDialog(n,file);
+                        startEditor(Level.fromNode(n));
+                    }
+                }
+            }
+        };
+        files.setNode(category);
+        files.show(stage);
     }
 
     public void newLevel() {

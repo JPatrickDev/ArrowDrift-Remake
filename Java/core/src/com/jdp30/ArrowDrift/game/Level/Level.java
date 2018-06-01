@@ -188,17 +188,21 @@ public class Level implements Disposable {
         return level;
     }
 
-    public static Level loadFromStorageSystem(Node node) {
+    public static Level fromNode(Node node) {
         int width = Integer.parseInt(node.getValue("width"));
         int height = Integer.parseInt(node.getValue("height"));
+
+        Level level = new Level(width, height);
+
         String levelName = node.getValue("name");
-        String[] spawnData = node.getValue("spawn").split(" ");
+        if (node.getValue("spawn") != null) {
+            String[] spawnData = node.getValue("spawn").split(" ");
+            level.addEntity(new Player(Integer.parseInt(spawnData[0]), Integer.parseInt(spawnData[1])));
+        }
         int minMoves = Integer.parseInt(node.getValue("minMoves"));
         String tileInfo = node.getValue("tiles");
         String entityData = node.getValue("entities");
-        Level level = new Level(width, height);
 
-        level.addEntity(new Player(Integer.parseInt(spawnData[0]), Integer.parseInt(spawnData[1])));
         level.setMinMoves(minMoves);
         String[] tileRows = tileInfo.split("#");
         int x = 0;
@@ -218,6 +222,9 @@ public class Level implements Disposable {
             x = 0;
             y++;
         }
+
+        if(entityData.equals(""))
+            return level;
 
         for (String row : entityData.split("#")) {
             String[] rowData = row.split(":");
@@ -271,13 +278,13 @@ public class Level implements Disposable {
         writer.close();
     }
 
-    public void toFile(String path, String name) throws IOException {
-        StorageSystem level = new StorageSystem(name);
-        Node rootNode = level.getRoot();
+    public Node toNode(String name) {
+        Node rootNode = new Node(name);
         rootNode.addValue("width", this.w + "");
         rootNode.addValue("height", this.h + "");
         rootNode.addValue("name", name);
-        rootNode.addValue("spawn", p.getX() + " " + p.getY());
+        if (p != null)
+            rootNode.addValue("spawn", p.getX() + " " + p.getY());
         rootNode.addValue("minMoves", getMinMoves() + "");
         String tileData = "";
         for (int y = getHeight() - 1; y >= 0; y--) {
@@ -297,9 +304,7 @@ public class Level implements Disposable {
         }
         entityData = entityData.replaceFirst("#", "");
         rootNode.addValue("entities", entityData);
-
-        level.save("Arrow Drift Data/Levels/" + path);
-
+        return rootNode;
     }
 
     public static Level blank(int width, int height) {

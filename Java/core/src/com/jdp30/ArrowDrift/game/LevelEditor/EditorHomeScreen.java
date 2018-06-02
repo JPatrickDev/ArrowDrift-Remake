@@ -158,7 +158,7 @@ public class EditorHomeScreen implements Screen {
                         showLevelSelectDialog(category,file);
                     }else{
                       //  showLevelSelectDialog(n,file);
-                        startEditor(Level.fromNode(n));
+                        startEditor(Level.fromNode(n),category,n.getName(),currentSystem,file.toString());
                     }
                 }
             }
@@ -170,12 +170,12 @@ public class EditorHomeScreen implements Screen {
     public void newLevel() {
         int width = Integer.parseInt(JOptionPane.showInputDialog(null, "Width"));
         int height = Integer.parseInt(JOptionPane.showInputDialog(null, "Height"));
-        startEditor(Level.blank(width, height));
+    //    startEditor(Level.blank(width, height));
     }
 
-    public void startEditor(Level level) {
+    public void startEditor(Level level,Node catNode,String name,StorageSystem system,String path) {
         System.out.println("starting editor");
-        ArrowDriftGame.setCurrentScreen(new EditorMainScreen(level));
+        ArrowDriftGame.setCurrentScreen(new EditorMainScreen(level,name,catNode,system,path));
     }
 
     @Override

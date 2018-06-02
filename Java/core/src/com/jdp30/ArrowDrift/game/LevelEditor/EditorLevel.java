@@ -54,7 +54,18 @@ public class EditorLevel extends ClickListener {
             }
         }
         EditorLevel l = new EditorLevel(main, stage, level.getWidth(), level.getHeight());
+
         l.setTiles(tiles);
+
+        for (Entity e : level.getEntities()) {
+            l.addEntity(e);
+        }
+        if(level.p != null){
+            l.addEntity(level.p);
+        }
+
+
+
         return l;
     }
 
@@ -87,6 +98,7 @@ public class EditorLevel extends ClickListener {
         c.addListener(listener);
         stage.addActor(c);
         entities.add(c);
+        System.out.println("Adding entity");
     }
 
     public void removeEntityAt(int x, int y) {
@@ -126,6 +138,10 @@ public class EditorLevel extends ClickListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setEntities(ArrayList<EntityContainer> entities) {
+        this.entities = entities;
     }
 }
 

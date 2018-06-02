@@ -9,6 +9,7 @@ import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import com.jdp30.ArrowDrift.game.util.Util;
 import storage.Node;
 import storage.StorageSystem;
 
@@ -195,16 +196,14 @@ public class Level implements Disposable {
         Level level = new Level(width, height);
 
         String levelName = node.getValue("name");
-        if (node.getValue("spawn") != null) {
-            String[] spawnData = node.getValue("spawn").split(" ");
-            level.addEntity(new Player(Integer.parseInt(spawnData[0]), Integer.parseInt(spawnData[1])));
-        }
+
         int minMoves = Integer.parseInt(node.getValue("minMoves"));
         String tileInfo = node.getValue("tiles");
         String entityData = node.getValue("entities");
 
         level.setMinMoves(minMoves);
         String[] tileRows = tileInfo.split("#");
+        tileRows = Util.reverse(tileRows);
         int x = 0;
         int y = 0;
         for (String s : tileRows) {
@@ -222,7 +221,10 @@ public class Level implements Disposable {
             x = 0;
             y++;
         }
-
+        if (node.getValue("spawn") != null) {
+            String[] spawnData = node.getValue("spawn").split(" ");
+            level.addEntity(new Player(Integer.parseInt(spawnData[0]), Integer.parseInt(spawnData[1])));
+        }
         if(entityData.equals(""))
             return level;
 
@@ -343,5 +345,9 @@ public class Level implements Disposable {
 
     public boolean isOver() {
         return won;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
     }
 }

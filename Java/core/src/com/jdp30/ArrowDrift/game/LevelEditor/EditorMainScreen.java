@@ -9,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Level.Level;
+import storage.Node;
+import storage.StorageSystem;
+
+import java.io.IOException;
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -17,18 +21,27 @@ import com.jdp30.ArrowDrift.game.Level.Level;
  */
 public class EditorMainScreen implements Screen {
 
+    private String name;
+    private StorageSystem system;
+    private String path;
+    private Node catNode;
     private Stage stage;
     private EditorLevel level;
     private Toolbar bar;
     private Actor currentInHand;
 
-    public EditorMainScreen(Level level) {
+    public EditorMainScreen(Level level, String name, Node catNode, StorageSystem system, String path) {
         stage = new Stage();
         this.level = EditorLevel.fromLevel(this, stage, level);
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         bar = new Toolbar(this, skin, (int) (Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 3), 0, Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight());
         stage.addActor(bar);
         Gdx.input.setInputProcessor(stage);
+
+        this.catNode = catNode;
+        this.system = system;
+        this.path = path;
+        this.name = name;
     }
 
     @Override
@@ -88,7 +101,7 @@ public class EditorMainScreen implements Screen {
         }
     }
 
-    public void setCurrentEntity(EntityContainer container){
+    public void setCurrentEntity(EntityContainer container) {
         this.currentInHand = container;
     }
 
@@ -102,5 +115,12 @@ public class EditorMainScreen implements Screen {
 
     public EditorLevel getLevel() {
         return level;
+    }
+
+    public void save() throws IOException {
+        Node newNode = getLevel().toLevel().toNode(this.name);
+        this.catNode.removeChild(this.name);
+        this.catNode.addChild(newNode);
+        this.system.save(this.path);
     }
 }

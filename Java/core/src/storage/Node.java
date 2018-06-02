@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -98,5 +99,16 @@ public class Node {
 
     public String getName() {
         return name;
+    }
+
+    public void removeChild(String name) {
+        Iterator<Node> nodeIterator = children.iterator();
+        while(nodeIterator.hasNext()){
+            Node next = nodeIterator.next();
+            if(next.getName().equals(name)){
+                nodeIterator.remove();
+                return;
+            }
+        }
     }
 }

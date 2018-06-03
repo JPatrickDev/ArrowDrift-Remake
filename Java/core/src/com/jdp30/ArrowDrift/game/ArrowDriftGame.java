@@ -23,9 +23,19 @@ public class ArrowDriftGame extends Game {
     private SpriteBatch batch;
 
     public static StorageSystem userdata;
+    private static StorageSystem currentPack;
+    public static String currentCat;
     public ArrowDriftGame() {
         this.INSTANCE = this;
 
+    }
+
+    public static void setCurrentPack(StorageSystem currentPack) {
+        ArrowDriftGame.currentPack = currentPack;
+    }
+
+    public static StorageSystem getCurrentPack() {
+        return currentPack;
     }
 
     @Override

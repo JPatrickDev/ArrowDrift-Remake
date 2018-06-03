@@ -13,7 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.GUI.LevelSelectionActor;
 import com.jdp30.ArrowDrift.game.GUI.LevelTypeSelectionActor;
+import storage.Node;
+import storage.StorageSystem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -39,12 +42,17 @@ public class CategorySelectScreen implements Screen {
         label.setY(Gdx.graphics.getHeight() - label.getHeight() * 3);
         label.setX(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2);
         stage.addActor(label);
-        FileHandle handle = Gdx.files.internal("levels/");
-        FileHandle[] children = handle.list();
+       // FileHandle handle = Gdx.files.internal("levels/");
+      //  FileHandle[] children = handle.list();
+
+        try {
+            StorageSystem mappack = StorageSystem.fromFile("Arrow Drift Data/Levels/DEFAULT");
+            ArrowDriftGame.setCurrentPack(mappack);
         int x = 0;
-        float w = (800.0f) / ((float) children.length);
-        for (final FileHandle f : children) {
-            LevelTypeSelectionActor a = new LevelTypeSelectionActor(f.path());
+        float w = (800.0f) / ((float) (mappack.getRoot().getChildren().size()));
+        for (final Node n  : mappack.getRoot().getChildren()) {
+            if(n.getName().equals("metadata"))continue;
+            LevelTypeSelectionActor a = new LevelTypeSelectionActor(n.getName());
             a.setWidth(w);
             a.setHeight(w);
             a.setX(x);
@@ -55,13 +63,15 @@ public class CategorySelectScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
-
-                    ArrowDriftGame.setCurrentScreen(new LevelSelectScreen(f.path() + "/levels/"));
+                    Node selectedCat = ArrowDriftGame.getCurrentPack().getRoot().getChild(n.getName());
+                    ArrowDriftGame.setCurrentScreen(new LevelSelectScreen(selectedCat));
                 }
             });
             x += a.getWidth();
         }
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         TextButton button = new TextButton("Back To Main Menu",skin);
 
         button.addListener(new ClickListener(){
@@ -75,6 +85,7 @@ public class CategorySelectScreen implements Screen {
         button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
 
         stage.addActor(button);
+
     }
 
     @Override

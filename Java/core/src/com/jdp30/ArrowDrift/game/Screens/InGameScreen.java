@@ -21,6 +21,8 @@ import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.util.LevelUtil;
 import javafx.scene.paint.Color;
+import storage.Node;
+import sun.awt.geom.AreaOp;
 import sun.plugin.dom.exception.InvalidStateException;
 
 /**
@@ -42,7 +44,7 @@ public class InGameScreen implements Screen {
 
     private ImgButton upDown = null, leftRight = null;
     private BitmapFont font;
-    public static String lvl = null;
+    public static Node lvl = null;
 
     @Override
     public void show() {
@@ -54,7 +56,7 @@ public class InGameScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        level = Level.load(lvl);
+        level = Level.fromNode(lvl);
 
         float wh = Gdx.graphics.getWidth() / 2;
 
@@ -102,21 +104,11 @@ public class InGameScreen implements Screen {
         });
     }
 
-    public String getNextLevel() {
-        String[] levelSplit = InGameScreen.lvl.split("/");
-        String end = levelSplit[levelSplit.length - 1];
-        end = end.replace(".txt", "");
-        end = (Integer.parseInt(end) + 1) + ".txt";
-        String newS = "";
-        for (int i = 0; i != levelSplit.length - 1; i++) {
-            newS += levelSplit[i] + "/";
-        }
-        FileHandle handle = Gdx.files.internal(newS + end);
-        if (handle.exists()) {
-            return newS + end;
-        } else {
-            return null;
-        }
+    public Node getNextLevel() {
+        Node currentCatNode = ArrowDriftGame.getCurrentPack().getRoot().getChild(ArrowDriftGame.currentCat);
+        int i = Integer.parseInt(lvl.getName()) + 1;
+        Node next = currentCatNode.getChild(i + "");
+        return next;
     }
 
     GlyphLayout layout = new GlyphLayout();
@@ -156,15 +148,14 @@ public class InGameScreen implements Screen {
 
         if (level != null) {
             if (level.isOver()) {
-                String[] s = lvl.split("/");
-                LevelUtil.updateMoves(s[s.length - 1], s[1], level.moves);
+                LevelUtil.updateMoves(lvl.getName(),ArrowDriftGame.currentCat, level.moves);
                 if (getNextLevel() == null) {
-                    CategoryFinishedScreen.category = lvl;
+                    CategoryFinishedScreen.category = ArrowDriftGame.getCurrentPack().getRoot().getChild(ArrowDriftGame.currentCat);
                     ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());
                     return;
                 }
                 lvl = getNextLevel();
-                level = Level.load(lvl);
+                level = Level.fromNode(lvl);
             }
         }
     }

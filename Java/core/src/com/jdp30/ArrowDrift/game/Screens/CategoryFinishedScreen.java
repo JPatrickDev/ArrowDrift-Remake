@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
+import storage.Node;
 
 /**
  * Created by Jack on 29/04/2018.
@@ -19,7 +20,7 @@ import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 public class CategoryFinishedScreen implements Screen {
     private Stage stage;
 
-    public static String category;
+    public static Node category;
     private String catName = "";
 
     public CategoryFinishedScreen() {
@@ -31,7 +32,7 @@ public class CategoryFinishedScreen implements Screen {
     @Override
     public void show() {
 
-        catName = category.split("/")[1].split(" ")[1];
+        catName = category.getName();
 
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
@@ -50,11 +51,12 @@ public class CategoryFinishedScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                String next = getNext();
+                Node next = getNext();
                 if (next == null) {
                     //TODO
                 } else {
-                    InGameScreen.lvl = next;
+                    ArrowDriftGame.currentCat = next.getName();
+                    InGameScreen.lvl = next.getChild("1");
                     ArrowDriftGame.setCurrentScreen(new InGameScreen());
                 }
             }
@@ -74,14 +76,11 @@ public class CategoryFinishedScreen implements Screen {
         table.row();
     }
 
-    public String getNext() {
-        int currentPos = Integer.parseInt(category.split("/")[1].split(" ")[0]);
-        FileHandle handle = Gdx.files.internal("levels/");
-        FileHandle[] children = handle.list();
-        for (FileHandle h : children) {
-            int i = Integer.parseInt(h.path().split("/")[1].split(" ")[0]);
-            if (i == (currentPos + 1)) {
-                return h.path() + "/levels/1.txt";
+    public Node getNext() {
+        int i = Integer.parseInt(category.getName().split(" - ")[0]) + 1;
+        for (Node c : ArrowDriftGame.getCurrentPack().getRoot().getChildren()) {
+            if(c.getName().startsWith(i + "")){
+                return c;
             }
         }
         return null;

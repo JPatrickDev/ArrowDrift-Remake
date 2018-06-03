@@ -24,6 +24,7 @@ import com.jdp30.ArrowDrift.game.GUI.FileDialog;
 import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
+import jdk.nashorn.internal.scripts.JO;
 import storage.Node;
 import storage.StorageSystem;
 
@@ -168,9 +169,15 @@ public class EditorHomeScreen implements Screen {
     }
 
     public void newLevel() {
-        int width = Integer.parseInt(JOptionPane.showInputDialog(null, "Width"));
-        int height = Integer.parseInt(JOptionPane.showInputDialog(null, "Height"));
-    //    startEditor(Level.blank(width, height));
+        String packName = JOptionPane.showInputDialog(null,"Name:");
+        StorageSystem system = new StorageSystem(packName);
+        currentSystem = system;
+        try {
+            system.save(Gdx.files.external("Arrow Drift Data/Levels/" + packName).toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        showCatSelectDialog(system,Gdx.files.external("Arrow Drift Data/Levels/" + packName));
     }
 
     public void startEditor(Level level,Node catNode,String name,StorageSystem system,String path) {

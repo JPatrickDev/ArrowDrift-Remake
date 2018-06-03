@@ -13,17 +13,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.GUI.LevelSelectionActor;
 import com.jdp30.ArrowDrift.game.GUI.LevelTypeSelectionActor;
+import storage.Node;
 
 /**
  * Created by Jack on 20/04/2018.
  */
 public class LevelSelectScreen implements Screen {
     private Stage stage;
-    private String folderPath;
+    private Node category;
 
-    public LevelSelectScreen(String folderPath) {
+    public LevelSelectScreen(Node category) {
         stage = new Stage();
-        this.folderPath = folderPath;
+        this.category = category;
     }
 
     @Override
@@ -35,8 +36,7 @@ public class LevelSelectScreen implements Screen {
         label.setY(Gdx.graphics.getHeight() - label.getHeight() * 3);
         label.setX(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2);
         stage.addActor(label);
-        FileHandle handle = Gdx.files.internal(folderPath);
-        FileHandle[] children = handle.list();
+
         int x = 0;
         int y = 0;
         int xP = 0;
@@ -47,8 +47,8 @@ public class LevelSelectScreen implements Screen {
         else
             h = w;
         y = (int) h;
-        for (final FileHandle f : children) {
-            LevelSelectionActor a = new LevelSelectionActor(0, f.path(), f.path().split("/")[f.path().split("/").length - 1].replace(".txt",""));
+        for (final Node level : category.getChildren()) {
+            LevelSelectionActor a = new LevelSelectionActor(0, level,category.getName());
             a.setWidth(w);
             a.setHeight(w);
             a.setX(x);
@@ -60,7 +60,8 @@ public class LevelSelectScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                    // ((LevelSelectionActor)event.getListenerActor()).recaulcuateFont();
-                    InGameScreen.lvl = f.path();
+                   InGameScreen.lvl = level;
+                    ArrowDriftGame.currentCat = category.getName();
                     ArrowDriftGame.setCurrentScreen(new InGameScreen());
                 }
             });

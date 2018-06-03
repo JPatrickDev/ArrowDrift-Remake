@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class LevelTypeSelectionActor extends Actor {
 
     private String path, name;
-    private Texture previewTexture;
+ //   private Texture previewTexture;
     private int nameWidth;
     private float prevWidth, prevHeight, padding;
 
@@ -23,7 +23,7 @@ public class LevelTypeSelectionActor extends Actor {
 
     public LevelTypeSelectionActor(String path) {
         this.path = path;
-        this.name = path.split("/")[1].split(" ")[1];
+        this.name = path;
     }
 
 
@@ -31,7 +31,7 @@ public class LevelTypeSelectionActor extends Actor {
         float padding = getWidth() / 8;
         float width = getWidth() - (padding * 2);
         float height = getHeight() - (padding * 2);
-        this.previewTexture = new Texture(path + "/preview/1.png");
+      //  this.previewTexture = new Texture(path + "/preview/1.png");
         this.prevWidth = width;
         this.prevHeight = height;
         this.padding = padding;
@@ -60,7 +60,7 @@ public class LevelTypeSelectionActor extends Actor {
             }
         }
         super.draw(batch, parentAlpha);
-        batch.draw(previewTexture, getX() + padding, getY() + padding, prevWidth, prevHeight);
+       // batch.draw(previewTexture, getX() + padding, getY() + padding, prevWidth, prevHeight);
         font.draw(batch, name, getX() + (getWidth() / 2 - this.nameWidth/2), getY() + padding - 10);
     }
 }

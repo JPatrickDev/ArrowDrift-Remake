@@ -120,74 +120,6 @@ public class Level implements Disposable {
         return getTile(p.getX(), p.getY()).getMovementType();
     }
 
-    public static Level load(String file) {
-        FileHandle handle = Gdx.files.internal(file);
-        String text = handle.readString();
-        String wordsArray[] = text.split("\\r?\\n");
-        ArrayList<String> validLines = new ArrayList<String>();
-        for (String s : wordsArray) {
-            if (!s.startsWith("#"))
-                validLines.add(s);
-        }
-        wordsArray = validLines.toArray(new String[]{});
-        int width = Integer.parseInt(wordsArray[0]);
-        int height = Integer.parseInt(wordsArray[1]);
-
-        Level level = new Level(width, height);
-        String[] spawnInfo = wordsArray[2].split(" ");
-
-        int spawnX = Integer.parseInt(spawnInfo[0]);
-        int spawnY = Integer.parseInt(spawnInfo[1]);
-        level.addEntity(new Player(spawnX, spawnY));
-
-        int minMoves = Integer.parseInt(wordsArray[3].trim());
-        level.setMinMoves(minMoves);
-
-        int x = 0;
-        int y = 0;
-        for (int i = 3 + height; i != 3; i--) {
-            String row = wordsArray[i];
-            String[] tiles = row.split(":");
-            for (String t : tiles) {
-                String[] tileData = t.split(",");
-                Tile tile = Tile.fromID(Integer.parseInt(tileData[0]), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(Integer.parseInt(tileData[1])), tileData);
-                if (tile != null) {
-                    level.setTileAt(x, y, tile);
-                } else {
-                    System.out.println(t);
-                    System.out.println("Invalid tile ID");
-                }
-                x++;
-            }
-            x = 0;
-            y++;
-        }
-        if (wordsArray.length > (4 + height)) {
-            System.out.println("More data found");
-            for (int i = 4 + height; i != (wordsArray.length); i++) {
-                String row = wordsArray[i];
-                String[] rowData = row.split(":");
-                String[] coords = rowData[1].split(",");
-                System.out.println(row);
-                try {
-                    Class<? extends Entity> e = Class.forName("com.jdp30.ArrowDrift.game.Entity." + rowData[0]).asSubclass(Entity.class);
-                    Entity en = e.getConstructor(int.class, int.class).newInstance(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-                    level.addEntity(en);
-                } catch (ClassNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return level;
-    }
 
     public static Level fromNode(Node node) {
         int width = Integer.parseInt(node.getValue("width"));
@@ -225,7 +157,7 @@ public class Level implements Disposable {
             String[] spawnData = node.getValue("spawn").split(" ");
             level.addEntity(new Player(Integer.parseInt(spawnData[0]), Integer.parseInt(spawnData[1])));
         }
-        if(entityData.equals(""))
+        if (entityData.equals(""))
             return level;
 
         for (String row : entityData.split("#")) {
@@ -249,35 +181,6 @@ public class Level implements Disposable {
             }
         }
         return level;
-    }
-
-    public void toFile(String path) throws IOException {
-        FileHandle handle = Gdx.files.local(path);
-        handle.delete();
-        BufferedWriter writer = new BufferedWriter(handle.writer(true, "UTF8"));
-        writer.write(this.getWidth() + "");
-        writer.newLine();
-        writer.write(getHeight() + "");
-        writer.newLine();
-        writer.write(p.getX() + " " + p.getY());
-        writer.newLine();
-        writer.write(getMinMoves());
-        writer.newLine();
-        for (int y = getHeight() - 1; y >= 0; y--) {
-            String line = "";
-            for (int x = 0; x != getWidth(); x++) {
-                line += ":" + tiles[x][y].toStringFormat();
-            }
-            line = line.replaceFirst(":", "");
-            writer.write(line);
-            writer.newLine();
-        }
-        for (Entity e : entities) {
-            writer.write(e.getClass().getSimpleName() + ":" + e.getX() + "," + e.getY());
-            writer.newLine();
-        }
-        writer.flush();
-        writer.close();
     }
 
     public Node toNode(String name) {

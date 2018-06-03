@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.util.LevelUtil;
+import storage.Node;
 
 import java.util.Random;
 
@@ -18,9 +19,9 @@ import java.util.Random;
  */
 public class LevelSelectionActor extends Actor {
 
+    private final Node level;
+    private final String category;
     private int stars;
-    private String path;
-    private String name;
 
     private BitmapFont font, smallerFont;
     private int nameWidth, nameHeight, scoreHeight,scoreWidth;
@@ -35,13 +36,12 @@ public class LevelSelectionActor extends Actor {
 
     int moves, min;
 
-    public LevelSelectionActor(int stars, String path, String name) {
+    public LevelSelectionActor(int stars, Node level,String category) {
         this.stars = stars;
-        this.path = path;
-        this.name = name;
         enabledStar = new Texture("ui/enabled_star.png");
         disabledStar = new Texture("ui/disabled_star.png");
-
+        this.level = level;
+        this.category = category;
         r = rnd.nextFloat();
         g = rnd.nextFloat();
         b = rnd.nextFloat();
@@ -50,10 +50,9 @@ public class LevelSelectionActor extends Actor {
 
     public void init() {
         padding = getWidth() / 16.0f;
-        String[] s = path.split("/");
-        int i = LevelUtil.getMovesTaken(s[s.length - 1], s[1]);
+        int i = LevelUtil.getMovesTaken(level.getName(),category);
         if (i != -1) {
-            int diff = i - LevelUtil.getMinMoves(s[s.length - 1], s[1]);
+            int diff = i - LevelUtil.getMinMoves(level.getName(),category);
             if (diff == 0) {
                 stars = 3;
             } else {
@@ -71,8 +70,8 @@ public class LevelSelectionActor extends Actor {
             this.stars = 0;
         }
 
-        this.moves = LevelUtil.getMovesTaken(s[s.length - 1], s[1]);
-        this.min = LevelUtil.getMinMoves(s[s.length - 1], s[1]);
+        this.moves = LevelUtil.getMovesTaken(level.getName(),category);
+        this.min = LevelUtil.getMinMoves(level.getName(),category);
     }
 
     float s = 0.1f;
@@ -91,16 +90,16 @@ public class LevelSelectionActor extends Actor {
             font = new BitmapFont(Gdx.files.internal("fonts/cg40.fnt"), Gdx.files.internal("fonts/cg40.png"), false);
             font.getData().setScale(s);
             GlyphLayout layout = new GlyphLayout();
-            layout.setText(font, name);
+            layout.setText(font, level.getName());
             float height = layout.height;
             if (height < (getHeight() - enabledStar.getHeight()) - padding * 2 && layout.width < getWidth() - padding * 2) {
-                s += 0.1;
+                s += 0.5;
                 font = null;
                 draw(batch, parentAlpha);
             } else {
                 s -= 1;
                 font.getData().setScale(s);
-                layout.setText(font, name);
+                layout.setText(font, level.getName());
                 this.nameWidth = (int) layout.width;
                 this.nameHeight = (int) layout.height;
             }
@@ -113,7 +112,7 @@ public class LevelSelectionActor extends Actor {
             float height = layout.height;
             System.out.println((getWidth() - this.nameWidth) + ":" + layout.width);
             if (layout.height < disabledStar.getHeight()) {
-                dS += 0.1;
+                dS += 0.5;
                 smallerFont = null;
                 draw(batch, parentAlpha);
             } else {
@@ -124,9 +123,8 @@ public class LevelSelectionActor extends Actor {
                 this.scoreWidth = (int) layout.width;
             }
         }
-        String[] s = path.split("/");
         batch.setColor(1, 1, 1, 1);
-        font.draw(batch, name, getX() + padding / 2 + ((getWidth() - padding) / 2 - nameWidth / 2), getY() + padding);
+        font.draw(batch, level.getName(), getX() + padding / 2 + ((getWidth() - padding) / 2 - nameWidth / 2), getY() + padding);
         if(moves != -1)
         smallerFont.draw(batch, moves + "", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 1.5)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
         else

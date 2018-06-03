@@ -3,6 +3,7 @@ package com.jdp30.ArrowDrift.game.LevelEditor;
 import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -19,9 +20,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
+import com.jdp30.ArrowDrift.game.GUI.FileDialog;
+import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
+import jdk.nashorn.internal.scripts.JO;
+import storage.Node;
+import storage.StorageSystem;
+
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -51,7 +59,7 @@ public class EditorHomeScreen implements Screen {
         stage.addActor(table);
 
 
-        final TextButton newLevel = new TextButton("New Level", skin);
+        final TextButton newLevel = new TextButton("New Map Pack", skin);
 
         newLevel.addListener(new ChangeListener() {
             @Override
@@ -63,7 +71,13 @@ public class EditorHomeScreen implements Screen {
         table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
-        final TextButton loadLevel = new TextButton("Load Level", skin);
+        final TextButton loadLevel = new TextButton("Load Map Pack", skin);
+        loadLevel.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                loadPack();
+            }
+        });
         table.add(loadLevel).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
@@ -78,15 +92,97 @@ public class EditorHomeScreen implements Screen {
         table.row();
     }
 
-    public void newLevel() {
-        int width = Integer.parseInt(JOptionPane.showInputDialog(null, "Width"));
-        int height = Integer.parseInt(JOptionPane.showInputDialog(null, "Height"));
-        startEditor(Level.blank(width, height));
+    StorageSystem currentSystem = null;
+    private void loadPack() {
+        FileDialog files = new FileDialog("Choose Map Pack", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    FileHandle file = getFile();
+                    try {
+                        StorageSystem system = StorageSystem.fromFile(file.toString());
+                        currentSystem = system;
+                        showCatSelectDialog(system,file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        files.setDirectory(Gdx.files.external("Arrow Drift Data/Levels/"));
+        files.show(stage);
     }
 
-    public void startEditor(Level level) {
+    private void showCatSelectDialog(final StorageSystem system,final FileHandle file){
+        LevelSelectDialog files = new LevelSelectDialog("Select Category", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    Node n = selected;
+                    if(n == null){
+                        String name = JOptionPane.showInputDialog(null,"Category Name:");
+                        Node newCat = new Node(name);
+                        system.getRoot().addChild(newCat);
+                        try {
+                            system.save(file.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        showCatSelectDialog(system,file);
+                    }else{
+                        showLevelSelectDialog(n,file);
+                    }
+                }
+            }
+        };
+        files.setNode(system.getRoot());
+        files.show(stage);
+    }
+
+    private void showLevelSelectDialog(final Node category, final FileHandle file){
+        LevelSelectDialog files = new LevelSelectDialog("Select Level", skin) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    Node n = selected;
+                    if(n == null){
+                        String name = JOptionPane.showInputDialog(null,"Level  Name:");
+                        int w = Integer.parseInt(JOptionPane.showInputDialog(null,"Width:"));
+                        int h = Integer.parseInt(JOptionPane.showInputDialog(null,"Height:"));
+                        Level level = Level.blank(w,h);
+                        category.addChild(level.toNode(name));
+                        try {
+                            currentSystem.save(file.toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        showLevelSelectDialog(category,file);
+                    }else{
+                      //  showLevelSelectDialog(n,file);
+                        startEditor(Level.fromNode(n),category,n.getName(),currentSystem,file.toString());
+                    }
+                }
+            }
+        };
+        files.setNode(category);
+        files.show(stage);
+    }
+
+    public void newLevel() {
+        String packName = JOptionPane.showInputDialog(null,"Name:");
+        StorageSystem system = new StorageSystem(packName);
+        currentSystem = system;
+        try {
+            system.save(Gdx.files.external("Arrow Drift Data/Levels/" + packName).toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        showCatSelectDialog(system,Gdx.files.external("Arrow Drift Data/Levels/" + packName));
+    }
+
+    public void startEditor(Level level,Node catNode,String name,StorageSystem system,String path) {
         System.out.println("starting editor");
-        ArrowDriftGame.setCurrentScreen(new EditorMainScreen(level));
+        ArrowDriftGame.setCurrentScreen(new EditorMainScreen(level,name,catNode,system,path));
     }
 
     @Override

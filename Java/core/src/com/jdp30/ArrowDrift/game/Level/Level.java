@@ -9,6 +9,9 @@ import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import com.jdp30.ArrowDrift.game.util.Util;
+import storage.Node;
+import storage.StorageSystem;
 
 import javax.swing.*;
 import java.io.BufferedWriter;
@@ -58,7 +61,7 @@ public class Level implements Disposable {
         }
         p.draw(batch, xo, yo);
 
-        if(p.getX() == endX && p.getY() == endY){
+        if (p.getX() == endX && p.getY() == endY) {
             won = true;
         }
     }
@@ -186,6 +189,68 @@ public class Level implements Disposable {
         return level;
     }
 
+    public static Level fromNode(Node node) {
+        int width = Integer.parseInt(node.getValue("width"));
+        int height = Integer.parseInt(node.getValue("height"));
+
+        Level level = new Level(width, height);
+
+        String levelName = node.getValue("name");
+
+        int minMoves = Integer.parseInt(node.getValue("minMoves"));
+        String tileInfo = node.getValue("tiles");
+        String entityData = node.getValue("entities");
+
+        level.setMinMoves(minMoves);
+        String[] tileRows = tileInfo.split("#");
+        tileRows = Util.reverse(tileRows);
+        int x = 0;
+        int y = 0;
+        for (String s : tileRows) {
+            for (String t : s.split(":")) {
+                String[] tileData = t.split(",");
+                Tile tile = Tile.fromID(Integer.parseInt(tileData[0]), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, AllowedMovementType.fromID(Integer.parseInt(tileData[1])), tileData);
+                if (tile != null) {
+                    level.setTileAt(x, y, tile);
+                } else {
+                    System.out.println(t);
+                    System.out.println("Invalid tile ID");
+                }
+                x++;
+            }
+            x = 0;
+            y++;
+        }
+        if (node.getValue("spawn") != null) {
+            String[] spawnData = node.getValue("spawn").split(" ");
+            level.addEntity(new Player(Integer.parseInt(spawnData[0]), Integer.parseInt(spawnData[1])));
+        }
+        if(entityData.equals(""))
+            return level;
+
+        for (String row : entityData.split("#")) {
+            String[] rowData = row.split(":");
+            String[] coords = rowData[1].split(",");
+            System.out.println(row);
+            try {
+                Class<? extends Entity> e = Class.forName("com.jdp30.ArrowDrift.game.Entity." + rowData[0]).asSubclass(Entity.class);
+                Entity en = e.getConstructor(int.class, int.class).newInstance(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+                level.addEntity(en);
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return level;
+    }
+
     public void toFile(String path) throws IOException {
         FileHandle handle = Gdx.files.local(path);
         handle.delete();
@@ -213,6 +278,35 @@ public class Level implements Disposable {
         }
         writer.flush();
         writer.close();
+    }
+
+    public Node toNode(String name) {
+        Node rootNode = new Node(name);
+        rootNode.addValue("width", this.w + "");
+        rootNode.addValue("height", this.h + "");
+        rootNode.addValue("name", name);
+        if (p != null)
+            rootNode.addValue("spawn", p.getX() + " " + p.getY());
+        rootNode.addValue("minMoves", getMinMoves() + "");
+        String tileData = "";
+        for (int y = getHeight() - 1; y >= 0; y--) {
+            String line = "";
+            for (int x = 0; x != getWidth(); x++) {
+                line += ":" + tiles[x][y].toStringFormat();
+            }
+            line = line.replaceFirst(":", "");
+            tileData += "#" + line;
+        }
+        tileData = tileData.replaceFirst("#", "");
+        rootNode.addValue("tiles", tileData);
+
+        String entityData = "";
+        for (Entity e : entities) {
+            entityData += "#" + e.getClass().getSimpleName() + ":" + e.getX() + "," + e.getY();
+        }
+        entityData = entityData.replaceFirst("#", "");
+        rootNode.addValue("entities", entityData);
+        return rootNode;
     }
 
     public static Level blank(int width, int height) {
@@ -251,5 +345,9 @@ public class Level implements Disposable {
 
     public boolean isOver() {
         return won;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
     }
 }

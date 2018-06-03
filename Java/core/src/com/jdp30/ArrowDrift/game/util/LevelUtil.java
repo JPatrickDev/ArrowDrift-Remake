@@ -49,6 +49,6 @@ public class LevelUtil {
     }
 
     public static int getMinMoves(String levelName,String category){
-        return Level.load("levels/" + category + "/levels/" + levelName).getMinMoves();
+        return Level.fromNode(ArrowDriftGame.getCurrentPack().getRoot().getChild(category).getChild(levelName)).getMinMoves();
     }
 }

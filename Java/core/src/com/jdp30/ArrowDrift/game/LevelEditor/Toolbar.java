@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.Entity.Box;
 import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Entity.Player;
@@ -13,6 +14,7 @@ import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Wall;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Created by Jack Patrick on 02/04/2018.
@@ -82,12 +84,23 @@ public class Toolbar extends Container<Actor> {
         b.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String fileName = JOptionPane.showInputDialog(null,"File name");
-                parent.getLevel().save(fileName);
+                try {
+                    parent.save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         table.add(b);
-
+        table.row();
+        TextButton backToMenu = new TextButton("Back To Editor Home",skin);
+        backToMenu.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ArrowDriftGame.setCurrentScreen(new EditorHomeScreen());
+            }
+        });
+        table.add(backToMenu);
         this.setActor(table);
     }
 

@@ -131,15 +131,6 @@ public class EditorLevel extends ClickListener {
         return level;
     }
 
-
-    public void save(String fileName) {
-        try {
-            toLevel().toFile("Level Testing");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setEntities(ArrayList<EntityContainer> entities) {
         this.entities = entities;
     }

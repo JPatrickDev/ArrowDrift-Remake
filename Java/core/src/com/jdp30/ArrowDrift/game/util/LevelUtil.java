@@ -9,17 +9,23 @@ import storage.Node;
  */
 public class LevelUtil {
 
-    public static void updateMoves(String levelName, String category, int moves) {
+    public static void updateMoves(String levelName, String category, String packName, int moves) {
         Node userdata = ArrowDriftGame.userdata.getRoot();
         if (!userdata.hasChild("levels")) {
             Node n = new Node("levels");
             userdata.addChild(n);
         }
         Node levels = userdata.getChild("levels");
-        if (!levels.hasChild(category)) {
-            levels.addChild(new Node(category));
+        if (!levels.hasChild(packName)) {
+            levels.addChild(new Node(packName));
         }
-        Node cat = levels.getChild(category);
+
+        Node pack = levels.getChild(packName);
+        if (!pack.hasChild(category)) {
+            pack.addChild(new Node(category));
+        }
+
+        Node cat = pack.getChild(category);
         if (!cat.hasChild(levelName)) {
             cat.addChild(new Node(levelName));
         }
@@ -28,16 +34,21 @@ public class LevelUtil {
         ArrowDriftGame.notifyStorageChanged();
     }
 
-    public static int getMovesTaken(String levelName, String category) {
+    public static int getMovesTaken(String levelName, String category,String packName) {
         Node userdata = ArrowDriftGame.userdata.getRoot();
         if (!userdata.hasChild("levels")) {
             return -1;
         }
         Node levels = userdata.getChild("levels");
-        if (!levels.hasChild(category)) {
+        if (!levels.hasChild(packName)) {
+            levels.addChild(new Node(packName));
+        }
+
+        Node pack = levels.getChild(packName);
+        if (!pack.hasChild(category)) {
             return -1;
         }
-        Node cat = levels.getChild(category);
+        Node cat = pack.getChild(category);
         if (!cat.hasChild(levelName)) {
             return -1;
         }

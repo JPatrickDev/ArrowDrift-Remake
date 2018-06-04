@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.util.LevelUtil;
 import storage.Node;
@@ -50,7 +51,7 @@ public class LevelSelectionActor extends Actor {
 
     public void init() {
         padding = getWidth() / 16.0f;
-        int i = LevelUtil.getMovesTaken(level.getName(),category);
+        int i = LevelUtil.getMovesTaken(level.getName(),category, ArrowDriftGame.getCurrentPackID());
         if (i != -1) {
             int diff = i - LevelUtil.getMinMoves(level.getName(),category);
             if (diff == 0) {
@@ -70,7 +71,7 @@ public class LevelSelectionActor extends Actor {
             this.stars = 0;
         }
 
-        this.moves = LevelUtil.getMovesTaken(level.getName(),category);
+        this.moves = LevelUtil.getMovesTaken(level.getName(),category,ArrowDriftGame.getCurrentPackID());
         this.min = LevelUtil.getMinMoves(level.getName(),category);
     }
 

@@ -148,7 +148,7 @@ public class InGameScreen implements Screen {
 
         if (level != null) {
             if (level.isOver()) {
-                LevelUtil.updateMoves(lvl.getName(),ArrowDriftGame.currentCat, level.moves);
+                LevelUtil.updateMoves(lvl.getName(), ArrowDriftGame.currentCat, ArrowDriftGame.getCurrentPackID(), level.moves);
                 if (getNextLevel() == null) {
                     CategoryFinishedScreen.category = ArrowDriftGame.getCurrentPack().getRoot().getChild(ArrowDriftGame.currentCat);
                     ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());

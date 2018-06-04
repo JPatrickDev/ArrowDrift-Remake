@@ -38,6 +38,10 @@ public class ArrowDriftGame extends Game {
         return currentPack;
     }
 
+    public static String getCurrentPackID() {
+        return getCurrentPack().getRoot().getName();
+    }
+
     @Override
     public void create() {
         createUserData();

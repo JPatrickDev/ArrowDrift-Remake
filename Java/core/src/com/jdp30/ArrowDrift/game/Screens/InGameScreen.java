@@ -123,8 +123,13 @@ public class InGameScreen implements Screen {
         if (level != null)
             level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding);
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
+
         layout.setText(font, "Moves: " + level.moves);
         font.draw(batch, "Moves: " + level.moves, Gdx.graphics.getWidth() / 2 - (layout.width) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding - topPadding);
+
+        layout.setText(font, "Level: " + lvl.getName());
+        font.draw(batch, "Level: " + lvl.getName(), Gdx.graphics.getWidth() / 2 - (layout.width) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding - topPadding - layout.height);
+
         font.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         upDown.draw(batch);
         leftRight.draw(batch);
@@ -134,6 +139,8 @@ public class InGameScreen implements Screen {
     public void update() {
         if (level == null) return;
         AllowedMovementType t = level.getCurrentMovementType();
+
+        //TODO: Don't set this every tick
         if (t.getUPDOWN() == 0) {
             upDown.setTexture(new Texture("button/up.png"));
         } else if (t.getUPDOWN() == 1) {
@@ -146,18 +153,17 @@ public class InGameScreen implements Screen {
             leftRight.setTexture(new Texture("button/right.png"));
         }
 
-        if (level != null) {
-            if (level.isOver()) {
-                LevelUtil.updateMoves(lvl.getName(), ArrowDriftGame.currentCat, ArrowDriftGame.getCurrentPackID(), level.moves);
-                if (getNextLevel() == null) {
-                    CategoryFinishedScreen.category = ArrowDriftGame.getCurrentPack().getRoot().getChild(ArrowDriftGame.currentCat);
-                    ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());
-                    return;
-                }
-                lvl = getNextLevel();
-                level = Level.fromNode(lvl);
+        if (level.isOver()) {
+            LevelUtil.updateMoves(lvl.getName(), ArrowDriftGame.currentCat, ArrowDriftGame.getCurrentPackID(), level.moves);
+            if (getNextLevel() == null) {
+                CategoryFinishedScreen.category = ArrowDriftGame.getCurrentPack().getRoot().getChild(ArrowDriftGame.currentCat);
+                ArrowDriftGame.setCurrentScreen(new CategoryFinishedScreen());
+                return;
             }
+            lvl = getNextLevel();
+            level = Level.fromNode(lvl);
         }
+
     }
 
     @Override

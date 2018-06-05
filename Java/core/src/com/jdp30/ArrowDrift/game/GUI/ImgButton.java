@@ -15,6 +15,7 @@ public class ImgButton {
     private int x, y;
     private Texture texture;
     private Callback callback;
+    private boolean down = false;
 
     public ImgButton(String texture, int x, int y) {
         this.x = x;
@@ -38,9 +39,14 @@ public class ImgButton {
         int y = Gdx.graphics.getHeight() - Gdx.input.getY();
         if (Gdx.input.isButtonPressed(0)) {
             if (new Rectangle(this.x, this.y, texture.getWidth(), texture.getHeight()).contains(x, y)) {
+                down = true;
+            }
+        }else{
+            if(down){
                 if (callback != null) {
                     callback.callback();
                 }
+                down = false;
             }
         }
     }

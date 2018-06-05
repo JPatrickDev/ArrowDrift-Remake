@@ -10,6 +10,8 @@ import storage.Node;
 public class LevelUtil {
 
     public static void updateMoves(String levelName, String category, String packName, int moves) {
+        if(getMovesTaken(levelName,category,packName) <=  moves)
+            return;
         Node userdata = ArrowDriftGame.userdata.getRoot();
         if (!userdata.hasChild("levels")) {
             Node n = new Node("levels");

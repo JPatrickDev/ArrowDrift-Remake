@@ -25,35 +25,32 @@ public class LevelSelectionActor extends Actor {
     private int stars;
 
     private BitmapFont font, smallerFont;
-    private int nameWidth, nameHeight, scoreHeight,scoreWidth;
+    private int nameWidth, nameHeight, scoreHeight, scoreWidth;
 
 
     private ShapeRenderer renderer;
     private Texture enabledStar, disabledStar;
-    float r, g, b;
+
     float padding;
     int j = 0;
-    Random rnd = new Random();
+
 
     int moves, min;
 
-    public LevelSelectionActor(int stars, Node level,String category) {
+    public LevelSelectionActor(int stars, Node level, String category) {
         this.stars = stars;
         enabledStar = new Texture("ui/enabled_star.png");
         disabledStar = new Texture("ui/disabled_star.png");
         this.level = level;
         this.category = category;
-        r = rnd.nextFloat();
-        g = rnd.nextFloat();
-        b = rnd.nextFloat();
-        // this.stars = rnd.nextInt(4);
+
     }
 
     public void init() {
         padding = getWidth() / 16.0f;
-        int i = LevelUtil.getMovesTaken(level.getName(),category, ArrowDriftGame.getCurrentPackID());
+        int i = LevelUtil.getMovesTaken(level.getName(), category, ArrowDriftGame.getCurrentPackID());
         if (i != -1) {
-            int diff = i - LevelUtil.getMinMoves(level.getName(),category);
+            int diff = i - LevelUtil.getMinMoves(level.getName(), category);
             if (diff == 0) {
                 stars = 3;
             } else {
@@ -71,8 +68,8 @@ public class LevelSelectionActor extends Actor {
             this.stars = 0;
         }
 
-        this.moves = LevelUtil.getMovesTaken(level.getName(),category,ArrowDriftGame.getCurrentPackID());
-        this.min = LevelUtil.getMinMoves(level.getName(),category);
+        this.moves = LevelUtil.getMovesTaken(level.getName(), category, ArrowDriftGame.getCurrentPackID());
+        this.min = LevelUtil.getMinMoves(level.getName(), category);
     }
 
     float s = 0.1f;
@@ -126,12 +123,12 @@ public class LevelSelectionActor extends Actor {
         }
         batch.setColor(1, 1, 1, 1);
         font.draw(batch, level.getName(), getX() + padding / 2 + ((getWidth() - padding) / 2 - nameWidth / 2), getY() + padding);
-        if(moves != -1)
-        smallerFont.draw(batch, moves + "", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 1.5)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+        if (moves != -1)
+            smallerFont.draw(batch, moves + "", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 1.5)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
         else
-            smallerFont.draw(batch,"-", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 0.75)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+            smallerFont.draw(batch, "-", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 0.75)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
 
-        smallerFont.draw(batch, min + "", (float) ((float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2)) + disabledStar.getWidth() * 3 ), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+        smallerFont.draw(batch, min + "", (float) ((float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2)) + disabledStar.getWidth() * 3), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
         for (int i = 0; i != 3; i++) {
             batch.draw(disabledStar, (getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) + disabledStar.getWidth() * i, (getY() + padding) - nameHeight - enabledStar.getHeight());
         }

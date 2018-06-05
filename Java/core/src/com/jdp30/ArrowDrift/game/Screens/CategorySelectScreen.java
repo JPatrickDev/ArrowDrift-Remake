@@ -35,15 +35,12 @@ public class CategorySelectScreen implements Screen {
 
     @Override
     public void show() {
-
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         Label label = new Label("Select A Level Category", skin);
         label.setY(Gdx.graphics.getHeight() - label.getHeight() * 3);
         label.setX(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2);
         stage.addActor(label);
-       // FileHandle handle = Gdx.files.internal("levels/");
-      //  FileHandle[] children = handle.list();
 
         try {
             StorageSystem mappack = StorageSystem.fromFile("Arrow Drift Data/Levels/DEFAULT");

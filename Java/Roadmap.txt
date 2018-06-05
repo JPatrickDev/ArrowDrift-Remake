@@ -1,9 +1,9 @@
 -----v0.5-----
 Better support for different screen sizes
 Re-add the image previews for categories 
-Proper backend support for map packs
-	- Storing the minMoves needs to indicate which pack the level is from
-Handle the "null" case for Category Finished Screen
+Proper backend support for map packs/
+	- Storing the minMoves needs to indicate which pack the level is from/
+Handle the "null" case for Category Finished Screen/
 -----v0.6-----
 Front end map pack support
 Better art

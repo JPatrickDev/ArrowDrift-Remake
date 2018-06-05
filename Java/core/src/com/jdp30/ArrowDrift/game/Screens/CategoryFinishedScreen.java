@@ -45,25 +45,25 @@ public class CategoryFinishedScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-
         final TextButton newLevel = new TextButton("Start Next Category", skin);
-        newLevel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                Node next = getNext();
-                if (next == null) {
-                    //TODO
-                } else {
-                    ArrowDriftGame.currentCat = next.getName();
-                    InGameScreen.lvl = next.getChild("1");
-                    ArrowDriftGame.setCurrentScreen(new InGameScreen());
+        if(getNext() != null) {
+            newLevel.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    Node next = getNext();
+                    if (next == null) {
+                        //TODO
+                    } else {
+                        ArrowDriftGame.currentCat = next.getName();
+                        InGameScreen.lvl = next.getChild("1");
+                        ArrowDriftGame.setCurrentScreen(new InGameScreen());
+                    }
                 }
-            }
-        });
-        table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);
-        table.row();
-
+            });
+            table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);
+            table.row();
+        }
         final TextButton back = new TextButton("Back To Category Select", skin);
         back.addListener(new ClickListener() {
             @Override

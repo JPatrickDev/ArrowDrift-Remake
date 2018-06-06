@@ -23,6 +23,7 @@ import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.GUI.FileDialog;
 import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
+import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
 import jdk.nashorn.internal.scripts.JO;
 import storage.Node;
@@ -44,6 +45,7 @@ public class EditorHomeScreen implements Screen {
 
     @Override
     public void show() {
+        Tile.TILE_SIZE = 32;
         batch = new SpriteBatch();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);

@@ -7,6 +7,7 @@ import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Direction;
 import com.jdp30.ArrowDrift.game.Level.Tile.AnimatedTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.BeltTile;
+import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.sun.xml.internal.ws.Closeable;
 
@@ -21,24 +22,27 @@ public class EditorTile extends Actor implements Cloneable {
 
     public EditorTile(Tile t, int x, int y) {
         setPosition(x, y);
-        setSize(64, 64);
+        setSize(Tile.TILE_SIZE, Tile.TILE_SIZE);
         this.parent = t.copy();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        if(parent instanceof GoalTile){
+            int i = 0;
+        }
         if (parent instanceof AnimatedTile) {
             if (parent instanceof BeltTile) {
-                batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(),getY(), 32, 32, 64, 64, 1, 1, ((BeltTile) parent).getAngle());
+                batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(),getY(), getWidth()/2, getHeight()/2, getWidth(), getHeight(), 1, 1, ((BeltTile) parent).getAngle());
             } else {
                 batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(), getY());
             }
         } else {
-            batch.draw(parent.getTextureObj(), getX(), getY());
+            batch.draw(parent.getTextureObj(), getX(), getY(),getWidth(),getHeight());
             if (parent.getMovementType()!= AllowedMovementType.NONE) {
                 Texture t = parent.movementTextures.get(parent.getMovementType());
-                batch.draw(t, getX(),getY());
+                batch.draw(t, getX(),getY(),getWidth(),getHeight());
             }
         }
     }

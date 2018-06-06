@@ -8,3 +8,7 @@ Handle the "null" case for Category Finished Screen/
 Front end map pack support
 Better art
 Better UI skin 
+-----v0.7-----
+Replace all JOptionPanes
+Android build
+Options Menu in-game

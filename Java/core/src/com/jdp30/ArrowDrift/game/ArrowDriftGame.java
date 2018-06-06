@@ -96,4 +96,8 @@ public class ArrowDriftGame extends Game {
             e.printStackTrace();
         }
     }
+
+    public static boolean isPortrait(){
+        return Gdx.graphics.getHeight() > Gdx.graphics.getWidth();
+    }
 }

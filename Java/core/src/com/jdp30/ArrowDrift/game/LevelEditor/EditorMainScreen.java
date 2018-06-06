@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jdp30.ArrowDrift.game.Entity.Entity;
 import com.jdp30.ArrowDrift.game.Level.Level;
+import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import storage.Node;
 import storage.StorageSystem;
 
@@ -46,7 +47,7 @@ public class EditorMainScreen implements Screen {
 
     @Override
     public void show() {
-
+        Tile.TILE_SIZE = 32;
 
     }
 

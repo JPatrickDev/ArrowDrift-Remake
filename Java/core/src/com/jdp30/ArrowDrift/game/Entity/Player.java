@@ -20,30 +20,55 @@ public class Player extends Entity {
         super.update(level);
         if (!isMoving) {
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                if (level.getCurrentMovementType().getUPDOWN() == 0)
-                    moveTo(getX(), getY() + 1, level);
+                moveUp(level);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                if (level.getCurrentMovementType().getUPDOWN() == 1)
-                    moveTo(getX(), getY() - 1, level);
+                moveDown(level);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                if (level.getCurrentMovementType().getLEFTRIGHT() == 0)
-                    moveTo(getX() - 1, getY(), level);
+                moveLeft(level);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if (level.getCurrentMovementType().getLEFTRIGHT() == 1)
-                    moveTo(getX() + 1, getY(), level);
+                moveRight(level);
             }
-            if(isMoving){
-                level.moves++;
-            }
+        }
+    }
+
+    public void moveUp(Level level) {
+        if (level.getCurrentMovementType().getUPDOWN() == 0)
+            moveTo(getX(), getY() + 1, level);
+        if (isMoving) {
+            level.moves++;
+        }
+    }
+
+    public void moveDown(Level level) {
+        if (level.getCurrentMovementType().getUPDOWN() == 1)
+            moveTo(getX(), getY() - 1, level);
+        if (isMoving) {
+            level.moves++;
+        }
+    }
+
+    public void moveLeft(Level level) {
+        if (level.getCurrentMovementType().getLEFTRIGHT() == 0)
+            moveTo(getX() - 1, getY(), level);
+        if (isMoving) {
+            level.moves++;
+        }
+    }
+
+    public void moveRight(Level level) {
+        if (level.getCurrentMovementType().getLEFTRIGHT() == 1)
+            moveTo(getX() + 1, getY(), level);
+        if (isMoving) {
+            level.moves++;
         }
     }
 
     @Override
     public Entity copy() {
-        return new Player(getX(),getY());
+        return new Player(getX(), getY());
     }
 
 

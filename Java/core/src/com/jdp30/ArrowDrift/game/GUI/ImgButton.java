@@ -2,7 +2,11 @@ package com.jdp30.ArrowDrift.game.GUI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import java.awt.*;
 
@@ -11,21 +15,21 @@ import java.awt.*;
  * <p>
  * Last Edit: 05/03/2018
  */
-public class ImgButton {
-    private int x, y;
+public class ImgButton extends Actor {
     private Texture texture;
-    private Callback callback;
-    private boolean down = false;
 
-    public ImgButton(String texture, int x, int y) {
-        this.x = x;
-        this.y = y;
+    public ImgButton(String texture, int x, int y, int width, int height) {
         this.texture = new Texture(texture);
+        setBounds(x, y, width, height);
+        setTouchable(Touchable.enabled);
+        setDebug(true);
     }
 
-    public void draw(SpriteBatch batch) {
-        update();
-        batch.draw(texture, x, y);
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
     }
 
     public void setTexture(Texture texture) {
@@ -34,24 +38,5 @@ public class ImgButton {
         this.texture = texture;
     }
 
-    public void update() {
-        int x = Gdx.input.getX();
-        int y = Gdx.graphics.getHeight() - Gdx.input.getY();
-        if (Gdx.input.isButtonPressed(0)) {
-            if (new Rectangle(this.x, this.y, texture.getWidth(), texture.getHeight()).contains(x, y)) {
-                down = true;
-            }
-        }else{
-            if(down){
-                if (callback != null) {
-                    callback.callback();
-                }
-                down = false;
-            }
-        }
-    }
 
-    public void setCallback(Callback callback) {
-        this.callback = callback;
-    }
 }

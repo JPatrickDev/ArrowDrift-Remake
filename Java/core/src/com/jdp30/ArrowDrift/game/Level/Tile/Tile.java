@@ -22,7 +22,7 @@ public abstract class Tile implements Disposable {
     public int y;
     private boolean solid;
     private String texture;
-    public static int TILE_SIZE = 64;
+    public static int TILE_SIZE = 32;
     private Texture textureObj;
 
     public static HashMap<AllowedMovementType, Texture> movementTextures = new HashMap<AllowedMovementType, Texture>();
@@ -46,10 +46,10 @@ public abstract class Tile implements Disposable {
     }
 
     public void draw(SpriteBatch batch, int xo, int yo) {
-        batch.draw(textureObj, x + xo, y + yo);
+        batch.draw(textureObj, x + xo, y + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
         if (movement != AllowedMovementType.NONE) {
             Texture t = movementTextures.get(movement);
-            batch.draw(t, x + xo, y + yo);
+            batch.draw(t, x + xo, y + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
         }
     }
 

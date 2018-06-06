@@ -35,6 +35,7 @@ public class LevelTypeSelectionActor extends Actor {
         this.prevWidth = width;
         this.prevHeight = height;
         this.padding = padding;
+        setDebug(true);
     }
 
     float s = 1.1f;

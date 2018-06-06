@@ -24,7 +24,7 @@ public class EntityContainer extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(parent.getTexture(),getX(),getY());
+        batch.draw(parent.getTexture(),getX(),getY(),Tile.TILE_SIZE,Tile.TILE_SIZE);
     }
 
     public Entity getEntity() {

@@ -25,7 +25,7 @@ public abstract class Entity implements Disposable {
 
     private int tX = -1, tY = -1;
 
-    private int moveSpeed = 4;
+    private int moveSpeed = Tile.TILE_SIZE/8;
 
     private boolean isFlung = false;
     private Direction flingDir = null;
@@ -107,7 +107,7 @@ public abstract class Entity implements Disposable {
     }
 
     public void draw(SpriteBatch batch, int xo, int yo) {
-        batch.draw(texture, (x * Tile.TILE_SIZE) + xOff + xo, (y * Tile.TILE_SIZE) + yOff + yo);
+        batch.draw(texture, (x * Tile.TILE_SIZE) + xOff + xo, (y * Tile.TILE_SIZE) + yOff + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
     }
 
     public void moveTo(int tX, int tY, Level level) {

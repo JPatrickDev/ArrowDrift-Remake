@@ -39,8 +39,7 @@ public class BeltTile extends AnimatedTile {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion t = animation.getKeyFrame(stateTime, true);
         if (t != null)
-            //batch.draw(animation.getKeyFrame(stateTime,true), x + xo, y + yo);
-            batch.draw(t, x + xo, y + yo, 32, 32, 64, 64, 1, 1, angle);
+            batch.draw(t, x + xo, y + yo, Tile.TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE, TILE_SIZE, 1, 1, angle);
     }
 
     public int getAngle() {

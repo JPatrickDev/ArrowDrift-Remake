@@ -2,28 +2,26 @@ package com.jdp30.ArrowDrift.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
-import com.jdp30.ArrowDrift.game.GUI.Callback;
 import com.jdp30.ArrowDrift.game.GUI.ImgButton;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.util.LevelUtil;
-import javafx.scene.paint.Color;
 import storage.Node;
-import sun.awt.geom.AreaOp;
 import sun.plugin.dom.exception.InvalidStateException;
+
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -33,75 +31,94 @@ import sun.plugin.dom.exception.InvalidStateException;
 public class InGameScreen implements Screen {
 
     SpriteBatch batch;
-    Texture img;
+    ShapeRenderer shape;
     Level level = null;
 
-    int levelPos = 0;
 
     int topPadding = 10;
 
-    Stage ui = null;
-
-    private ImgButton upDown = null, leftRight = null;
     private BitmapFont font;
     public static Node lvl = null;
+
+    private Rectangle gameArea, uiArea, infoArea;
+
+    private Stage stage;
+
+    private ImgButton upDown, leftRight;
 
     @Override
     public void show() {
         if (lvl == null) {
             throw new InvalidStateException("Level can't be null");
         }
+        setPortraitRects();
+        preLevel();
+
 
         font = new BitmapFont(Gdx.files.internal("fonts/cg40.fnt"), Gdx.files.internal("fonts/cg40.png"), false);
 
         batch = new SpriteBatch();
+        shape = new ShapeRenderer();
+        shape.setAutoShapeType(true);
 
         level = Level.fromNode(lvl);
 
-        float wh = Gdx.graphics.getWidth() / 2;
 
-        upDown = new ImgButton("button/up.png", (int) (wh / 2 - 128 / 2), (int) ((Gdx.graphics.getHeight() - (level.getHeight() * Tile.TILE_SIZE)) / 2 - 128 / 2));
-        upDown.setCallback(new Callback() {
+        stage = new Stage();
+        stage.getViewport().setScreenPosition((int) uiArea.x, (int) uiArea.y);
+        stage.getViewport().setScreenSize((int) uiArea.getWidth(), (int) uiArea.getHeight());
 
-            @Override
-            public void callback() {
-                if (!level.p.isMoving()) {
-                    AllowedMovementType t = level.getCurrentMovementType();
-                    if (t.getUPDOWN() == 0) {
-                        level.p.movedBy(0, 1, level);
-                        if (level.p.isMoving()) {
-                            level.moves++;
-                        }
-                    } else if (t.getUPDOWN() == 1) {
-                        level.p.movedBy(0, -1, level);
-                        if (level.p.isMoving()) {
-                            level.moves++;
-                        }
-                    }
-                }
-            }
-        });
-        leftRight = new ImgButton("button/right.png", (int) (Gdx.graphics.getWidth() / 2 + ((wh / 2 - 128 / 2))), (int) ((Gdx.graphics.getHeight() - (level.getHeight() * Tile.TILE_SIZE)) / 2 - 128 / 2));
-        leftRight.setCallback(new Callback() {
+
+        int i = (int) uiArea.getWidth();
+        if(uiArea.getHeight() < i)
+            i = (int) uiArea.getHeight() * 2;
+        int buttonWidth = (int) ((i/ 2)) - 2*10;
+
+
+        upDown = new ImgButton("button/up.png", (int) ((uiArea.getWidth() / 2)) / 2 - buttonWidth / 2, (int) (uiArea.getHeight() / 2 - buttonWidth / 2), buttonWidth, buttonWidth);
+        stage.addActor(upDown);
+        leftRight = new ImgButton("button/up.png", (int) (uiArea.getWidth() / 2 + ((uiArea.getWidth() / 2) / 2) - buttonWidth / 2), (int) (uiArea.getHeight() / 2 - buttonWidth / 2), buttonWidth, buttonWidth);
+        stage.addActor(leftRight);
+        Gdx.input.setInputProcessor(stage);
+        leftRight.addListener(new ClickListener() {
 
             @Override
-            public void callback() {
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
                 if (!level.p.isMoving()) {
                     AllowedMovementType t = level.getCurrentMovementType();
                     if (t.getLEFTRIGHT() == 0) {
-                        level.p.movedBy(-1, 0, level);
-                        if (level.p.isMoving()) {
-                            level.moves++;
-                        }
+                        level.p.moveLeft(level);
                     } else if (t.getLEFTRIGHT() == 1) {
-                        level.p.movedBy(1, 0, level);
-                        if (level.p.isMoving()) {
-                            level.moves++;
-                        }
+                        level.p.moveRight(level);
                     }
                 }
             }
         });
+        upDown.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if (!level.p.isMoving()) {
+                    AllowedMovementType t = level.getCurrentMovementType();
+                    if (t.getUPDOWN() == 0) {
+                        level.p.moveUp(level);
+                    } else if (t.getUPDOWN() == 1) {
+                        level.p.moveDown(level);
+                    }
+                }
+            }
+        });
+
+    }
+
+    public void setPortraitRects() {
+        float third = Gdx.graphics.getHeight() / 3.0f;
+        float sixth = third / 2.0f;
+        float seventh = Gdx.graphics.getHeight() / 7.0f;
+        uiArea = new Rectangle(0, 0, Gdx.graphics.getWidth(), seventh * 2);
+        infoArea = new Rectangle(0, uiArea.getHeight(), Gdx.graphics.getWidth(), sixth);
+        gameArea = new Rectangle(0, (uiArea.getHeight() + infoArea.getHeight()), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - (uiArea.getHeight() + infoArea.getHeight()));
     }
 
     public Node getNextLevel() {
@@ -111,6 +128,30 @@ public class InGameScreen implements Screen {
         return next;
     }
 
+
+    public void preLevel(){
+        int levelWidth = Integer.parseInt(lvl.getValue("width"));
+        int levelHeight = Integer.parseInt(lvl.getValue("height"));
+
+        int maxWidth = (int) (gameArea.getWidth() - (2 * topPadding));
+        int maxHeight = (int) (gameArea.getHeight() - (2 * topPadding));
+        int currentSize = 8;
+        for(int i = 8; i <= 512; i+=2){
+            System.out.println(i);
+            int tSize = i;
+            int width = tSize * levelWidth;
+            int height = tSize * levelHeight;
+            if(width <= maxWidth && height <= maxHeight){
+                currentSize = i;
+            }else{
+                break;
+            }
+        }
+
+        Tile.TILE_SIZE =  currentSize;
+    }
+
+
     GlyphLayout layout = new GlyphLayout();
 
     @Override
@@ -119,21 +160,28 @@ public class InGameScreen implements Screen {
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.setColor(Color.RED);
+        shape.rect(gameArea.getX(), gameArea.getY(), gameArea.getWidth(), gameArea.getHeight());
+        shape.setColor(Color.BLUE);
+        shape.rect(uiArea.getX(), uiArea.getY(), uiArea.getWidth(), uiArea.getHeight());
+        shape.setColor(Color.GOLD);
+        shape.rect(infoArea.getX(), infoArea.getY(), infoArea.getWidth(), infoArea.getHeight());
+        shape.end();
+
         batch.begin();
         if (level != null)
-            level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding);
+            level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (int) (gameArea.getY() + (gameArea.getHeight()/2 - (level.getHeight()*Tile.TILE_SIZE)/2)));
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
 
         layout.setText(font, "Moves: " + level.moves);
-        font.draw(batch, "Moves: " + level.moves, Gdx.graphics.getWidth() / 2 - (layout.width) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding - topPadding);
-
-        layout.setText(font, "Level: " + lvl.getName());
-        font.draw(batch, "Level: " + lvl.getName(), Gdx.graphics.getWidth() / 2 - (layout.width) / 2, (Gdx.graphics.getHeight() - level.getHeight() * Tile.TILE_SIZE) - topPadding - topPadding - layout.height);
+        font.draw(batch, "Moves: " + level.moves, infoArea.getX() + (infoArea.getWidth()/2 - layout.width/2),infoArea.getY() + infoArea.getHeight() - topPadding);
 
         font.setColor(com.badlogic.gdx.graphics.Color.WHITE);
-        upDown.draw(batch);
-        leftRight.draw(batch);
         batch.end();
+
+
+        stage.draw();
     }
 
     public void update() {
@@ -153,6 +201,7 @@ public class InGameScreen implements Screen {
             leftRight.setTexture(new Texture("button/right.png"));
         }
 
+
         if (level.isOver()) {
             LevelUtil.updateMoves(lvl.getName(), ArrowDriftGame.currentCat, ArrowDriftGame.getCurrentPackID(), level.moves);
             if (getNextLevel() == null) {
@@ -161,6 +210,7 @@ public class InGameScreen implements Screen {
                 return;
             }
             lvl = getNextLevel();
+            preLevel();
             level = Level.fromNode(lvl);
         }
 
@@ -168,7 +218,7 @@ public class InGameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().setScreenSize(width, height);
     }
 
     @Override
@@ -190,4 +240,5 @@ public class InGameScreen implements Screen {
     public void dispose() {
 
     }
+
 }

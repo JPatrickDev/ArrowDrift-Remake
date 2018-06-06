@@ -43,6 +43,7 @@ public class LevelSelectionActor extends Actor {
         disabledStar = new Texture("ui/disabled_star.png");
         this.level = level;
         this.category = category;
+        setDebug(true);
 
     }
 
@@ -137,6 +138,7 @@ public class LevelSelectionActor extends Actor {
             batch.draw(enabledStar, (getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) + disabledStar.getWidth() * p, (getY() + padding) - nameHeight - enabledStar.getHeight());
             p++;
         }
+
     }
 
     public void recaulcuateFont() {

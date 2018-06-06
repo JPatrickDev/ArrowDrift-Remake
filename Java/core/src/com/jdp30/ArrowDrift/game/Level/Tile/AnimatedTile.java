@@ -32,7 +32,7 @@ public abstract class AnimatedTile extends Tile {
     public void draw(SpriteBatch batch, int xo, int yo) {
         stateTime += Gdx.graphics.getDeltaTime();
         if (animation.getKeyFrame(stateTime) != null)
-            batch.draw(animation.getKeyFrame(stateTime, true), x + xo, y + yo);
+            batch.draw(animation.getKeyFrame(stateTime, true), x + xo, y + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
     }
 
     public TextureRegion getCurrentFrame() {

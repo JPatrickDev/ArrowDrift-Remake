@@ -72,7 +72,7 @@ public class InGameScreen implements Screen {
         int i = (int) uiArea.getWidth();
         if(uiArea.getHeight() < i)
             i = (int) uiArea.getHeight() * 2;
-        int buttonWidth = (int) ((i/ 2)) - 2*10;
+        int buttonWidth = (int) ((i/ 2)) - 2*50;
 
 
         upDown = new ImgButton("button/up.png", (int) ((uiArea.getWidth() / 2)) / 2 - buttonWidth / 2, (int) (uiArea.getHeight() / 2 - buttonWidth / 2), buttonWidth, buttonWidth);

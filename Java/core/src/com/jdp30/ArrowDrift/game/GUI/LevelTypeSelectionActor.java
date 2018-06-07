@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import storage.Node;
 
 /**
  * Created by Jack Patrick on 03/04/2018.
@@ -15,15 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class LevelTypeSelectionActor extends Actor {
 
     private String path, name;
- //   private Texture previewTexture;
+    private Texture previewTexture;
     private int nameWidth;
     private float prevWidth, prevHeight, padding;
 
     private BitmapFont font;
 
-    public LevelTypeSelectionActor(String path) {
+    private Node parent;
+    public LevelTypeSelectionActor(String path, Node node) {
         this.path = path;
         this.name = path;
+        this.parent = node;
     }
 
 
@@ -31,8 +34,8 @@ public class LevelTypeSelectionActor extends Actor {
         float padding = getWidth() / 8;
         float width = getWidth() - (padding * 2);
         float height = getHeight() - (padding * 2);
-      //  this.previewTexture = new Texture(path + "/preview/1.png");
-        this.prevWidth = width;
+        this.previewTexture = parent.getTexture("preview");
+        this.prevWidth = height;
         this.prevHeight = height;
         this.padding = padding;
         setDebug(true);
@@ -53,7 +56,7 @@ public class LevelTypeSelectionActor extends Actor {
                 font = null;
                 draw(batch, parentAlpha);
             } else {
-                s -= 0.1;
+                s -= 0.5;
                 font.getData().setScale(s);
                 this.font = font;
                 layout.setText(font, name);
@@ -61,7 +64,7 @@ public class LevelTypeSelectionActor extends Actor {
             }
         }
         super.draw(batch, parentAlpha);
-       // batch.draw(previewTexture, getX() + padding, getY() + padding, prevWidth, prevHeight);
+        batch.draw(previewTexture, getX() + (getWidth()/2 - prevWidth/2), getY() + padding, prevWidth, prevHeight);
         font.draw(batch, name, getX() + (getWidth() / 2 - this.nameWidth/2), getY() + padding - 10);
     }
 }

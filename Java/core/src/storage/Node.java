@@ -1,5 +1,8 @@
 package storage;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +30,40 @@ public class Node {
 
     public void addValue(String key, String value) {
         this.data.put(key, value);
+    }
+
+    public void addTexture(String key,Texture texture){
+        texture.getTextureData().prepare();
+        Pixmap map = texture.getTextureData().consumePixmap();
+        String value = texture.getWidth() + ":" + texture.getHeight() + ":" +  Pixmap.Format.toGdx2DPixmapFormat(texture.getTextureData().getFormat());
+
+        for(int x = 0; x != texture.getWidth(); x++){
+            for(int y = 0; y != texture.getHeight();y++){
+                int i = map.getPixel(x,y);
+                value += ":" + i;
+            }
+        }
+        System.out.println(value);
+        addValue(key,value);
+    }
+
+    public Texture getTexture(String key){
+        String data = getValue(key);
+        String[] info = data.split(":");
+        int width = Integer.parseInt(info[0]);
+        int height = Integer.parseInt(info[1]);
+        Pixmap.Format format = Pixmap.Format.fromGdx2DPixmapFormat(Integer.parseInt(info[2]));
+        Pixmap map = new Pixmap(width,height,format);
+        for(int x = 0; x != width; x++){
+            for(int y = 0; y != height;y++){
+                int i = x + y * width;
+                i += 3;
+                int color = Integer.parseInt(info[i]);
+                map.setColor(color);
+                map.fillRectangle(x,y,1,1);
+            }
+        }
+        return new Texture(map);
     }
 
     public String getValue(String key) {

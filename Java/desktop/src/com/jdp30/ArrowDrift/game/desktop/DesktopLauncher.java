@@ -7,8 +7,8 @@ import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 800;
-		config.height = 600;
+		config.width = 350;
+		config.height = 800;
 		new LwjglApplication(new ArrowDriftGame(), config);
 	}
 }

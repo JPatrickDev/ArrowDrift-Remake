@@ -212,6 +212,7 @@ public class Level implements Disposable {
         return rootNode;
     }
 
+
     public static Level blank(int width, int height) {
         Level level = new Level(width, height);
         for (int y = 0; y != height; y++) {

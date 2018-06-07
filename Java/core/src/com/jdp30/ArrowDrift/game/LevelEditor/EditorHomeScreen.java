@@ -124,6 +124,7 @@ public class EditorHomeScreen implements Screen {
                     if(n == null){
                         String name = JOptionPane.showInputDialog(null,"Category Name:");
                         Node newCat = new Node(name);
+                        newCat.addTexture("preview",new Texture("levelPreview.png"));
                         system.getRoot().addChild(newCat);
                         try {
                             system.save(file.toString());

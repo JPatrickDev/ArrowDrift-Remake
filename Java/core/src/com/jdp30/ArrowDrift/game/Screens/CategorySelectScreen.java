@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -33,30 +34,60 @@ public class CategorySelectScreen implements Screen {
 
     }
 
+    TextButton button;
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         Label label = new Label("Select A Level Category", skin);
-        label.setY(Gdx.graphics.getHeight() - label.getHeight() * 3);
+        label.setY(Gdx.graphics.getHeight() - label.getHeight());
         label.setX(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2);
         stage.addActor(label);
+
+
+        button = new TextButton("Back To Main Menu", skin);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
+            }
+        });
+        button.setY(0);
+        button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
+
+        stage.addActor(button);
+
+
 
         try {
             StorageSystem mappack = StorageSystem.fromFile("Arrow Drift Data/Levels/DEFAULT");
             ArrowDriftGame.setCurrentPack(mappack);
-        int x = 0;
-        float w = (800.0f) / ((float) (mappack.getRoot().getChildren().size()));
-        for (final Node n  : mappack.getRoot().getChildren()) {
-            if(n.getName().equals("metadata"))continue;
-            LevelTypeSelectionActor a = new LevelTypeSelectionActor(n.getName());
-            a.setWidth(w);
-            a.setHeight(w);
-            a.setX(x);
-            a.setY(Gdx.graphics.getHeight() / 2 - w / 2);
+            portrait(mappack);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+
+    public void portrait(StorageSystem mappack) {
+        Rectangle area = new Rectangle(0, button.getY() + button.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - button.getHeight() * 2);
+        int y = (int) area.getY();
+        for (final Node n : mappack.getRoot().getChildren()) {
+            if (n.getName().equals("metadata")) continue;
+            LevelTypeSelectionActor a = new LevelTypeSelectionActor(n.getName(), n);
+            a.setWidth(Gdx.graphics.getWidth() - 20);
+            a.setHeight(area.getHeight() / (mappack.getRoot().getChildren().size()-1));
+            a.setX(Gdx.graphics.getWidth() / 2 - a.getWidth() / 2);
+            a.setY(y);
             a.init();
             stage.addActor(a);
-            a.addListener(new ClickListener(){
+            a.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
@@ -64,25 +95,8 @@ public class CategorySelectScreen implements Screen {
                     ArrowDriftGame.setCurrentScreen(new LevelSelectScreen(selectedCat));
                 }
             });
-            x += a.getWidth();
+            y += a.getHeight();
         }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TextButton button = new TextButton("Back To Main Menu",skin);
-
-        button.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event,x,y);
-                ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
-            }
-        });
-        button.setY(label.getHeight() * 3);
-        button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
-
-        stage.addActor(button);
-
     }
 
     @Override
@@ -95,7 +109,7 @@ public class CategorySelectScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().setScreenSize(width,height);
+        stage.getViewport().setScreenSize(width, height);
     }
 
     @Override

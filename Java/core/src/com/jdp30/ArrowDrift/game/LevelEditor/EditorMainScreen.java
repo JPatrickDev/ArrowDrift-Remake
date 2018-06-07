@@ -48,7 +48,6 @@ public class EditorMainScreen implements Screen {
     @Override
     public void show() {
         Tile.TILE_SIZE = 32;
-
     }
 
     @Override

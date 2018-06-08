@@ -65,7 +65,10 @@ public class CategorySelectScreen implements Screen {
         try {
             StorageSystem mappack = StorageSystem.fromFile("Arrow Drift Data/Levels/DEFAULT");
             ArrowDriftGame.setCurrentPack(mappack);
+            if(ArrowDriftGame.isPortrait())
             portrait(mappack);
+            else
+                landscape(mappack);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,6 +99,30 @@ public class CategorySelectScreen implements Screen {
                 }
             });
             y += a.getHeight();
+        }
+    }
+
+    public void landscape(StorageSystem mappack){
+        Rectangle area = new Rectangle(0, button.getY() + button.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - button.getHeight() * 2);
+        int x = (int) area.getX();
+        for (final Node n : mappack.getRoot().getChildren()) {
+            if (n.getName().equals("metadata")) continue;
+            LevelTypeSelectionActor a = new LevelTypeSelectionActor(n.getName(), n);
+            a.setWidth(area.getWidth() / (mappack.getRoot().getChildren().size()-1));
+            a.setHeight(Gdx.graphics.getHeight()/2);
+            a.setX(x);
+            a.setY(Gdx.graphics.getHeight() / 2 - a.getHeight() / 2);
+            a.init();
+            stage.addActor(a);
+            a.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    Node selectedCat = ArrowDriftGame.getCurrentPack().getRoot().getChild(n.getName());
+                    ArrowDriftGame.setCurrentScreen(new LevelSelectScreen(selectedCat));
+                }
+            });
+            x += a.getWidth();
         }
     }
 

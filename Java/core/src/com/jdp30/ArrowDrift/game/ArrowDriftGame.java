@@ -3,14 +3,17 @@ package com.jdp30.ArrowDrift.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.utils.Array;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
 import storage.Node;
 import storage.StorageSystem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ArrowDriftGame extends Game {
@@ -25,6 +28,7 @@ public class ArrowDriftGame extends Game {
     public static StorageSystem userdata;
     private static StorageSystem currentPack;
     public static String currentCat;
+
     public ArrowDriftGame() {
         this.INSTANCE = this;
 
@@ -42,22 +46,34 @@ public class ArrowDriftGame extends Game {
         return getCurrentPack().getRoot().getName();
     }
 
+    public static String[] getPacks() {
+        FileHandle[] files = Gdx.files.external("Arrow Drift Data/Levels/").list();
+        String[] out = new String[files.length];
+        for(int i = 0; i != out.length; i++){
+            out[i] = files[i].name();
+        }
+        return out;
+    }
+
     @Override
     public void create() {
         createUserData();
         try {
             userdata = StorageSystem.fromFile("Arrow Drift Data/config");
+            StorageSystem mappack = StorageSystem.fromFile("Arrow Drift Data/Levels/DEFAULT");
+            ArrowDriftGame.setCurrentPack(mappack);
         } catch (IOException e) {
             e.printStackTrace();
             //TODO - Handle better
             System.exit(0);
         }
-        font = new BitmapFont(Gdx.files.internal("fonts/cg12.fnt"),Gdx.files.internal("fonts/cg12.png"),false);
+        font = new BitmapFont(Gdx.files.internal("fonts/cg12.fnt"), Gdx.files.internal("fonts/cg12.png"), false);
         batch = new SpriteBatch();
+
         setScreen(new MainMenuScreen());
     }
 
-    public static void setCurrentScreen(Screen s){
+    public static void setCurrentScreen(Screen s) {
         INSTANCE.setScreen(s);
     }
 
@@ -66,7 +82,7 @@ public class ArrowDriftGame extends Game {
     public void render() {
         super.render();
         batch.begin();
-        font.draw(batch,VERSION_NUMBER,0,12);
+        font.draw(batch, VERSION_NUMBER, 0, 12);
         batch.end();
     }
 
@@ -75,8 +91,8 @@ public class ArrowDriftGame extends Game {
         notifyStorageChanged();
     }
 
-    public void createUserData(){
-        if(Gdx.files.external("Arrow Drift Data/config").exists())
+    public void createUserData() {
+        if (Gdx.files.external("Arrow Drift Data/config").exists())
             return;
         StorageSystem system = new StorageSystem("userdata");
         Node settings = new Node("settings");
@@ -97,7 +113,7 @@ public class ArrowDriftGame extends Game {
         }
     }
 
-    public static boolean isPortrait(){
+    public static boolean isPortrait() {
         return Gdx.graphics.getHeight() > Gdx.graphics.getWidth();
     }
 }

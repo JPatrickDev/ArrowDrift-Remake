@@ -73,7 +73,6 @@
         .update {
             border: 4px solid #101010;
             width: 750px;
-            height: 100px;
             margin: 10px;
             background-color: #568777;
             position: relative;
@@ -88,7 +87,7 @@
         }
 
         .updateContent {
-            padding: 10px;
+            padding-bottom: 40px;
         }
 
         .updateFooter {
@@ -140,6 +139,58 @@
                     <div id="updates">
                         <div id="updatesGrid">
                             <div class="update">
+                                <div class="updateHeader">08.06.2018</div>
+                                <div class="updateContent">
+                                    <br>
+                                    Current version is now v0.5. Game is rapidly approaching a releasable state, with
+                                    v0.5 introducing much better scaling support for both portrait and landscape
+                                    resolutions.
+                                    The Level Editor is now a map pack editor, allowing support for the new zip based
+                                    level storage system. Map Packs can be placed in Home/Arrow Drift Data/Levels and
+                                    can be loaded via the main menu.
+                                </div>
+                                <div class="updateFooter">Tags: Announcement, Update,Version</div>
+                            </div>
+                            <div class="update">
+                                <div class="updateHeader">3.06.2018</div>
+                                <div class="updateContent">
+                                    <h3>About</h3>
+                                    Arrow Drift is a re-make of one of my Ludum Dare entries. The original was made
+                                    entirely in 48-hours and can be found <a
+                                        href=http://ludumdare.com/compo/ludum-dare-34/?action=preview&uid=14696”>Here</a>
+                                    . This project is an attempt to make a much better version of the game, with
+                                    improves both internally and externally.
+                                    <br>
+                                    <br>
+                                    Internally, the game has moved over from Slick2D/LWJGL, which has always been my
+                                    preferred LD combo due to how familiar I am with it, to LibGDX. This is a library I
+                                    have wanted to learn more about for a while now, so this project felt like the
+                                    perfect time to do so. I’m particularly excited about the opportunity to deploy
+                                    Arrow Drift on Android devices. The game has also been built on a robust tile-based
+                                    game-engine, making adding new tiles/entities and levels very easy.
+                                    <br>
+                                    <br>
+                                    Externally, it’s currently very much a Work-In-Progress. It does feature a Level
+                                    Editor to easily create new levels, but there’s currently no easy way to add them to
+                                    the game once it’s compiled. Work is currently in progress to convert the game to
+                                    use a zip based storage system for levels to allow for easily loadable "map packs".
+                                    The game runs smoothly, with animated tile support, category and level select
+                                    screens, and end of category screens. The GUI looks very basic at the moment because
+                                    it’s pretty much just default LibGDX skins for GUI elements. Support for scaling is
+                                    lacking in places, but is improving – Hopefully an Android build will be available
+                                    soon.
+                                    <br>
+                                    <br>
+                                    Feel free to take a look at the GitHub Repo, where the source for both the game and
+                                    this website can be found. Pull request are always welcome, as is general feedback.
+                                    You can follow me on Twitter at @jdp30_, or email me at jack@jdp30.com.
+                                    <br>
+                                    <br>
+                                    More updates coming soon.
+                                </div>
+                                <div class="updateFooter">Tags: Announcement, Update</div>
+                            </div>
+                            <div class="update">
                                 <div class="updateHeader">25.04.2018</div>
                                 <div class="updateContent">Welcome to the Arrow Drift Website! More information coming
                                     soon.
@@ -167,7 +218,7 @@
                         $i = 0;
                         foreach ($obj as $commit) {
                             $i++;
-                            if ($i > 5)
+                            if ($i > 12)
                                 break;
                             ?>
                             <div class="commit">

@@ -37,8 +37,24 @@ public class LevelSelectScreen implements Screen {
         label.setX(Gdx.graphics.getWidth() / 2 - label.getWidth() / 2);
         stage.addActor(label);
 
+        TextButton button = new TextButton("Back To Main Menu", skin);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
+            }
+        });
+        button.setY(0);
+        button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
+
+        stage.addActor(button);
+
+
+
         int x = 0;
-        int y = 0;
+        int y = (int) (button.getY() + button.getHeight());
         int xP = 0;
         float w = (Gdx.graphics.getWidth()) / 3.0f;
         float h = Gdx.graphics.getHeight() / 3.0f;
@@ -46,7 +62,6 @@ public class LevelSelectScreen implements Screen {
             w = h;
         else
             h = w;
-        y = (int) h;
         for (final Node level : category.getChildren()) {
             for (int i = 0; i != 5; i++) {
                 LevelSelectionActor a = new LevelSelectionActor(0, level, category.getName());
@@ -77,19 +92,7 @@ public class LevelSelectScreen implements Screen {
             }
         }
 
-        TextButton button = new TextButton("Back To Main Menu", skin);
 
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
-            }
-        });
-        button.setY(0);
-        button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
-
-        stage.addActor(button);
     }
 
     @Override

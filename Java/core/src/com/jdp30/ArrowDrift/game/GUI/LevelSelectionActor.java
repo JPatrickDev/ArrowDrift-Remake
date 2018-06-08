@@ -37,18 +37,22 @@ public class LevelSelectionActor extends Actor {
 
     int moves, min;
 
+    int starSize = 32;
+
     public LevelSelectionActor(int stars, Node level, String category) {
         this.stars = stars;
         enabledStar = new Texture("ui/enabled_star.png");
         disabledStar = new Texture("ui/disabled_star.png");
         this.level = level;
         this.category = category;
-        setDebug(true);
+      //  setDebug(true);
 
     }
 
     public void init() {
         padding = getWidth() / 16.0f;
+        starSize = (int) (getWidth() - padding * 6);
+        starSize /= 3;
         int i = LevelUtil.getMovesTaken(level.getName(), category, ArrowDriftGame.getCurrentPackID());
         if (i != -1) {
             int diff = i - LevelUtil.getMinMoves(level.getName(), category);
@@ -91,7 +95,7 @@ public class LevelSelectionActor extends Actor {
             GlyphLayout layout = new GlyphLayout();
             layout.setText(font, level.getName());
             float height = layout.height;
-            if (height < (getHeight() - enabledStar.getHeight()) - padding * 2 && layout.width < getWidth() - padding * 2) {
+            if (height < (getHeight() - starSize) - padding * 2 && layout.width < getWidth() - padding * 2) {
                 s += 0.5;
                 font = null;
                 draw(batch, parentAlpha);
@@ -110,7 +114,7 @@ public class LevelSelectionActor extends Actor {
             layout.setText(smallerFont, moves + "");
             float height = layout.height;
             System.out.println((getWidth() - this.nameWidth) + ":" + layout.width);
-            if (layout.height < disabledStar.getHeight()) {
+            if (layout.height < starSize) {
                 dS += 0.5;
                 smallerFont = null;
                 draw(batch, parentAlpha);
@@ -123,19 +127,19 @@ public class LevelSelectionActor extends Actor {
             }
         }
         batch.setColor(1, 1, 1, 1);
-        font.draw(batch, level.getName(), getX() + padding / 2 + ((getWidth() - padding) / 2 - nameWidth / 2), getY() + padding);
+        font.draw(batch, level.getName(), getX() + padding / 2 + ((getWidth() - padding) / 2 - nameWidth / 2), getY() + nameHeight + starSize + padding);
         if (moves != -1)
-            smallerFont.draw(batch, moves + "", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 1.5)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+            smallerFont.draw(batch, moves + "", getX() + padding, (getY() + starSize));
         else
-            smallerFont.draw(batch, "-", (float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) - (scoreWidth * 0.75)), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+            smallerFont.draw(batch, "-", getX() + padding, getY() + starSize);
 
-        smallerFont.draw(batch, min + "", (float) ((float) ((getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2)) + disabledStar.getWidth() * 3), (getY() + padding) - nameHeight - enabledStar.getHeight() + scoreHeight);
+        smallerFont.draw(batch, min + "", getX() + getWidth() - scoreWidth, getY() + starSize);
         for (int i = 0; i != 3; i++) {
-            batch.draw(disabledStar, (getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) + disabledStar.getWidth() * i, (getY() + padding) - nameHeight - enabledStar.getHeight());
+            batch.draw(disabledStar, (getX() + padding / 2 + (getWidth() - padding) / 2 - (starSize * 3) / 2) + starSize * i, getY() + padding, starSize, starSize);
         }
         int p = 0;
         for (int i = stars; i != 0; i--) {
-            batch.draw(enabledStar, (getX() + padding / 2 + (getWidth() - padding) / 2 - (enabledStar.getWidth() * 3) / 2) + disabledStar.getWidth() * p, (getY() + padding) - nameHeight - enabledStar.getHeight());
+            batch.draw(enabledStar, (getX() + padding / 2 + (getWidth() - padding) / 2 - (starSize * 3) / 2) + starSize * p, getY() + padding, starSize, starSize);
             p++;
         }
 

@@ -1,5 +1,5 @@
 -----v0.5-----
-Better support for different screen sizes
+Better support for different screen sizes/
 Re-add the image previews for categories/
 Proper backend support for map packs/
 	- Storing the minMoves needs to indicate which pack the level is from/

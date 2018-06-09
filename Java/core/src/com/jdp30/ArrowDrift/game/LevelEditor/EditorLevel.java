@@ -1,14 +1,21 @@
 package com.jdp30.ArrowDrift.game.LevelEditor;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.Entity.Entity;
+import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
+import com.jdp30.ArrowDrift.game.Level.Tile.TPTargetTile;
+import com.jdp30.ArrowDrift.game.Level.Tile.TPTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
+import com.jdp30.ArrowDrift.game.util.Util;
 
+
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -69,6 +76,8 @@ public class EditorLevel extends ClickListener {
         return l;
     }
 
+    boolean waitingForTPTargetClick = false;
+    EditorTile tpPos = null;
     @Override
     public void clicked(InputEvent event, float x, float y) {
         super.clicked(event, x, y);
@@ -83,12 +92,28 @@ public class EditorLevel extends ClickListener {
                 removeEntityAt((int) t.getX(), (int) t.getY());
                 if (parent.getCurrentInHand() instanceof EditorTile) {
                     t.setTile(((EditorTile) parent.getCurrentInHand()).getParentTile());
+                    if(((EditorTile) parent.getCurrentInHand()).getParentTile() instanceof TPTile) {
+                        waitingForTPTargetClick = true;
+                        this.tpPos = t;
+                        parent.setCurrentTile(null);
+                    }
                 }
                 if (parent.getCurrentInHand() instanceof EntityContainer) {
                     Entity e = ((EntityContainer) parent.getCurrentInHand()).getEntity();
                     e.setPos((int) (t.getX() / Tile.TILE_SIZE), (int) (t.getY() / Tile.TILE_SIZE));
                     addEntity(e);
                 }
+            }
+        }else{
+            if(waitingForTPTargetClick){
+                String hex = Util.randHex();
+                Color c = Color.valueOf(hex);
+                TPTargetTile targetTile = new TPTargetTile((int) (t.getX() / Tile.TILE_SIZE), (int) (t.getY() / Tile.TILE_SIZE), AllowedMovementType.UP_RIGHT,c);
+                TPTile tpTile = new TPTile((int) (tpPos.getX() / Tile.TILE_SIZE), (int) (tpPos.getY() / Tile.TILE_SIZE),AllowedMovementType.NONE,c,targetTile.x,targetTile.y);
+                tpPos.setTile(tpTile);
+                t.setTile(targetTile);
+                waitingForTPTargetClick = false;
+                return;
             }
         }
     }

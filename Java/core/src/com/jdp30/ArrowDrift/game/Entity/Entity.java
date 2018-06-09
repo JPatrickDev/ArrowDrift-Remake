@@ -204,4 +204,8 @@ public abstract class Entity implements Disposable {
         this.x = x;
         this.y = y;
     }
+
+    public void teleportTo(Level level, int tX, int tY){
+        setPos(tX,tY);
+    }
 }

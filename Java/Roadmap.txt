@@ -9,9 +9,16 @@ Front end map pack support/
 Better art
 Better UI skin
 Replace all JOptionPanes
+Teleport tiles
 -----v0.7-----
 Android build
 Options Menu in-game
 Settings Menu
     - Resolution
     - Clear user data
+-----v0.8-----
+DEFAULT pack containing proper levels
+    - Probably just remakes of the original LD levels for now
+Automatically extract the DEFAULT pack to the Levels directory
+Downloadable build on website
+

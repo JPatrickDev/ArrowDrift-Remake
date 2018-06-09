@@ -36,7 +36,7 @@ public class EditorTile extends Actor implements Cloneable {
             if (parent instanceof BeltTile) {
                 batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(),getY(), getWidth()/2, getHeight()/2, getWidth(), getHeight(), 1, 1, ((BeltTile) parent).getAngle());
             } else {
-                batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(), getY());
+                batch.draw(((AnimatedTile) parent).getCurrentFrame(), getX(), getY(),Tile.TILE_SIZE,Tile.TILE_SIZE);
             }
         } else {
             batch.draw(parent.getTextureObj(), getX(), getY(),getWidth(),getHeight());

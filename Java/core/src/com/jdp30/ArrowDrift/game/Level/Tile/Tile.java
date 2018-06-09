@@ -1,5 +1,6 @@
 package com.jdp30.ArrowDrift.game.Level.Tile;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
@@ -25,6 +26,8 @@ public abstract class Tile implements Disposable {
     public static int TILE_SIZE = 32;
     private Texture textureObj;
 
+
+    public static Color target = Color.valueOf("#FF00AE");
     public static HashMap<AllowedMovementType, Texture> movementTextures = new HashMap<AllowedMovementType, Texture>();
 
     static {
@@ -46,10 +49,10 @@ public abstract class Tile implements Disposable {
     }
 
     public void draw(SpriteBatch batch, int xo, int yo) {
-        batch.draw(textureObj, x + xo, y + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
+        batch.draw(textureObj, x + xo, y + yo, Tile.TILE_SIZE, Tile.TILE_SIZE);
         if (movement != AllowedMovementType.NONE) {
             Texture t = movementTextures.get(movement);
-            batch.draw(t, x + xo, y + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
+            batch.draw(t, x + xo, y + yo, Tile.TILE_SIZE, Tile.TILE_SIZE);
         }
     }
 
@@ -75,6 +78,8 @@ public abstract class Tile implements Disposable {
         return movement;
     }
 
+    //5 - TP Target
+    //4 - TP Tile
     //3 = Goal
     //1 = WALL
     //2 = Belt
@@ -98,6 +103,23 @@ public abstract class Tile implements Disposable {
             return new BeltTile(x, y, d);
         } else if (ID == 3) {
             return new GoalTile(x, y);
+        } else if (ID == 4) {
+            int tX = 0, tY = 0;
+            Color c = Color.RED;
+            try {
+                tX = Integer.parseInt(tileData[2]);
+                tY = Integer.parseInt(tileData[3]);
+                c = Color.valueOf(tileData[4]);
+            }catch (Exception e){
+
+            }
+            return new TPTile(x, y, allowedMovementType, c, tX, tY);
+        } else if (ID == 5) {
+            Color c = Color.RED;
+            try {
+                c = Color.valueOf(tileData[2]);
+            }catch (Exception e){}
+            return new TPTargetTile(x, y, allowedMovementType, c);
         }
         return null;
     }
@@ -113,5 +135,9 @@ public abstract class Tile implements Disposable {
 
     public void setType(AllowedMovementType type) {
         this.movement = type;
+    }
+
+    public void setTextureObj(Texture textureObj) {
+        this.textureObj = textureObj;
     }
 }

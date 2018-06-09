@@ -47,7 +47,7 @@ public class EditorMainScreen implements Screen {
 
     @Override
     public void show() {
-        Tile.TILE_SIZE = 32;
+        Tile.TILE_SIZE = 64;
     }
 
     @Override
@@ -94,6 +94,10 @@ public class EditorMainScreen implements Screen {
     }
 
     public void setCurrentTile(EditorTile currentTile) {
+        if(currentTile == null){
+            this.currentInHand = null;
+            return;
+        }
         try {
             this.currentInHand = currentTile.clone();
         } catch (CloneNotSupportedException e) {

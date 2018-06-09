@@ -45,7 +45,7 @@ public class EditorHomeScreen implements Screen {
 
     @Override
     public void show() {
-        Tile.TILE_SIZE = 32;
+        Tile.TILE_SIZE = 64;
         batch = new SpriteBatch();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);

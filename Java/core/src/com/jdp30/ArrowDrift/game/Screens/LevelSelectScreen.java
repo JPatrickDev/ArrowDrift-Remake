@@ -52,7 +52,6 @@ public class LevelSelectScreen implements Screen {
         stage.addActor(button);
 
 
-
         int x = 0;
         int y = (int) (button.getY() + button.getHeight());
         int xP = 0;
@@ -63,32 +62,30 @@ public class LevelSelectScreen implements Screen {
         else
             h = w;
         for (final Node level : category.getChildren()) {
-            for (int i = 0; i != 5; i++) {
-                LevelSelectionActor a = new LevelSelectionActor(0, level, category.getName());
-                a.setWidth(w);
-                a.setHeight(w);
-                a.setX(x);
-                a.setY(y);
-                a.init();
-                stage.addActor(a);
-                a.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        super.clicked(event, x, y);
-                        System.out.println("Level selected");
-                        // ((LevelSelectionActor)event.getListenerActor()).recaulcuateFont();
-                        InGameScreen.lvl = level;
-                        ArrowDriftGame.currentCat = category.getName();
-                        ArrowDriftGame.setCurrentScreen(new InGameScreen());
-                    }
-                });
-                x += a.getWidth();
-                xP++;
-                if (xP >= 4) {
-                    xP = 0;
-                    x = 0;
-                    y += h;
+            LevelSelectionActor a = new LevelSelectionActor(0, level, category.getName());
+            a.setWidth(w);
+            a.setHeight(w);
+            a.setX(x);
+            a.setY(y);
+            a.init();
+            stage.addActor(a);
+            a.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    System.out.println("Level selected");
+                    // ((LevelSelectionActor)event.getListenerActor()).recaulcuateFont();
+                    InGameScreen.lvl = level;
+                    ArrowDriftGame.currentCat = category.getName();
+                    ArrowDriftGame.setCurrentScreen(new InGameScreen());
                 }
+            });
+            x += a.getWidth();
+            xP++;
+            if (xP >= 4) {
+                xP = 0;
+                x = 0;
+                y += h;
             }
         }
 

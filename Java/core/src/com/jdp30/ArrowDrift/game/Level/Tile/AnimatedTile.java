@@ -17,22 +17,25 @@ public abstract class AnimatedTile extends Tile {
 
     public AnimatedTile(String texture, int x, int y, boolean solid, AllowedMovementType type) {
         super(texture, x, y, solid, type);
+       createAnimation();
+    }
+
+    public void createAnimation(){
         TextureRegion[][] tmp = TextureRegion.split(this.getTextureObj(), 64,
                 64);
-        TextureRegion[] animFrames = new TextureRegion[19];
-        for (int i = 0; i < 19; i++) {
+        TextureRegion[] animFrames = new TextureRegion[this.getTextureObj().getWidth() / 64];
+        for (int i = 0; i < this.getTextureObj().getWidth() / 64; i++) {
             animFrames[i] = tmp[0][i];
         }
         animation = new Animation<TextureRegion>(0.05f, animFrames);
     }
-
     protected float stateTime;
 
     @Override
     public void draw(SpriteBatch batch, int xo, int yo) {
         stateTime += Gdx.graphics.getDeltaTime();
         if (animation.getKeyFrame(stateTime) != null)
-            batch.draw(animation.getKeyFrame(stateTime, true), x + xo, y + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
+            batch.draw(animation.getKeyFrame(stateTime, true), x + xo, y + yo, Tile.TILE_SIZE, Tile.TILE_SIZE);
     }
 
     public TextureRegion getCurrentFrame() {

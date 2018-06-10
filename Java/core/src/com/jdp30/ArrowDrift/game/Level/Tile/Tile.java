@@ -128,6 +128,7 @@ public abstract class Tile implements Disposable {
         return textureObj;
     }
 
+    public void init(Level level){}
 
     public abstract Tile copy();
 

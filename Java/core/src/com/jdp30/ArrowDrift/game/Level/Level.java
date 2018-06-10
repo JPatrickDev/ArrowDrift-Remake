@@ -45,13 +45,18 @@ public class Level implements Disposable {
     }
 
 
+    boolean init = true;
     public void render(SpriteBatch batch, int xo, int yo) {
         for (Tile[] tt : tiles)
             for (Tile t : tt) {
-                if (t != null)
+                if (t != null) {
+                    if(init)
+                        t.init(this);
                     t.draw(batch, xo, yo);
+                }
             }
-
+        if(init)
+            init = false;
         for (Entity e : entities) {
             e.update(this);
         }
@@ -83,7 +88,11 @@ public class Level implements Disposable {
     }
 
     public Tile getTile(int x, int y) {
-        return tiles[x][y];
+        try {
+            return tiles[x][y];
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public boolean canMoveTo(int x, int y) {

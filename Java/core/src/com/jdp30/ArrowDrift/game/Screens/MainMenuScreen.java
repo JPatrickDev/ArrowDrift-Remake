@@ -34,6 +34,7 @@ public class MainMenuScreen implements Screen {
 
 
         final TextButton newLevel = new TextButton("Play", skin);
+        newLevel.getLabelCell().padBottom(5f).padTop(5f);
         newLevel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -45,6 +46,7 @@ public class MainMenuScreen implements Screen {
         table.row();
 
         final TextButton loadLevel = new TextButton("Level Editor", skin);
+        loadLevel.getLabelCell().padBottom(5f).padTop(5f);
         loadLevel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -56,19 +58,20 @@ public class MainMenuScreen implements Screen {
         table.row();
 
         final TextButton settings = new TextButton("Settings", skin);
+        settings.getLabelCell().padBottom(5f).padTop(5f);
         table.add(settings).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
         final TextButton about = new TextButton("About", skin);
+        about.getLabelCell().padBottom(5f).padTop(5f);
         table.add(about).width(newLevel.getWidth() * 3).pad(20);
         table.row();
 
-        final Label packLabel = new Label("Current Pack:" + ArrowDriftGame.getCurrentPack().getRoot().getName(), skin);
 
         String[] packs =  ArrowDriftGame.getPacks();
 
         final SelectBox<String> mappacks = new SelectBox<String>(skin);
-
+        mappacks.setWidth(150);
         mappacks.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -80,20 +83,14 @@ public class MainMenuScreen implements Screen {
                 try {
                     StorageSystem s = StorageSystem.fromFile("Arrow Drift Data/Levels/" + item);
                     ArrowDriftGame.setCurrentPack(s);
-                    packLabel.setText("Current Pack:" + s.getRoot().getName());
-                    packLabel.setX(Gdx.graphics.getWidth() - packLabel.getWidth() - 20);
-                    mappacks.setX(packLabel.getX() - mappacks.getWidth());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
-        packLabel.setX(Gdx.graphics.getWidth() - packLabel.getWidth() - 20);
-        packLabel.setY(mappacks.getHeight() / 2 - packLabel.getHeight() / 2);
         mappacks.setItems(packs);
-        mappacks.setX(packLabel.getX() - mappacks.getWidth());
+        mappacks.setX(Gdx.graphics.getWidth() - mappacks.getWidth());
         mappacks.setSelected(ArrowDriftGame.getCurrentPack().getRoot().getName());
-        stage.addActor(packLabel);
         stage.addActor(mappacks);
     }
 

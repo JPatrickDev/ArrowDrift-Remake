@@ -62,7 +62,7 @@ public class EditorHomeScreen implements Screen {
 
 
         final TextButton newLevel = new TextButton("New Map Pack", skin);
-
+        newLevel.getLabelCell().padBottom(5f).padTop(5f);
         newLevel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -74,6 +74,7 @@ public class EditorHomeScreen implements Screen {
         table.row();
 
         final TextButton loadLevel = new TextButton("Load Map Pack", skin);
+        loadLevel.getLabelCell().padBottom(5f).padTop(5f);
         loadLevel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -84,6 +85,7 @@ public class EditorHomeScreen implements Screen {
         table.row();
 
         final TextButton back = new TextButton("Back To Main Menu", skin);
+        back.getLabelCell().padBottom(5f).padTop(5f);
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

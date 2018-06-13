@@ -25,6 +25,7 @@ import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
+import com.jdp30.ArrowDrift.game.util.Util;
 import jdk.nashorn.internal.scripts.JO;
 import storage.Node;
 import storage.StorageSystem;
@@ -124,16 +125,24 @@ public class EditorHomeScreen implements Screen {
                 if (object.equals("OK")) {
                     Node n = selected;
                     if(n == null){
-                        String name = JOptionPane.showInputDialog(null,"Category Name:");
-                        Node newCat = new Node(name);
-                        newCat.addTexture("preview",new Texture("levelPreview.png"));
-                        system.getRoot().addChild(newCat);
-                        try {
-                            system.save(file.toString());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        showCatSelectDialog(system,file);
+                        Util.TextDialogListener nameCallback = new Util.TextDialogListener() {
+                            @Override
+                            public void result(final String name) {
+                                if (name == null || name.equals(""))
+                                    return;
+                                Node newCat = new Node(name);
+                                newCat.addTexture("preview",new Texture("levelPreview.png"));
+                                system.getRoot().addChild(newCat);
+                                try {
+                                    system.save(file.toString());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                showCatSelectDialog(system,file);
+
+                            }
+                        };
+                        Util.input("Category Name:",stage,nameCallback);
                     }else{
                         showLevelSelectDialog(n,file);
                     }
@@ -151,17 +160,42 @@ public class EditorHomeScreen implements Screen {
                 if (object.equals("OK")) {
                     Node n = selected;
                     if(n == null){
-                        String name = JOptionPane.showInputDialog(null,"Level  Name:");
-                        int w = Integer.parseInt(JOptionPane.showInputDialog(null,"Width:"));
-                        int h = Integer.parseInt(JOptionPane.showInputDialog(null,"Height:"));
-                        Level level = Level.blank(w,h);
-                        category.addChild(level.toNode(name));
-                        try {
-                            currentSystem.save(file.toString());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        showLevelSelectDialog(category,file);
+                        Util.TextDialogListener  nameCallback = new Util.TextDialogListener() {
+                            @Override
+                            public void result(final String levelName) {
+                                if(levelName == null || levelName.equals(""))
+                                    return;
+                                Util.TextDialogListener widthCallback = new Util.TextDialogListener() {
+                                    @Override
+                                    public void result(final String levelWidth) {
+                                        if(levelWidth == null || levelWidth.equals(""))
+                                            return;
+                                        Util.TextDialogListener heightCallback = new Util.TextDialogListener() {
+                                            @Override
+                                            public void result(String levelHeight) {
+                                                if(levelHeight == null || levelHeight.equals(""))
+                                                    return;
+                                                int w = Integer.parseInt(levelWidth);
+                                                int h = Integer.parseInt(levelHeight);
+                                                Level level = Level.blank(w,h);
+                                                category.addChild(level.toNode(levelName));
+                                                try {
+                                                    currentSystem.save(file.toString());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                showLevelSelectDialog(category,file);
+
+                                            }
+                                        };
+                                        Util.input("Level Height",stage,heightCallback);
+                                    }
+                                };
+                                Util.input("Level Width",stage,widthCallback);
+
+                            }
+                        };
+                        Util.input("Level Name",stage,nameCallback);
                     }else{
                       //  showLevelSelectDialog(n,file);
                         startEditor(Level.fromNode(n),category,n.getName(),currentSystem,file.toString());
@@ -174,15 +208,22 @@ public class EditorHomeScreen implements Screen {
     }
 
     public void newLevel() {
-        String packName = JOptionPane.showInputDialog(null,"Name:");
-        StorageSystem system = new StorageSystem(packName);
-        currentSystem = system;
-        try {
-            system.save(Gdx.files.external("Arrow Drift Data/Levels/" + packName).toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        showCatSelectDialog(system,Gdx.files.external("Arrow Drift Data/Levels/" + packName));
+        Util.TextDialogListener callback = new Util.TextDialogListener() {
+            @Override
+            public void result(String packName) {
+                if(packName == null || packName.equals(""))
+                    return;
+                StorageSystem system = new StorageSystem(packName);
+                currentSystem = system;
+                try {
+                    system.save(Gdx.files.external("Arrow Drift Data/Levels/" + packName).toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                showCatSelectDialog(system,Gdx.files.external("Arrow Drift Data/Levels/" + packName));
+            }
+        };
+        Util.input("Pack Name",stage,callback);
     }
 
     public void startEditor(Level level,Node catNode,String name,StorageSystem system,String path) {

@@ -38,7 +38,7 @@ public class Util {
 
     public static void input(String title, Stage parent, final TextDialogListener textCallback) {
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
-        TextInputDialog text = new TextInputDialog("Select Level", skin) {
+        TextInputDialog text = new TextInputDialog(title, skin) {
             @Override
             protected void result(Object object) {
                 if (object.equals("OK")) {
@@ -52,8 +52,7 @@ public class Util {
 
     }
 
-    interface TextDialogListener {
-
-        public void result(String text);
+    public interface TextDialogListener {
+         void result(String text);
     }
 }

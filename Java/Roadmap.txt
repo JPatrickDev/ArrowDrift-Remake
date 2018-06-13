@@ -6,9 +6,9 @@ Proper backend support for map packs/
 Handle the "null" case for Category Finished Screen/
 -----v0.6-----
 Front end map pack support/
-Better art
-Better UI skin
-Replace all JOptionPanes
+Better art/
+Better UI skin/
+Replace all JOptionPanes/
 Teleport tiles/
 -----v0.7-----
 Android build

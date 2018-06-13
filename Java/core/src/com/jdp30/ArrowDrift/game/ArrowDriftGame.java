@@ -20,7 +20,7 @@ public class ArrowDriftGame extends Game {
 
     private static ArrowDriftGame INSTANCE;
 
-    private static final String VERSION_NUMBER = "0.5";
+    private static final String VERSION_NUMBER = "0.6";
 
     private BitmapFont font;
     private SpriteBatch batch;

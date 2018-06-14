@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.GUI.ImgButton;
@@ -30,12 +32,12 @@ import sun.plugin.dom.exception.InvalidStateException;
  */
 public class InGameScreen implements Screen {
 
-    SpriteBatch batch;
-    ShapeRenderer shape;
-    Level level = null;
+    private SpriteBatch batch;
+    private ShapeRenderer shape;
+    private Level level = null;
 
 
-    int topPadding = 10;
+    private int topPadding = 10;
 
     private BitmapFont font;
     public static Node lvl = null;
@@ -48,6 +50,10 @@ public class InGameScreen implements Screen {
 
     @Override
     public void show() {
+
+
+        Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
+
         if (lvl == null) {
             throw new InvalidStateException("Level can't be null");
         }
@@ -116,6 +122,12 @@ public class InGameScreen implements Screen {
                 }
             }
         });
+
+        final TextButton menu = new TextButton("Options", skin);
+        menu.setSize(infoArea.getWidth()/2,infoArea.getHeight()/3);
+        menu.setPosition(infoArea.getX() + (infoArea.getWidth()/2 - menu.getWidth()/2),infoArea.getY() + topPadding);
+
+        stage.addActor(menu);
 
     }
 

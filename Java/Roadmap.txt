@@ -21,4 +21,7 @@ DEFAULT pack containing proper levels
     - Probably just remakes of the original LD levels for now
 Automatically extract the DEFAULT pack to the Levels directory
 Downloadable build on website
-
+Sound effects
+-----v0.9-----
+Performance improvements 
+     - Better caching of textures

@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
+import com.jdp30.ArrowDrift.game.GUI.MenuDialog;
 import com.jdp30.ArrowDrift.game.GUI.TextInputDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import storage.Node;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +19,7 @@ import java.util.Random;
 
 /**
  * Created by Jack Patrick on 02/06/2018.
- * <p>
+ * <p/>
  * Last Edit: 02/06/2018
  */
 public class Util {
@@ -49,10 +51,20 @@ public class Util {
             }
         };
         text.show(parent);
+    }
 
+    public static void menu(String title, String[] options, final TextDialogListener listener, Stage parent) {
+        Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
+        MenuDialog text = new MenuDialog(title, skin, options) {
+            @Override
+            protected void result(Object object) {
+               System.out.println("Result");
+            }
+        };
+        text.show(parent);
     }
 
     public interface TextDialogListener {
-         void result(String text);
+        void result(String text);
     }
 }

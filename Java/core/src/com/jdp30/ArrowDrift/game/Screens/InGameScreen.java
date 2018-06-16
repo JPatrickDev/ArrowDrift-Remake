@@ -21,6 +21,7 @@ import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.util.LevelUtil;
+import com.jdp30.ArrowDrift.game.util.Util;
 import storage.Node;
 import sun.plugin.dom.exception.InvalidStateException;
 
@@ -52,7 +53,7 @@ public class InGameScreen implements Screen {
     public void show() {
 
 
-        Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
+        final Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
 
         if (lvl == null) {
             throw new InvalidStateException("Level can't be null");
@@ -124,9 +125,16 @@ public class InGameScreen implements Screen {
         });
 
         final TextButton menu = new TextButton("Options", skin);
-        menu.setSize(infoArea.getWidth()/2,infoArea.getHeight()/3);
-        menu.setPosition(infoArea.getX() + (infoArea.getWidth()/2 - menu.getWidth()/2),infoArea.getY() + topPadding);
+        menu.setSize(infoArea.getWidth() / 2, infoArea.getHeight() / 3);
+        menu.setPosition(infoArea.getX() + (infoArea.getWidth() / 2 - menu.getWidth() / 2), infoArea.getY() + topPadding);
+        menu.addListener(new ClickListener() {
 
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                Util.menu("Menu", new String[]{"Back To Main Menu", "Settings"}, null, stage);
+            }
+        });
         stage.addActor(menu);
 
     }
@@ -147,7 +155,7 @@ public class InGameScreen implements Screen {
         float sixth = third / 2.0f;
         float seventh = Gdx.graphics.getHeight() / 7.0f;
         uiArea = new Rectangle(0, 0, Gdx.graphics.getWidth(), seventh * 2);
-        infoArea = new Rectangle(third, 0, Gdx.graphics.getWidth() - third*2, uiArea.getHeight());
+        infoArea = new Rectangle(third, 0, Gdx.graphics.getWidth() - third * 2, uiArea.getHeight());
         leftButton = new Rectangle(uiArea.getX(), uiArea.getY(), third, uiArea.getHeight());
         rightButton = new Rectangle(uiArea.getX() + uiArea.getWidth() - third, uiArea.getY(), third, uiArea.getHeight());
 

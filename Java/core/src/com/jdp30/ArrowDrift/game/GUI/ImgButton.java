@@ -22,7 +22,6 @@ public class ImgButton extends Actor {
         this.texture = new Texture(texture);
         setBounds(x, y, width, height);
         setTouchable(Touchable.enabled);
-        setDebug(true);
     }
 
 

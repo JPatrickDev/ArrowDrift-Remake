@@ -112,6 +112,9 @@ public class Level implements Disposable {
             for (Tile tt : t)
                 tt.dispose();
         }
+        for(Entity e : this.entities){
+            e.dispose();
+        }
         p.dispose();
     }
 

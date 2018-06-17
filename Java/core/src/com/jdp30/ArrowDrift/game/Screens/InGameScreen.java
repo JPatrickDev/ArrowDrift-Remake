@@ -132,7 +132,16 @@ public class InGameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                Util.menu("Menu", new String[]{"Back To Main Menu", "Settings"}, null, stage);
+                Util.menu("Menu", new String[]{"Back To Main Menu", "Close"}, new Util.TextDialogListener() {
+                    @Override
+                    public void result(String text) {
+                        if(text.equals("Back To Main Menu")){
+                            level.dispose();
+                            stage.dispose();
+                            ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
+                        }
+                    }
+                }, stage);
             }
         });
         stage.addActor(menu);

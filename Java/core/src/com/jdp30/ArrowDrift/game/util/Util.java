@@ -53,14 +53,20 @@ public class Util {
         text.show(parent);
     }
 
-    public static void menu(String title, String[] options, final TextDialogListener listener, Stage parent) {
+    //TODO Automatically handle the close option
+    public static void menu(String title, String[] options, final TextDialogListener listener, final Stage parent) {
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         MenuDialog text = new MenuDialog(title, skin, options) {
             @Override
-            protected void result(Object object) {
-               System.out.println("Result");
+            public void clicked(String option) {
+                if(option.equalsIgnoreCase("Close") || option.equalsIgnoreCase("Back")){
+                    remove();
+                }else{
+
+                }
             }
         };
+        text.setListener(listener);
         text.show(parent);
     }
 

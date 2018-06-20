@@ -1,21 +1,16 @@
-package com.jdp30.ArrowDrift.game.GUI;
+package com.jdp30.ArrowDrift.game.GUI.Dialogs;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.util.Util;
 
-import java.util.Arrays;
-import java.util.Comparator;
-
 public class MenuDialog extends Dialog {
 
     private Skin skin;
     private String[] options;
-    private Util.TextDialogListener listener;
+    private Util.DialogResultListener listener;
     @Override
     public Dialog show(Stage stage) {
         return super.show(stage);
@@ -66,7 +61,7 @@ public class MenuDialog extends Dialog {
     public void clicked(String option){
 
     }
-    public void setListener(Util.TextDialogListener listener){
+    public void setListener(Util.DialogResultListener listener){
         this.listener = listener;
     }
 }

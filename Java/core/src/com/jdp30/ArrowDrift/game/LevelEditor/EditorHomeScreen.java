@@ -4,33 +4,25 @@ import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
-import com.jdp30.ArrowDrift.game.GUI.FileDialog;
-import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
+import com.jdp30.ArrowDrift.game.GUI.Dialogs.FileDialog;
+import com.jdp30.ArrowDrift.game.GUI.Dialogs.LevelSelectDialog;
 import com.jdp30.ArrowDrift.game.Level.Level;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
 import com.jdp30.ArrowDrift.game.util.Util;
-import jdk.nashorn.internal.scripts.JO;
 import storage.Node;
 import storage.StorageSystem;
 
-import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -125,7 +117,7 @@ public class EditorHomeScreen implements Screen {
                 if (object.equals("OK")) {
                     Node n = selected;
                     if(n == null){
-                        Util.TextDialogListener nameCallback = new Util.TextDialogListener() {
+                        Util.DialogResultListener nameCallback = new Util.DialogResultListener() {
                             @Override
                             public void result(final String name) {
                                 if (name == null || name.equals(""))
@@ -160,17 +152,17 @@ public class EditorHomeScreen implements Screen {
                 if (object.equals("OK")) {
                     Node n = selected;
                     if(n == null){
-                        Util.TextDialogListener  nameCallback = new Util.TextDialogListener() {
+                        Util.DialogResultListener nameCallback = new Util.DialogResultListener() {
                             @Override
                             public void result(final String levelName) {
                                 if(levelName == null || levelName.equals(""))
                                     return;
-                                Util.TextDialogListener widthCallback = new Util.TextDialogListener() {
+                                Util.DialogResultListener widthCallback = new Util.DialogResultListener() {
                                     @Override
                                     public void result(final String levelWidth) {
                                         if(levelWidth == null || levelWidth.equals(""))
                                             return;
-                                        Util.TextDialogListener heightCallback = new Util.TextDialogListener() {
+                                        Util.DialogResultListener heightCallback = new Util.DialogResultListener() {
                                             @Override
                                             public void result(String levelHeight) {
                                                 if(levelHeight == null || levelHeight.equals(""))
@@ -208,7 +200,7 @@ public class EditorHomeScreen implements Screen {
     }
 
     public void newLevel() {
-        Util.TextDialogListener callback = new Util.TextDialogListener() {
+        Util.DialogResultListener callback = new Util.DialogResultListener() {
             @Override
             public void result(String packName) {
                 if(packName == null || packName.equals(""))

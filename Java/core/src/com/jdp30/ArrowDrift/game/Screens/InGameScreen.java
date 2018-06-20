@@ -132,7 +132,7 @@ public class InGameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                Util.menu("Menu", new String[]{"Back To Main Menu", "Close"}, new Util.TextDialogListener() {
+                Util.menu("Menu", new String[]{"Back To Main Menu", "Close"}, new Util.DialogResultListener() {
                     @Override
                     public void result(String text) {
                         if(text.equals("Back To Main Menu")){

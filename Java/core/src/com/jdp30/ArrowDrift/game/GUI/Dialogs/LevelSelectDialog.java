@@ -1,4 +1,4 @@
-package com.jdp30.ArrowDrift.game.GUI;
+package com.jdp30.ArrowDrift.game.GUI.Dialogs;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

@@ -1,4 +1,4 @@
-package com.jdp30.ArrowDrift.game.GUI;
+package com.jdp30.ArrowDrift.game.GUI.Dialogs;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -19,7 +19,6 @@ public class TextInputDialog extends Dialog {
     public Dialog show(Stage stage) {
         return super.show(stage);
     }
-
 
     public TextInputDialog(String title, Skin skin) {
         super(title, skin);

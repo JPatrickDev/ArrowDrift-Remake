@@ -1,4 +1,4 @@
-package com.jdp30.ArrowDrift.game.GUI;
+package com.jdp30.ArrowDrift.game.GUI.Dialogs;
 
 import java.util.Arrays;
 import java.util.Comparator;

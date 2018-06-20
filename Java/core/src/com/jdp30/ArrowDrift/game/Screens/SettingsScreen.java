@@ -4,26 +4,29 @@ package com.jdp30.ArrowDrift.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.LevelEditor.EditorHomeScreen;
+import com.jdp30.ArrowDrift.game.util.Util;
 import storage.StorageSystem;
 
 import java.io.IOException;
 
 /**
  * Created by Jack Patrick on 03/04/2018.
- * <p>
+ * <p/>
  * Last Edit: 03/04/2018
  */
-public class MainMenuScreen implements Screen {
+public class SettingsScreen implements Screen {
 
     private Stage stage;
-    private boolean firstRun = true;
-    public MainMenuScreen() {
+
+    public SettingsScreen() {
         this.stage = new Stage();
 
         Gdx.input.setInputProcessor(stage);
@@ -32,73 +35,54 @@ public class MainMenuScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
+        final Label title = new Label("Settings", skin);
+        title.setPosition(Gdx.graphics.getWidth() / 2 - title.getWidth() / 2, Gdx.graphics.getHeight() - title.getHeight());
+        stage.addActor(title);
 
-        final TextButton newLevel = new TextButton("Play", skin);
+        final TextButton newLevel = new TextButton("Set Resolution", skin);
         newLevel.getLabelCell().padBottom(5f).padTop(5f);
         newLevel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                ArrowDriftGame.setCurrentScreen(new CategorySelectScreen());
+                Util.dropdown("Select New Resolution", ArrowDriftGame.resolutions, stage, new Util.DialogResultListener() {
+                    @Override
+                    public void result(String text) {
+                        System.out.println(text);
+                        ArrowDriftGame.setCurrentResolution(text);
+                        ArrowDriftGame.setCurrentScreen(new SettingsScreen());
+                    }
+                },ArrowDriftGame.getCurrentResolution()[0] + "x" + ArrowDriftGame.getCurrentResolution()[1]);
             }
         });
-        table.add(newLevel).width(newLevel.getWidth() * 3).pad(20);
+        table.add(newLevel).width(Gdx.graphics.getWidth() / 2).pad(20);
         table.row();
 
-        final TextButton loadLevel = new TextButton("Level Editor", skin);
+        final TextButton loadLevel = new TextButton("Clear User Data", skin);
         loadLevel.getLabelCell().padBottom(5f).padTop(5f);
         loadLevel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                ArrowDriftGame.setCurrentScreen(new EditorHomeScreen());
             }
         });
-        table.add(loadLevel).width(newLevel.getWidth() * 3).pad(20);
+        table.add(loadLevel).width(Gdx.graphics.getWidth() / 2).pad(20);
         table.row();
-
-        final TextButton settings = new TextButton("Settings", skin);
-        settings.getLabelCell().padBottom(5f).padTop(5f);
-        settings.addListener(new ClickListener() {
+        table.row();
+        table.row();
+        table.row();
+        final TextButton back = new TextButton("Back To Main Menu", skin);
+        back.getLabelCell().padBottom(5f).padTop(5f);
+        back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                ArrowDriftGame.setCurrentScreen(new SettingsScreen());
+                ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
             }
         });
-        table.add(settings).width(newLevel.getWidth() * 3).pad(20);
-        table.row();
-
-        final TextButton about = new TextButton("About", skin);
-        about.getLabelCell().padBottom(5f).padTop(5f);
-        table.add(about).width(newLevel.getWidth() * 3).pad(20);
-        table.row();
+        table.add(back).width(Gdx.graphics.getWidth() / 2).pad(20);
 
 
-        String[] packs =  ArrowDriftGame.getPacks();
-
-        final SelectBox<String> mappacks = new SelectBox<String>(skin);
-        mappacks.setWidth(150);
-        mappacks.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(firstRun){
-                    firstRun = false;
-                    return;
-                }
-                String item = mappacks.getSelected();
-                try {
-                    StorageSystem s = StorageSystem.fromFile("Arrow Drift Data/Levels/" + item);
-                    ArrowDriftGame.setCurrentPack(s);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mappacks.setItems(packs);
-        mappacks.setX(Gdx.graphics.getWidth() - mappacks.getWidth());
-        mappacks.setSelected(ArrowDriftGame.getCurrentPack().getRoot().getName());
-        stage.addActor(mappacks);
     }
 
     @Override

@@ -3,15 +3,10 @@ package com.jdp30.ArrowDrift.game.util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.jdp30.ArrowDrift.game.GUI.LevelSelectDialog;
-import com.jdp30.ArrowDrift.game.GUI.MenuDialog;
-import com.jdp30.ArrowDrift.game.GUI.TextInputDialog;
-import com.jdp30.ArrowDrift.game.Level.Level;
-import storage.Node;
+import com.jdp30.ArrowDrift.game.GUI.Dialogs.DropDownSelectDialog;
+import com.jdp30.ArrowDrift.game.GUI.Dialogs.MenuDialog;
+import com.jdp30.ArrowDrift.game.GUI.Dialogs.TextInputDialog;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +33,7 @@ public class Util {
     }
 
 
-    public static void input(String title, Stage parent, final TextDialogListener textCallback) {
+    public static void input(String title, Stage parent, final DialogResultListener textCallback) {
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         TextInputDialog text = new TextInputDialog(title, skin) {
             @Override
@@ -54,7 +49,7 @@ public class Util {
     }
 
     //TODO Automatically handle the close option
-    public static void menu(String title, String[] options, final TextDialogListener listener, final Stage parent) {
+    public static void menu(String title, String[] options, final DialogResultListener listener, final Stage parent) {
         Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
         MenuDialog text = new MenuDialog(title, skin, options) {
             @Override
@@ -70,7 +65,24 @@ public class Util {
         text.show(parent);
     }
 
-    public interface TextDialogListener {
+
+    public static void dropdown(String title, String[] items,Stage parent, final DialogResultListener textCallback,String currentItem) {
+        Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
+        DropDownSelectDialog text = new DropDownSelectDialog(title, skin,items) {
+            @Override
+            protected void result(Object object) {
+                if (object.equals("OK")) {
+                    textCallback.result(getText());
+                } else {
+
+                }
+            }
+        };
+        text.setCurrentItem(currentItem);
+        text.show(parent);
+    }
+
+    public interface DialogResultListener {
         void result(String text);
     }
 }

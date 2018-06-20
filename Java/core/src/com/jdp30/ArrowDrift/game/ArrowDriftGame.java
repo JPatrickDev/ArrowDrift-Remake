@@ -119,6 +119,18 @@ public class ArrowDriftGame extends Game {
         }
     }
 
+    public static void resetUserdata(){
+        if (Gdx.files.external("Arrow Drift Data/config").exists()){
+            Gdx.files.external("Arrow Drift Data/config").delete();
+        }
+        createUserData();
+        try {
+            userdata = StorageSystem.fromFile("Arrow Drift Data/config");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static boolean isPortrait() {
         return Gdx.graphics.getHeight() > Gdx.graphics.getWidth();
     }

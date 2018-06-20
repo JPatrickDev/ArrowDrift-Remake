@@ -64,12 +64,10 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                ArrowDriftGame.resetUserdata();
             }
         });
         table.add(loadLevel).width(Gdx.graphics.getWidth() / 2).pad(20);
-        table.row();
-        table.row();
-        table.row();
         table.row();
         final TextButton back = new TextButton("Back To Main Menu", skin);
         back.getLabelCell().padBottom(5f).padTop(5f);

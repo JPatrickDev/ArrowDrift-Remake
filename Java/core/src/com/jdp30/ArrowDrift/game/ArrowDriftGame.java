@@ -22,7 +22,7 @@ public class ArrowDriftGame extends Game {
     public static String[] resolutions = new String[]{/*"320x240"*/"640x480", "800x480", "1024x600", "1920x1080"};
     private static ArrowDriftGame INSTANCE;
 
-    private static final String VERSION_NUMBER = "0.6";
+    private static final String VERSION_NUMBER = "0.7";
 
     private BitmapFont font;
     private SpriteBatch batch;

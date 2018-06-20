@@ -14,7 +14,7 @@ Teleport tiles/
 Options Menu in-game/
 Settings Menu
     - Resolution/
-    - Clear user data
+    - Clear user data/
 -----v0.8-----
 DEFAULT pack containing proper levels
     - Probably just remakes of the original LD levels for now

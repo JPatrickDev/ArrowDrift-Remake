@@ -32,8 +32,6 @@ public class ImgButton extends Actor {
     }
 
     public void setTexture(Texture texture) {
-        if (this.texture != null)
-            this.texture.dispose();
         this.texture = texture;
     }
 

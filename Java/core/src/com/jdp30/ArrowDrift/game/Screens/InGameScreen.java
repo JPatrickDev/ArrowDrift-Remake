@@ -25,6 +25,8 @@ import com.jdp30.ArrowDrift.game.util.Util;
 import storage.Node;
 import sun.plugin.dom.exception.InvalidStateException;
 
+import java.util.HashMap;
+
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -135,7 +137,7 @@ public class InGameScreen implements Screen {
                 Util.menu("Menu", new String[]{"Back To Main Menu", "Close"}, new Util.DialogResultListener() {
                     @Override
                     public void result(String text) {
-                        if(text.equals("Back To Main Menu")){
+                        if (text.equals("Back To Main Menu")) {
                             level.dispose();
                             stage.dispose();
                             ArrowDriftGame.setCurrentScreen(new MainMenuScreen());
@@ -234,21 +236,40 @@ public class InGameScreen implements Screen {
         stage.draw();
     }
 
+    //HashMap<String, Texture> buttons = new HashMap<String, Texture>();
+    private Texture up, down, left, right;
+    int prevUpdown = -1;
+    int prevLeftRight = -1;
+
     public void update() {
+        if (up == null) {
+            up = new Texture("button/up.png");
+            down = new Texture("button/down.png");
+            left = new Texture("button/left.png");
+            right = new Texture("button/right.png");
+        }
         if (level == null) return;
         AllowedMovementType t = level.getCurrentMovementType();
 
         //TODO: Don't set this every tick
-        if (t.getUPDOWN() == 0) {
-            upDown.setTexture(new Texture("button/up.png"));
-        } else if (t.getUPDOWN() == 1) {
-            upDown.setTexture(new Texture("button/down.png"));
+        if (t.getUPDOWN() != prevUpdown) {
+            if (t.getUPDOWN() == 0) {
+                upDown.setTexture(up);
+            } else if (t.getUPDOWN() == 1) {
+                upDown.setTexture(down);
+            }
+            prevUpdown = t.getUPDOWN();
+            System.out.println("UpDown set");
         }
 
-        if (t.getLEFTRIGHT() == 0) {
-            leftRight.setTexture(new Texture("button/left.png"));
-        } else if (t.getLEFTRIGHT() == 1) {
-            leftRight.setTexture(new Texture("button/right.png"));
+        if (t.getLEFTRIGHT() != prevLeftRight) {
+            if (t.getLEFTRIGHT() == 0) {
+                leftRight.setTexture(left);
+            } else if (t.getLEFTRIGHT() == 1) {
+                leftRight.setTexture(right);
+            }
+            prevLeftRight = t.getLEFTRIGHT();
+            System.out.println("LeftRight set");
         }
 
 

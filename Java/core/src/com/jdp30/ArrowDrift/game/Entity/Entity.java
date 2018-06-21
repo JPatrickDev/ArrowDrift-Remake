@@ -12,7 +12,7 @@ import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 
 /**
  * Created by Jack Patrick on 05/03/2018.
- * <p>
+ * <p/>
  * Last Edit: 05/03/2018
  */
 public abstract class Entity implements Disposable {
@@ -25,11 +25,12 @@ public abstract class Entity implements Disposable {
 
     private int tX = -1, tY = -1;
 
-    private int moveSpeed = Tile.TILE_SIZE/8;
+    private int moveSpeed = Tile.TILE_SIZE / 8;
 
     private boolean isFlung = false;
     private Direction flingDir = null;
     private boolean flung;
+    private int maxFlingDistance, moved;
 
     public Entity(Texture texture, int x, int y) {
         this.texture = texture;
@@ -78,6 +79,16 @@ public abstract class Entity implements Disposable {
                 isMoving = false;
                 level.getTile(x, y).steppedOn(this, level);
                 if (isFlung) {
+                    moved++;
+                    if (moved >= this.maxFlingDistance && this.maxFlingDistance >= 1) {
+                        isFlung = false;
+                        flingDir = null;
+                        tX = -1;
+                        tY = -1;
+                        isMoving = false;
+                        return;
+                    }
+
                     tX = getX();
                     tY = getY();
                     switch (flingDir) {
@@ -107,7 +118,7 @@ public abstract class Entity implements Disposable {
     }
 
     public void draw(SpriteBatch batch, int xo, int yo) {
-        batch.draw(texture, (x * Tile.TILE_SIZE) + xOff + xo, (y * Tile.TILE_SIZE) + yOff + yo,Tile.TILE_SIZE,Tile.TILE_SIZE);
+        batch.draw(texture, (x * Tile.TILE_SIZE) + xOff + xo, (y * Tile.TILE_SIZE) + yOff + yo, Tile.TILE_SIZE, Tile.TILE_SIZE);
     }
 
     public void moveTo(int tX, int tY, Level level) {
@@ -136,6 +147,10 @@ public abstract class Entity implements Disposable {
     }
 
     public void fling(Direction direction, Level level) {
+        fling(direction, level, -1);
+    }
+
+    public void fling(Direction direction, Level level, int maxDistance) {
         isFlung = true;
         flingDir = direction;
         isMoving = false;
@@ -162,6 +177,9 @@ public abstract class Entity implements Disposable {
             flingDir = null;
             tX = -1;
             tY = -1;
+        }else{
+            this.maxFlingDistance = maxDistance;
+            this.moved = 0;
         }
     }
 
@@ -205,7 +223,12 @@ public abstract class Entity implements Disposable {
         this.y = y;
     }
 
-    public void teleportTo(Level level, int tX, int tY){
-        setPos(tX,tY);
+    public void teleportTo(Level level, int tX, int tY) {
+        setPos(tX, tY);
+        isMoving = false;
+        isFlung = false;
+        this.tX = -1;
+        this.tY = -1;
+        flingDir = null;
     }
 }

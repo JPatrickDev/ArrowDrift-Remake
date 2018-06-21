@@ -19,11 +19,16 @@ public class Box extends Entity {
     @Override
     public void walkedInTo(Direction from, Level level) {
         super.walkedInTo(from, level);
-        fling(from, level);
+        fling(from, level,1);
     }
 
     @Override
     public Entity copy() {
         return new Box(getX(),getY());
+    }
+
+    @Override
+    public void teleportTo(Level level, int tX, int tY) {
+        return;
     }
 }

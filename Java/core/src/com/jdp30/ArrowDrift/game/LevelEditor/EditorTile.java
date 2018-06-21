@@ -9,7 +9,6 @@ import com.jdp30.ArrowDrift.game.Level.Tile.AnimatedTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.BeltTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.GoalTile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
-import com.sun.xml.internal.ws.Closeable;
 
 /**
  * Created by Jack Patrick on 11/03/2018.

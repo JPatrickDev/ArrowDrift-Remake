@@ -23,10 +23,6 @@ import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.util.LevelUtil;
 import com.jdp30.ArrowDrift.game.util.Util;
 import storage.Node;
-import sun.plugin.dom.exception.InvalidStateException;
-
-import java.util.HashMap;
-
 
 /**
  * Created by Jack Patrick on 11/03/2018.
@@ -58,7 +54,7 @@ public class InGameScreen implements Screen {
         final Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
 
         if (lvl == null) {
-            throw new InvalidStateException("Level can't be null");
+         System.exit(0);
         }
 
         int buttonPadding = 50;
@@ -251,7 +247,6 @@ public class InGameScreen implements Screen {
         if (level == null) return;
         AllowedMovementType t = level.getCurrentMovementType();
 
-        //TODO: Don't set this every tick
         if (t.getUPDOWN() != prevUpdown) {
             if (t.getUPDOWN() == 0) {
                 upDown.setTexture(up);

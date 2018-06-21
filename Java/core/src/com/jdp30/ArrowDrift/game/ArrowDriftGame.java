@@ -63,7 +63,7 @@ public class ArrowDriftGame extends Game {
 
         try {
             userdata = StorageSystem.fromFile("Arrow Drift Data/config");
-            StorageSystem mappack = StorageSystem.fromFile("Arrow Drift Data/Levels/DEFAULT");
+            StorageSystem mappack = StorageSystem.fromFile("DEFAULT");
             ArrowDriftGame.setCurrentPack(mappack);
             int[] res = getCurrentResolution();
             Gdx.graphics.setWindowedMode(res[0],res[1]);

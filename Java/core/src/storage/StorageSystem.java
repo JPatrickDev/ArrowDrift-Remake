@@ -21,7 +21,7 @@ public class StorageSystem {
         //Setup the metadata for the storage system
         Node meta = new Node("metadata");
         meta.addValue("version", "" + version);
-        meta.addValue("createdAt","" + System.currentTimeMillis());
+        meta.addValue("createdAt", "" + System.currentTimeMillis());
         root.addChild(meta);
     }
 
@@ -39,7 +39,7 @@ public class StorageSystem {
 
     public void save(String file) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try{
+        try {
             ZipOutputStream zos = new ZipOutputStream(baos);
             root.toZip(zos);
         } catch (IOException ioe) {
@@ -52,7 +52,7 @@ public class StorageSystem {
             OutputStream outputStream = Gdx.files.external(file).write(false);
             baos.writeTo(outputStream);
             outputStream.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -85,8 +85,11 @@ public class StorageSystem {
     public static StorageSystem fromFile(String file) throws IOException {
         InputStream stream = null;
         try {
-            stream = Gdx.files.external(file).read();
-            Node node = loadFromfile(true,stream, null);
+            if (!(file.equalsIgnoreCase("DEFAULT")))
+                stream = Gdx.files.external(file).read();
+            else
+                stream = Gdx.files.internal(file).read();
+            Node node = loadFromfile(true, stream, null);
             if (node != null) {
                 StorageSystem system = new StorageSystem(node.getName());
                 system.setRoot(node);
@@ -101,7 +104,7 @@ public class StorageSystem {
         return null;
     }
 
-    private static Node loadFromfile(boolean top,InputStream fileInputStream, Node currentNode) throws IOException {
+    private static Node loadFromfile(boolean top, InputStream fileInputStream, Node currentNode) throws IOException {
         ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
         String entryName = "";
         ZipEntry entry = zipInputStream.getNextEntry();
@@ -114,7 +117,7 @@ public class StorageSystem {
             if (!entryName.equals("data")) {
                 Node n = new Node(entryName);
                 currentNode.addChild(n);
-                loadFromfile(false,zipInputStream, n);
+                loadFromfile(false, zipInputStream, n);
             } else {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(zipInputStream));
                 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
@@ -126,11 +129,12 @@ public class StorageSystem {
             }
             entry = zipInputStream.getNextEntry();
         }
-        if(top){
+        if (top) {
             fileInputStream.close();
         }
         if (currentNode.getChildren().isEmpty())
             return currentNode;
         return currentNode.getChildren().get(0);
     }
+
 }

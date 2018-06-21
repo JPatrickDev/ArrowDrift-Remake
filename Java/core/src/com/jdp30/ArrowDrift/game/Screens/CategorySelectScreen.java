@@ -99,6 +99,7 @@ public class CategorySelectScreen implements Screen {
         Rectangle area = new Rectangle(0, button.getY() + button.getHeight(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - button.getHeight() * 2);
         int x = (int) area.getX();
         for (final Node n : mappack.getRoot().getChildren()) {
+            System.out.println(n);
             if (n.getName().equals("metadata")) continue;
             LevelTypeSelectionActor a = new LevelTypeSelectionActor(n.getName(), n);
             a.setWidth(area.getWidth() / (mappack.getRoot().getChildren().size() - 1));

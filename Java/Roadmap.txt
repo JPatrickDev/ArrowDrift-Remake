@@ -15,10 +15,12 @@ Options Menu in-game/
 Settings Menu
     - Resolution/
     - Clear user data/
+ =====v0.7.1======
+    - Fix Issue with level 4 of the default pack that caused a crash.
 -----v0.8-----
 DEFAULT pack containing proper levels
-    - Probably just remakes of the original LD levels for now
-Automatically extract the DEFAULT pack to the Levels directory
+    - Probably just remakes of the original LD levels for now/
+Automatically extract the DEFAULT pack to the Levels directory/
 Downloadable build on website
 -----v0.9-----
 Performance improvements 

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class ArrowDriftGame extends Game {
 
+    public static boolean debug = false;
 
     public static String[] resolutions = new String[]{/*"320x240"*/"640x480", "800x480", "1024x600", "1920x1080"};
     private static ArrowDriftGame INSTANCE;

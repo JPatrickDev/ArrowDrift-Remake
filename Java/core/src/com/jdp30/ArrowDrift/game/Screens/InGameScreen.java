@@ -47,6 +47,7 @@ public class InGameScreen implements Screen {
 
     private ImgButton upDown, leftRight;
 
+    private Texture buttonBg = null, infoAreaBg;
     @Override
     public void show() {
 
@@ -124,7 +125,7 @@ public class InGameScreen implements Screen {
 
         final TextButton menu = new TextButton("Options", skin);
         menu.setSize(infoArea.getWidth() / 2, infoArea.getHeight() / 3);
-        menu.setPosition(infoArea.getX() + (infoArea.getWidth() / 2 - menu.getWidth() / 2), infoArea.getY() + topPadding);
+        menu.setPosition(infoArea.getX() + (infoArea.getWidth() / 2 - menu.getWidth() / 2), infoArea.getHeight()/2 - menu.getHeight());
         menu.addListener(new ClickListener() {
 
             @Override
@@ -144,6 +145,8 @@ public class InGameScreen implements Screen {
         });
         stage.addActor(menu);
 
+        this.buttonBg = new Texture("guiBackgrounds/landscape_button_background.png");
+        this.infoAreaBg = new Texture("guiBackgrounds/landscape_info_area_background.png");
     }
 
     public void setPortraitRects() {
@@ -206,24 +209,28 @@ public class InGameScreen implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.RED);
-        shape.rect(gameArea.getX(), gameArea.getY(), gameArea.getWidth(), gameArea.getHeight());
-        shape.setColor(Color.BLUE);
-        shape.rect(uiArea.getX(), uiArea.getY(), uiArea.getWidth(), uiArea.getHeight());
-        shape.setColor(Color.GOLD);
-        shape.rect(infoArea.getX(), infoArea.getY(), infoArea.getWidth(), infoArea.getHeight());
-        shape.end();
-
+        if(ArrowDriftGame.debug) {
+            shape.begin(ShapeRenderer.ShapeType.Filled);
+            shape.setColor(Color.RED);
+            shape.rect(gameArea.getX(), gameArea.getY(), gameArea.getWidth(), gameArea.getHeight());
+            shape.setColor(Color.BLUE);
+            shape.rect(uiArea.getX(), uiArea.getY(), uiArea.getWidth(), uiArea.getHeight());
+            shape.setColor(Color.GOLD);
+            shape.rect(infoArea.getX(), infoArea.getY(), infoArea.getWidth(), infoArea.getHeight());
+            shape.end();
+        }
         batch.begin();
+        batch.draw(this.buttonBg,leftButton.getX(),leftButton.getY(),leftButton.getWidth(),leftButton.getHeight());
+        batch.draw(this.buttonBg,rightButton.getX(),rightButton.getY(),rightButton.getWidth(),rightButton.getHeight());
+        batch.draw(this.infoAreaBg,infoArea.getX(),infoArea.getY(),infoArea.getWidth(),infoArea.getHeight());
         if (level != null)
             level.render(batch, Gdx.graphics.getWidth() / 2 - (level.getWidth() * Tile.TILE_SIZE) / 2, (int) (gameArea.getY() + (gameArea.getHeight() / 2 - (level.getHeight() * Tile.TILE_SIZE) / 2)));
         font.setColor(com.badlogic.gdx.graphics.Color.BLACK);
 
         layout.setText(font, "Moves: " + level.moves);
-        font.draw(batch, "Moves: " + level.moves, infoArea.getX() + (infoArea.getWidth() / 2 - layout.width / 2), infoArea.getY() + infoArea.getHeight() - topPadding);
+        font.draw(batch, "Moves: " + level.moves, infoArea.getX() + (infoArea.getWidth() / 2 - layout.width / 2), infoArea.getY() + (infoArea.getHeight()/2) + layout.height + topPadding);
 
         font.setColor(com.badlogic.gdx.graphics.Color.WHITE);
         batch.end();

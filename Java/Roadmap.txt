@@ -25,7 +25,6 @@ Better TP tile texture/animation/
 Fix issue with hard/2/
     - I think one of the TP target tiles needs rotating/
 Remove coloured rects in the in-game/
-       - Convert the game to have a "debug" mode that can be toggled that shows all the bounding boxes and stuff
 -----v0.9-----
 Android build
 Sound effects

@@ -19,17 +19,17 @@ Settings Menu
     - Fix Issue with level 4 of the default pack that caused a crash./
 -----v0.8-----
 DEFAULT pack containing proper levels
-    - Probably just remakes of the original LD levels for now
+    - Probably just remakes of the original LD levels for now/
 Automatically extract the DEFAULT pack to the Levels directory/
-Downloadable build on website
-Performance improvements
-     - Better caching of textures
-Better TP tile texture/animation
-Fix issue with hard/2
-    - I think one of the TP target tiles needs rotating
-Remove coloured rects in the in-game
+Better TP tile texture/animation/
+Fix issue with hard/2/
+    - I think one of the TP target tiles needs rotating/
+Remove coloured rects in the in-game/
        - Convert the game to have a "debug" mode that can be toggled that shows all the bounding boxes and stuff
-
 -----v0.9-----
 Android build
 Sound effects
+Add min moves for all levels
+Performance improvements
+     - Better caching of textures
+Downloadable build on website

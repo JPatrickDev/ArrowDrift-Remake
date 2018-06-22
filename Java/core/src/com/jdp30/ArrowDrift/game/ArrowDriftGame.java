@@ -51,8 +51,9 @@ public class ArrowDriftGame extends Game {
 
     public static String[] getPacks() {
         FileHandle[] files = Gdx.files.external("Arrow Drift Data/Levels/").list();
-        String[] out = new String[files.length];
-        for (int i = 0; i != out.length; i++) {
+        String[] out = new String[files.length + 1];
+        out[0] = "DEFAULT";
+        for (int i = 1; i != out.length; i++) {
             out[i] = files[i].name();
         }
         return out;

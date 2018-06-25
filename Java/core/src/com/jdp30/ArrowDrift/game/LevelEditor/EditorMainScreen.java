@@ -49,7 +49,7 @@ public class EditorMainScreen implements Screen {
     public void show() {
         Tile.TILE_SIZE = 64;
     }
-
+    SpriteBatch batch = new SpriteBatch();
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
@@ -57,7 +57,6 @@ public class EditorMainScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         if (currentInHand != null) {
-            SpriteBatch batch = new SpriteBatch();
             batch.begin();
             int x = Gdx.input.getX();
             int y = Gdx.graphics.getHeight() - Gdx.input.getY();

@@ -28,7 +28,7 @@ Remove coloured rects in the in-game/
 -----v0.9-----
 Android build
 Sound effects
-Add min moves for all levels
+Add min moves for all levels/
 Performance improvements
      - Better caching of textures
 Downloadable build on website

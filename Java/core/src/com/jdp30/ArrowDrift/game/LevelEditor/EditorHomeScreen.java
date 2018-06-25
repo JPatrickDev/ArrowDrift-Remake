@@ -122,15 +122,21 @@ public class EditorHomeScreen implements Screen {
                             public void result(final String name) {
                                 if (name == null || name.equals(""))
                                     return;
-                                Node newCat = new Node(name);
-                                newCat.addTexture("preview",new Texture("levelPreview.png"));
-                                system.getRoot().addChild(newCat);
-                                try {
-                                    system.save(file.toString());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                showCatSelectDialog(system,file);
+                               Util.DialogResultListener iconCallback = new Util.DialogResultListener() {
+                                   @Override
+                                   public void result(String text) {
+                                       Node newCat = new Node(name);
+                                       newCat.addTexture("preview",new Texture(text));
+                                       system.getRoot().addChild(newCat);
+                                       try {
+                                           system.save(file.toString());
+                                       } catch (IOException e) {
+                                           e.printStackTrace();
+                                       }
+                                       showCatSelectDialog(system,file);
+                                   }
+                               };
+                               Util.input("Preview File Name",stage,iconCallback);
 
                             }
                         };

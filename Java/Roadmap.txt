@@ -32,3 +32,12 @@ Add min moves for all levels
 Performance improvements
      - Better caching of textures
 Downloadable build on website
+Implement the Cat Preview Images
+-----v0.10-----
+Implement the About Screen
+Add a Tutorial Screen
+Add a Tutorial overlay
+Add sound options to the settings menu 
+Game name on main menu. 
+Improve structure of the assets folder. 
+Bundle a couple of different sizes for each font and automatically use the best one for the job. 

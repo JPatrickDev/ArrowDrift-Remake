@@ -127,4 +127,12 @@ public class EditorMainScreen implements Screen {
         this.catNode.addChild(newNode);
         this.system.save(this.path);
     }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setMinMoves(int minMoves) {
+        level.setMinMoves(minMoves);
+    }
 }

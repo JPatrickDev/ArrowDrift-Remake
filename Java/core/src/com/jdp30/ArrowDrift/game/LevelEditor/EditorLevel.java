@@ -32,6 +32,7 @@ public class EditorLevel extends ClickListener {
     private EditorMainScreen parent;
     private RightListener listener;
     public ArrayList<EntityContainer> entities = new ArrayList<EntityContainer>();
+    private int minMoves;
 
     public EditorLevel(EditorMainScreen parent, Stage stage, int width, int height) {
         this.width = width;
@@ -71,7 +72,7 @@ public class EditorLevel extends ClickListener {
             l.addEntity(level.p);
         }
 
-
+        l.minMoves = level.getMinMoves();
 
         return l;
     }
@@ -153,11 +154,16 @@ public class EditorLevel extends ClickListener {
             e.setPos(((int) c.getX() / Tile.TILE_SIZE), ((int) c.getY() / Tile.TILE_SIZE));
             level.addEntity(e);
         }
+        level.setMinMoves(minMoves);
         return level;
     }
 
     public void setEntities(ArrayList<EntityContainer> entities) {
         this.entities = entities;
+    }
+
+    public void setMinMoves(int minMoves) {
+        this.minMoves = minMoves;
     }
 }
 

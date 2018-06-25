@@ -12,6 +12,7 @@ import com.jdp30.ArrowDrift.game.Entity.Player;
 import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 import com.jdp30.ArrowDrift.game.Level.Tile.Wall;
+import com.jdp30.ArrowDrift.game.util.Util;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -106,6 +107,21 @@ public class Toolbar extends Container<Actor> {
             }
         });
         table.add(backToMenu);
+        table.row();
+        TextButton setMin = new TextButton("Set minimum moves", skin);
+        setMin.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+               // ArrowDriftGame.setCurrentScreen(new EditorHomeScreen());
+                Util.input("Minimum moves:",getStage(), new Util.DialogResultListener() {
+                    @Override
+                    public void result(String text) {
+                        parent.setMinMoves(Integer.parseInt(text));
+                    }
+                });
+            }
+        });
+        table.add(setMin);
         this.setActor(table);
     }
 

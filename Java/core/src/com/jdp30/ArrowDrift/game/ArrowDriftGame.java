@@ -54,7 +54,7 @@ public class ArrowDriftGame extends Game {
         String[] out = new String[files.length + 1];
         out[0] = "DEFAULT";
         for (int i = 1; i != out.length; i++) {
-            out[i] = files[i].name();
+            out[i] = files[i-1].name();
         }
         return out;
     }

@@ -32,7 +32,8 @@ Add min moves for all levels/
 Performance improvements
      - Better caching of textures
 Downloadable build on website
-Implement the Cat Preview Images
+Implement the Cat Preview Images/
+Draw players tile movements over the player.
 -----v0.10-----
 Implement the About Screen
 Add a Tutorial Screen

@@ -231,4 +231,14 @@ public abstract class Entity implements Disposable {
         this.tY = -1;
         flingDir = null;
     }
+
+
+    public int getxOff() {
+        return xOff;
+    }
+
+
+    public int getyOff() {
+        return yOff;
+    }
 }

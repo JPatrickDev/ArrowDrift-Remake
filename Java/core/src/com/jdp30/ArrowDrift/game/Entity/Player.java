@@ -3,7 +3,10 @@ package com.jdp30.ArrowDrift.game.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jdp30.ArrowDrift.game.Level.AllowedMovementType;
 import com.jdp30.ArrowDrift.game.Level.Level;
+import com.jdp30.ArrowDrift.game.Level.Tile.Tile;
 
 /**
  * Created by Jack Patrick on 05/03/2018.
@@ -11,6 +14,7 @@ import com.jdp30.ArrowDrift.game.Level.Level;
  * Last Edit: 05/03/2018
  */
 public class Player extends Entity {
+    private AllowedMovementType current = null;
     public Player(int x, int y) {
         super(new Texture("player.png"), x, y);
     }
@@ -31,6 +35,15 @@ public class Player extends Entity {
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 moveRight(level);
             }
+        }
+        current = level.getCurrentMovementType();
+    }
+
+    @Override
+    public void draw(SpriteBatch batch, int xo, int yo) {
+        super.draw(batch, xo, yo);
+        if(current != null && current != AllowedMovementType.NONE){
+            batch.draw(Tile.movementTextures.get(current), (getX() * Tile.TILE_SIZE) + getxOff() + xo, (getY() * Tile.TILE_SIZE) + getyOff() + yo, Tile.TILE_SIZE, Tile.TILE_SIZE);
         }
     }
 

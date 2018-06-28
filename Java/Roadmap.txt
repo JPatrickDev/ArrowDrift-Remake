@@ -26,14 +26,16 @@ Fix issue with hard/2/
     - I think one of the TP target tiles needs rotating/
 Remove coloured rects in the in-game/
 -----v0.9-----
-Android build
-Sound effects
 Add min moves for all levels/
-Performance improvements
-     - Better caching of textures
-Downloadable build on website
 Implement the Cat Preview Images/
-Draw players tile movements over the player.
+Draw players tile movements over the player./
+  ===v0.9.1====
+    Performance improvements
+         - Better caching of textures
+    Downloadable build on website
+    Android build
+    Sound effects
+
 -----v0.10-----
 Implement the About Screen
 Add a Tutorial Screen

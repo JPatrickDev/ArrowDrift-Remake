@@ -19,9 +19,10 @@ import java.io.IOException;
 
 /**
  * Created by Jack Patrick on 03/04/2018.
- * <p/>
- * Last Edit: 03/04/2018
+ *
+ * Last Edit: 09/07/2018
  */
+//TODO: Convert this and the main menu to have a common base class(A menu that is just a list of buttons)
 public class SettingsScreen implements Screen {
 
     private Stage stage;
@@ -38,6 +39,18 @@ public class SettingsScreen implements Screen {
         final Label title = new Label("Settings", skin);
         title.setPosition(Gdx.graphics.getWidth() / 2 - title.getWidth() / 2, Gdx.graphics.getHeight() - title.getHeight());
         stage.addActor(title);
+
+        final TextButton sound = new TextButton("Sound", skin);
+        sound.getLabelCell().padBottom(5f).padTop(5f);
+        sound.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                
+            }
+        });
+        table.add(sound).width(Gdx.graphics.getWidth() / 2).pad(20);
+        table.row();
 
         final TextButton newLevel = new TextButton("Set Resolution", skin);
         newLevel.getLabelCell().padBottom(5f).padTop(5f);

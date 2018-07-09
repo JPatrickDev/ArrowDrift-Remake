@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.jdp30.ArrowDrift.game.ArrowDriftGame;
+import com.jdp30.ArrowDrift.game.GUI.Dialogs.SoundSettingsDialog;
 import com.jdp30.ArrowDrift.game.LevelEditor.EditorHomeScreen;
 import com.jdp30.ArrowDrift.game.util.Util;
 import storage.StorageSystem;
@@ -46,7 +47,9 @@ public class SettingsScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                
+                Skin skin = new Skin(Gdx.files.internal("ui/skin.json"));
+                new SoundSettingsDialog("Sound", skin).show(stage);
+
             }
         });
         table.add(sound).width(Gdx.graphics.getWidth() / 2).pad(20);

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.utils.Array;
 import com.jdp30.ArrowDrift.game.Screens.MainMenuScreen;
+import com.jdp30.ArrowDrift.game.util.SoundUtil;
 import storage.Node;
 import storage.StorageSystem;
 
@@ -78,6 +79,7 @@ public class ArrowDriftGame extends Game {
         batch = new SpriteBatch();
 
         setScreen(new MainMenuScreen());
+
     }
 
     public static void setCurrentScreen(Screen s) {

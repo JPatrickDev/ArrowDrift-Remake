@@ -34,20 +34,32 @@ public class SoundSettingsDialog extends Dialog {
         this.setModal(true);
         this.skin = skin;
 
-        final Slider s = new Slider(0, 100, 1, false, skin);
-        s.setValue(SoundUtil.getInstance().getVolume() * 100.0f);
+
+        final TextButton toggleSound = new TextButton("Disable Sound", skin);
+        if(!SoundUtil.getInstance().isEnabled()){
+            toggleSound.setText("Enable Sound");
+        }
+        getContentTable().add(toggleSound);
+        getContentTable().row();
+
+        final Table optionsTable = new Table();
+
+
+        final Slider effectsSlider = new Slider(0, 100, 1, false, skin);
+        effectsSlider.setValue(SoundUtil.getInstance().getVolume() * 100.0f);
         Label effectsLabel = new Label("Effects:", skin);
         final Label effectsValue = new Label(((int)SoundUtil.getInstance().getVolume() * 100.0f) + "%", skin);
-        getContentTable().add(effectsLabel);
-        getContentTable().add(s);
-        getContentTable().add(effectsValue);
+        optionsTable.add(effectsLabel);
+        optionsTable.add(effectsSlider);
+        optionsTable.add(effectsValue);
 
+        getContentTable().add(optionsTable);
 
-        s.addListener(new EventListener() {
+        effectsSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                if (s.getValue() != SoundUtil.getInstance().getVolume() * 100.0) {
-                    SoundUtil.getInstance().setVolume(s.getValue() / 100.0f);
+                if (effectsSlider.getValue() != SoundUtil.getInstance().getVolume() * 100.0) {
+                    SoundUtil.getInstance().setVolume(effectsSlider.getValue() / 100.0f);
                     String value = "";
                     if(SoundUtil.getInstance().getVolume() < 0.10){
                         value = ("  " +((int)Math.ceil(SoundUtil.getInstance().getVolume() * 100.0f)) + "%");
@@ -62,7 +74,18 @@ public class SoundSettingsDialog extends Dialog {
             }
         });
 
-
+        toggleSound.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(toggleSound.getText().toString().equals("Disable Sound")){
+                    toggleSound.setText("Enable Sound");
+                    SoundUtil.getInstance().setEnabled(false);
+                }else{
+                    toggleSound.setText("Disable Sound");
+                    SoundUtil.getInstance().setEnabled(true);
+                }
+            }
+        });
     }
 
 }

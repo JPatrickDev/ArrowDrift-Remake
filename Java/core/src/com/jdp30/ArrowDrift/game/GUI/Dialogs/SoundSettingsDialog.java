@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 import com.jdp30.ArrowDrift.game.util.SoundUtil;
 import storage.Node;
 
@@ -48,12 +49,12 @@ public class SoundSettingsDialog extends Dialog {
         final Slider effectsSlider = new Slider(0, 100, 1, false, skin);
         effectsSlider.setValue(SoundUtil.getInstance().getVolume() * 100.0f);
         Label effectsLabel = new Label("Effects:", skin);
-        final Label effectsValue = new Label(((int)SoundUtil.getInstance().getVolume() * 100.0f) + "%", skin);
+        final Label effectsValue = new Label(((int)effectsSlider.getValue()) + "%", skin);
         optionsTable.add(effectsLabel);
         optionsTable.add(effectsSlider);
         optionsTable.add(effectsValue);
 
-        getContentTable().add(optionsTable);
+        getContentTable().add(optionsTable).pad(10f);
 
         effectsSlider.addListener(new EventListener() {
             @Override
@@ -88,4 +89,9 @@ public class SoundSettingsDialog extends Dialog {
         });
     }
 
+    @Override
+    protected void result(Object object) {
+        super.result(object);
+        ArrowDriftGame.notifyStorageChanged();
+    }
 }

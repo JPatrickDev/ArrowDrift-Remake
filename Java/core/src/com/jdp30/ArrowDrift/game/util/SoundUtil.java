@@ -2,6 +2,7 @@ package com.jdp30.ArrowDrift.game.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.jdp30.ArrowDrift.game.ArrowDriftGame;
 
 import java.util.HashMap;
 
@@ -56,6 +57,7 @@ public class SoundUtil {
 
     public void setVolume(float volume) {
         this.volume = volume;
+        ArrowDriftGame.userdata.getRoot().getChild("settings").addValue("effectsVolume", volume + "");
     }
 
     public boolean isEnabled() {
@@ -64,5 +66,6 @@ public class SoundUtil {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        ArrowDriftGame.userdata.getRoot().getChild("settings").addValue("effectsEnabled", enabled + "");
     }
 }

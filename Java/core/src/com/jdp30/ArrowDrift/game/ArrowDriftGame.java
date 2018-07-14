@@ -55,7 +55,7 @@ public class ArrowDriftGame extends Game {
         String[] out = new String[files.length + 1];
         out[0] = "DEFAULT";
         for (int i = 1; i != out.length; i++) {
-            out[i] = files[i-1].name();
+            out[i] = files[i - 1].name();
         }
         return out;
     }
@@ -66,10 +66,14 @@ public class ArrowDriftGame extends Game {
 
         try {
             userdata = StorageSystem.fromFile("Arrow Drift Data/config");
+            if (userdata.getRoot().getChild("settings").hasKey("effectsVolume"))
+                SoundUtil.getInstance().setVolume(Float.valueOf(userdata.getRoot().getChild("settings").getValue("effectsVolume")));
+            if (userdata.getRoot().getChild("settings").hasKey("effectsEnabled"))
+                SoundUtil.getInstance().setEnabled(Boolean.valueOf(userdata.getRoot().getChild("settings").getValue("effectsEnabled")));
             StorageSystem mappack = StorageSystem.fromFile("DEFAULT");
             ArrowDriftGame.setCurrentPack(mappack);
             int[] res = getCurrentResolution();
-            Gdx.graphics.setWindowedMode(res[0],res[1]);
+            Gdx.graphics.setWindowedMode(res[0], res[1]);
         } catch (IOException e) {
             e.printStackTrace();
             //TODO - Handle better
@@ -123,8 +127,8 @@ public class ArrowDriftGame extends Game {
         }
     }
 
-    public static void resetUserdata(){
-        if (Gdx.files.external("Arrow Drift Data/config").exists()){
+    public static void resetUserdata() {
+        if (Gdx.files.external("Arrow Drift Data/config").exists()) {
             Gdx.files.external("Arrow Drift Data/config").delete();
         }
         createUserData();
@@ -152,7 +156,7 @@ public class ArrowDriftGame extends Game {
             userdata.getRoot().getChild("settings").addValue("resolution", resolution);
             userdata.save("Arrow Drift Data/config");
             int[] res = getCurrentResolution();
-            Gdx.graphics.setWindowedMode(res[0],res[1]);
+            Gdx.graphics.setWindowedMode(res[0], res[1]);
         } catch (IOException e) {
             e.printStackTrace();
         }
